@@ -93,14 +93,14 @@
         <name>tv4p.ru Vintera TV</name>
         <url>http://tv4p.ru/05v.m3u</url>
         <type>0</type>
-        <enable>true</enable>
+        <enable>false</enable>
     </provider>
 
     <provider>
         <name>tv4p.ru Bonus TV</name>
         <url>http://tv4p.ru/04b.m3u</url>
         <type>0</type>
-        <enable>true</enable>
+        <enable>false</enable>
     </provider>
 
     <provider>
@@ -197,13 +197,6 @@
     <provider>
         <name>545-TV(RU)</name>
         <url>http://545-tv.com/listRU.php</url>
-        <type>0</type>
-        <enable>true</enable>
-    </provider>
-
-    <provider>
-        <name>RuMedia 2 (test)</name>
-        <url>http://iptv.rumedia.biz/friazino.m3u</url>
         <type>0</type>
         <enable>true</enable>
     </provider>
