@@ -35,11 +35,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<Channel> getAllChannels() {
-        List<Channel> arr = new ArrayList<Channel>();
-        for (Channel chn : channel) {
-            arr.add(chn);
-        }
-        return arr;
+        return channel;
     }
 
     @Override
