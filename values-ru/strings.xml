@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GlobalTV</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="updatePlaylistButton">Обновить Плейлист</string>
+    <string name="openPlaylistButton">Открыть Плейлист</string>
+    <string name="globalSearchButton">Глобальный Поиск</string>
+    <string name="playlistsManagerButton">Управление Плейлистами</string>
+    <string name="playlist">Плейлист</string>
+    <string name="pcs">шт.</string>
+    <string name="autoUpdate">автообновление</string>
+    <string name="every24h">каждые 24ч</string>
+    <string name="updated">обновлено </string>
+    <string name="dayago"> день назад</string>
+    <string name="daysago"> дня назад</string>
+    <string name="fivedaysago"> дней назад</string>
+    <string name="all">Все</string>
+    <string name="favorites">Избранное</string>
+    <string name="selectCategory">Выберите категорию</string>
+    <string name="search">Поиск</string>
+    <string name="searching">Поиск…</string>
+    <string name="channels"> каналов</string>
+    <string name="request">Запрос</string>
+    <string name="doyouwant">Вы хотите </string>
+    <string name="add">Добавить</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отменить</string>
+    <string name="tofavorites">до избранного</string>
+    <string name="fromfavorites">из избранного</string>
+    <string name="pleaseentertext">Введите текст для поиска</string>
+    <string name="playlistupdated">Плейлист %s обновлен</string>
+    <string name="playlistnotexist">Плейлист не загружен</string>
+    <string name="updatefailed">Ошибка обновления %s</string>
+    <string name="resultsfor">Результаты для </string>
+    <string name="addnewplaylist">Добавить Новый Плейлист</string>
+    <string name="delete">Удалить</string>
+    <string name="modify">Изменит</string>
+    <string name="name">Название</string>
+    <string name="url">Ссылка</string>
+    <string name="savefile">Сохранить как файл</string>
+    <string name="type">Тип</string>
+    <string name="standardplaylist">Стандартный плейлист</string>
+    <string name="torrenttvplaylist">TorrentTV плейлист</string>
+    <string name="selected">Избранные</string>
+    <string name="offered">Предлагаемые</string>
+    <string name="pleasefillallfields">Заполните все поля</string>
+    <string name="updateOutdatedPlaylists">Обн. устар. Плейлисты</string>
+    <string name="reset">Сброс</string>
+    <string name="playlist_add_all">Добавить все плейлисты</string>
+    <string name="updating">Обновление…</string>
+    <string name="plstmanwarn">Для добавления новых плейлистов используйте Плейлист Менеджер</string>
+    <string name="resetwarn">Вы действительно хотите сделать сброс (все настройки приложения будут удалены) ?</string>
+    <string name="playlistexist">Этот плейлист уже есть в избранном списке</string>
+    <string name="provider_list_is_empty">Список плейлистов пустой. Добавте хотябы один</string>
+    <string name="no_selected_playlist">Нет избранных плейлистов. Добавте хотябы один</string>
+    <string name="settings">Настройки</string>
+    <string name="openChannel">Открыть канал</string>
+    <string name="addToFavorites">Добавить в Избранное</string>
+    <string name="removeFromFavorites">Удалить из Избранного</string>
+    <string name="addToSelectedPlaylists">Добавить к Избранным Плейлистам</string>
+    <string name="addAllOfferedPlaylist">Добавить Все Плейлисты</string>
+    <string name="save">Сохранить</string>
+    <string name="select">Выбрать</string>
+    <string name="failed">ошибка обновления</string>
+    <string name="sortedListButton">Сортированый список по дате обновления</string>
+
+    <string-array name="categories_list_orig">
+        <item>Europe</item>
+    </string-array>
+
+    <string-array name="categories_list_translated">
+        <item>Европа</item>
+    </string-array>
+</resources>
