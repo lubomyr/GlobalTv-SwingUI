@@ -7,6 +7,7 @@ import atua.anddev.globaltv.form.MainForm;
 import atua.anddev.globaltv.service.PlaylistService;
 import org.w3c.dom.Document;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,16 @@ public class MainActivity implements Services {
     private static List<String> localsList = new ArrayList<String>();
 
     public static void main(String[] args) {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
         mainForm = new MainForm();
 
         if (lang == null)
