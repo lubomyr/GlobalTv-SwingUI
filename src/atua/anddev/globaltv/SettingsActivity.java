@@ -48,6 +48,7 @@ public class SettingsActivity implements Services {
             settingForm.useThisPlayerRadioButton1.setSelected(true);
         else
             settingForm.useThisPlayerRadioButton.setSelected(true);
+        settingForm.pack();
     }
 
     private void buttonActionListener() {

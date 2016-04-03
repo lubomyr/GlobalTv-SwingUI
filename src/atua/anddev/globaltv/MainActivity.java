@@ -397,15 +397,15 @@ public class MainActivity implements Services {
                     playlistService.setUpdateDate(num, new Date().getTime());
                     playlistService.saveData();
                     checkPlaylistFile(selectedProvider);
-                    mainForm.mainWarningLabel.setText(tService.local("playlistupdated") + " " +
-                            playlistService.getActivePlaylistById(num).getName());
+                    mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.local("updated"));
 
                 }
                 ;
             } catch (Exception e) {
-                mainForm.mainWarningLabel.setText(tService.local("updatefailed") + " " +
-                        playlistService.getActivePlaylistById(num).getName());
+                mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.local("failed"));
                 System.out.println("Error: " + e.toString());
+            } finally {
+                mainForm.pack();
             }
         }
     }
