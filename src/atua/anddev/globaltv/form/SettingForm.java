@@ -11,8 +11,10 @@ public class SettingForm extends JFrame {
     public JRadioButton useThisPlayerRadioButton1;
     public JButton selectButton2;
     public JButton saveButton;
-    private JPanel settingsPanel;
     public JTextField textField3;
+    public JComboBox comboBox1;
+    public JLabel themeLabel;
+    private JPanel settingsPanel;
 
     public SettingForm() {
         super("Settings");

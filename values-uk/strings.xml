@@ -64,6 +64,8 @@
     <string name="select">Вибрати</string>
     <string name="failed">оновлення невдале</string>
     <string name="sortedListButton">Сортований список за датою оновлення</string>
+    <string name="useThisPlayer">використати цей плейер</string>
+    <string name="selectTheme">Вибрати Тему (вимагає перезапуск програми)</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

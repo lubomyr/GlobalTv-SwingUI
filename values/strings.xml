@@ -65,6 +65,8 @@
     <string name="select">Select</string>
     <string name="failed">update failed</string>
     <string name="sortedListButton">Sorted list by update Date</string>
+    <string name="useThisPlayer">use this player</string>
+    <string name="selectTheme">Select GUI Theme (It require restart app)</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

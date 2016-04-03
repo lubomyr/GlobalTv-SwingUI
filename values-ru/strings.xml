@@ -64,6 +64,8 @@
     <string name="select">Выбрать</string>
     <string name="failed">ошибка обновления</string>
     <string name="sortedListButton">Сортированый список по дате обновления</string>
+    <string name="useThisPlayer">использовать этот плейер</string>
+    <string name="selectTheme">Выбрать Тему (нужен перезапуск приложения)</string>
 
     <string-array name="categories_list_orig">
         <item>Europe</item>

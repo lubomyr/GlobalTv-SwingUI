@@ -32,18 +32,6 @@ public class MainActivity implements Services {
     private static List<String> localsList = new ArrayList<String>();
 
     public static void main(String[] args) {
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-        }
-        mainForm = new MainForm();
-
         if (lang == null)
             lang = Locale.getDefault().getISO3Language();
 
@@ -64,6 +52,19 @@ public class MainActivity implements Services {
 
         if (Global.path_aceplayer == null)
             loadSettings();
+
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if (Global.selectedTheme.equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
+
+        mainForm = new MainForm();
 
         showLocals();
         setupProviderView();
@@ -266,6 +267,7 @@ public class MainActivity implements Services {
             Global.path_aceplayer = doc.getElementsByTagName("aceplayer").item(0).getTextContent();
             Global.path_vlc = doc.getElementsByTagName("vlcplayer").item(0).getTextContent();
             Global.path_other = doc.getElementsByTagName("otherplayer").item(0).getTextContent();
+            Global.selectedTheme = doc.getElementsByTagName("theme").item(0).getTextContent();
 
         } catch (Exception e) {
             e.printStackTrace();
