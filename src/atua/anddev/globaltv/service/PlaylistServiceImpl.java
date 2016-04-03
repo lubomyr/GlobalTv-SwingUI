@@ -391,23 +391,17 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         protected String doInBackground() {
             try {
                 URL url = new URL("https://dl.dropboxusercontent.com/u/47797448/playlist/playlists.json");
-
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
+                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"));
                 String line;
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-
                 resultJson = buffer.toString();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -415,21 +409,17 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         }
 
         protected void onPostExecute(String strJson) {
-
             JSONObject dataJsonObj = null;
 
             try {
                 dataJsonObj = new JSONObject(strJson);
                 JSONArray playlists = dataJsonObj.getJSONArray("playlist");
 
-
                 for (int i = 0; i < playlists.length(); i++) {
                     JSONObject playlist = playlists.getJSONObject(i);
-
                     String name = playlist.getString("name");
                     String url = playlist.getString("url");
                     int type = playlist.getInt("type");
-
                     addToOfferedPlaylist(name, url, type);
                 }
 
