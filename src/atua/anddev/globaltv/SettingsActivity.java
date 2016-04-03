@@ -41,9 +41,17 @@ public class SettingsActivity implements Services {
         settingForm.textField1.setText(Global.path_aceplayer);
         settingForm.textField2.setText(Global.path_vlc);
         settingForm.textField3.setText(Global.path_other);
+        ButtonGroup group = new ButtonGroup();
+        group.add(settingForm.useThisPlayerRadioButton);
+        group.add(settingForm.useThisPlayerRadioButton1);
+        if (Global.otherplayer)
+            settingForm.useThisPlayerRadioButton1.setSelected(true);
+        else
+            settingForm.useThisPlayerRadioButton.setSelected(true);
     }
 
     private void buttonActionListener() {
+
         settingForm.selectButton.addActionListener(new ActionListener() {
             private Component parent;
 
@@ -97,13 +105,14 @@ public class SettingsActivity implements Services {
 
     }
 
-    public static void saveSettings() {
-        if (Global.path_aceplayer == null)
-            Global.path_aceplayer = "";
-        if (Global.path_vlc == null)
-            Global.path_vlc = "";
-        if (Global.path_other == null)
-            Global.path_other = "";
+    public void saveSettings() {
+        if (settingForm.useThisPlayerRadioButton1.isSelected())
+            Global.otherplayer = true;
+        else
+            Global.otherplayer = false;
+        Global.path_aceplayer = settingForm.textField1.getText();
+        Global.path_vlc = settingForm.textField2.getText();
+        Global.path_other = settingForm.textField3.getText();
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
