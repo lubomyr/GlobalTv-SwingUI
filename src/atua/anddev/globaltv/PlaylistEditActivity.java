@@ -74,8 +74,7 @@ public class PlaylistEditActivity implements Services {
                         playlistService.setActivePlaylistById(num, name, url, type);
                         PlaylistManagerActivity.model_a.setElementAt(name, num);
                         success = true;
-                    }
-                    if (editAction.equals("addNew") && playlistService.indexNameForActivePlaylist(name.toString()) == -1) {
+                    } else if (editAction.equals("addNew") && playlistService.indexNameForActivePlaylist(name.toString()) == -1) {
                         playlistService.addToActivePlaylist(name, url, type, "", "");
                         PlaylistManagerActivity.model_a.addElement(name);
                         success = true;

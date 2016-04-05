@@ -124,6 +124,7 @@ public class SettingsActivity implements Services {
         settingForm.saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 saveSettings();
+                settingForm.dispose();
             }
         });
 
