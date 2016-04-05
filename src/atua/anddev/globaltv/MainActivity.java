@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by lubomyr on 31.03.16.
@@ -136,6 +137,7 @@ public class MainActivity implements Services {
     }
 
     public static boolean checkPlaylistFile(int num) {
+        String tmpText;
         String fname = playlistService.getActivePlaylistById(num).getFile();
         try {
             String updateDateStr = playlistService.getActivePlaylistById(num).getUpdate();
@@ -151,32 +153,31 @@ public class MainActivity implements Services {
                 updateDate = fileDate;
                 System.out.println("Error: " + e.toString());
             }
-            String tmpText;
+            int hoursPassed = (int) TimeUnit.MILLISECONDS.toHours(diffDate);
+            if (hoursPassed > 12)
+                needUpdate = true;
+            else
+                needUpdate = false;
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(diffDate);
             int daysPassed = cal.get(Calendar.DATE);
             switch (daysPassed) {
                 case 1:
                     tmpText = tService.local("updated") + " " + new Date(updateDate).toLocaleString();
-                    needUpdate = false;
                     break;
                 case 2:
                     tmpText = tService.local("updated") + " 1 " + tService.local("dayago");
-                    needUpdate = true;
                     break;
                 case 3:
                 case 4:
                 case 5:
                     tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
-                    needUpdate = true;
                     break;
                 default:
                     tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
-                    needUpdate = true;
                     break;
 
             }
-
             mainForm.mainPlaylistInfoLabel.setText(tmpText);
             InputStream myfile = new FileInputStream(myPath + fname);
         } catch (FileNotFoundException e) {
