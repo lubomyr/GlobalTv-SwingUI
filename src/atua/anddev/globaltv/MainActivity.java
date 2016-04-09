@@ -174,7 +174,7 @@ public class MainActivity implements Services {
                     tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
                     break;
                 default:
-                    tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
+                    tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("fivedaysago");
                     break;
 
             }

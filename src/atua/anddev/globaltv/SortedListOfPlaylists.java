@@ -65,8 +65,13 @@ public class SortedListOfPlaylists implements Services {
             case 2:
                 tmpText = tService.local("updated") + " 1 " + tService.local("dayago");
                 break;
+            case 3:
+            case 4:
+            case 5:
+                tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
+                break;
             default:
-                tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("dayago");
+                tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("fivedaysago");
                 break;
         }
         return tmpText;
