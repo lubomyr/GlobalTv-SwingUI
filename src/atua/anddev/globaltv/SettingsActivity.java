@@ -27,12 +27,14 @@ import java.util.List;
 public class SettingsActivity implements Services {
     private SettingForm settingForm;
     private List<String> themeList = Arrays.asList("Metal", "Nimbus", "CDE/Motif", "GTK+");
+    private List<String> fontSizeList = Arrays.asList("12", "16", "20", "24");
 
     public SettingsActivity() {
         settingForm = new SettingForm();
         applyLocals();
         showSettings();
-        ThemeListActionAdapter();
+        fontSizeListActionAdapter();
+        themeListActionAdapter();
         buttonActionListener();
     }
 
@@ -44,6 +46,7 @@ public class SettingsActivity implements Services {
         settingForm.useThisPlayerRadioButton.setText(tService.local("useThisPlayer"));
         settingForm.useThisPlayerRadioButton1.setText(tService.local("useThisPlayer"));
         settingForm.themeLabel.setText(tService.local("selectTheme"));
+        settingForm.fontSizeLabel.setText(tService.local("selectFontSize"));
     }
 
     private void showSettings() {
@@ -62,10 +65,24 @@ public class SettingsActivity implements Services {
             settingForm.comboBox1.addItem(str);
         }
         settingForm.comboBox1.setSelectedItem(Global.selectedTheme);
+
+        for (String str : fontSizeList) {
+            settingForm.comboBox2.addItem(str);
+        }
+        settingForm.comboBox2.setSelectedItem(Global.selectedFontSize);
         settingForm.pack();
     }
 
-    private void ThemeListActionAdapter() {
+    private void fontSizeListActionAdapter() {
+        ItemListener itemListener = new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                Global.selectedFontSize = itemEvent.getItem().toString();
+            }
+        };
+        settingForm.comboBox2.addItemListener(itemListener);
+    }
+
+    private void themeListActionAdapter() {
         ItemListener itemListener = new ItemListener() {
             public void itemStateChanged(ItemEvent itemEvent) {
                 Global.selectedTheme = itemEvent.getItem().toString();
@@ -131,8 +148,6 @@ public class SettingsActivity implements Services {
     }
 
     public void saveSettings() {
-        if (Global.selectedTheme == null)
-            Global.selectedTheme = "Metal";
         if (settingForm.useThisPlayerRadioButton1.isSelected())
             Global.otherplayer = true;
         else
@@ -168,6 +183,11 @@ public class SettingsActivity implements Services {
             Element theme = doc.createElement("theme");
             theme.appendChild(doc.createTextNode(Global.selectedTheme));
             rootElement.appendChild(theme);
+
+            // selected gui theme element
+            Element fontsize = doc.createElement("fontsize");
+            fontsize.appendChild(doc.createTextNode(Global.selectedFontSize));
+            rootElement.appendChild(fontsize);
 
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();

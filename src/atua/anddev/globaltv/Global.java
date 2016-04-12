@@ -1,9 +1,5 @@
 package atua.anddev.globaltv;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by lubomyr on 29.03.16.
  */
@@ -15,5 +11,6 @@ public class Global {
     static String path_vlc;
     static String path_other;
     static boolean otherplayer;
-    static String selectedTheme;
+    static String selectedTheme = "Metal";
+    static String selectedFontSize = "12";
 }

@@ -8,8 +8,10 @@ import atua.anddev.globaltv.service.PlaylistService;
 import org.w3c.dom.Document;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,6 +22,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,6 +38,8 @@ public class MainActivity implements Services {
     public static void main(String[] args) {
         if (lang == null)
             lang = Locale.getDefault().getISO3Language();
+
+        //guideService.doInBackground("http://api.torrent-tv.ru/ttv.xmltv.xml.gz");
 
         if (playlistService.sizeOfActivePlaylist() == 0 && checkFile("userdata.xml")) {
             playlistService.setupProvider("user");
@@ -53,6 +58,8 @@ public class MainActivity implements Services {
 
         if (Global.path_aceplayer == null)
             loadSettings();
+
+        setUIFont(new FontUIResource(new Font("Dialog", 0, Integer.valueOf(Global.selectedFontSize))));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -88,6 +95,19 @@ public class MainActivity implements Services {
         mainForm.settingsButton.setText(tService.local("settings"));
         mainForm.playlistManagerButton.setText(tService.local("playlistsManagerButton"));
         mainForm.playlistLabel.setText(tService.local("playlist"));
+    }
+
+    public static void setUIFont(FontUIResource f) {
+        Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource) {
+                FontUIResource orig = (FontUIResource) value;
+                Font font = new Font(f.getFontName(), f.getStyle(), f.getSize());
+                UIManager.put(key, new FontUIResource(font));
+            }
+        }
     }
 
     private static void showLocals() {
@@ -269,6 +289,7 @@ public class MainActivity implements Services {
             Global.path_vlc = doc.getElementsByTagName("vlcplayer").item(0).getTextContent();
             Global.path_other = doc.getElementsByTagName("otherplayer").item(0).getTextContent();
             Global.selectedTheme = doc.getElementsByTagName("theme").item(0).getTextContent();
+            Global.selectedFontSize = doc.getElementsByTagName("fontsize").item(0).getTextContent();
 
         } catch (Exception e) {
             e.printStackTrace();

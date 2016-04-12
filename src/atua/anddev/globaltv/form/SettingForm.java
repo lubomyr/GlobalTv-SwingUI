@@ -14,6 +14,8 @@ public class SettingForm extends JFrame {
     public JTextField textField3;
     public JComboBox comboBox1;
     public JLabel themeLabel;
+    public JComboBox comboBox2;
+    public JLabel fontSizeLabel;
     private JPanel settingsPanel;
 
     public SettingForm() {

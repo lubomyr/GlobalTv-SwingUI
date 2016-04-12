@@ -66,6 +66,7 @@
     <string name="sortedListButton">Сортированый список по дате обновления</string>
     <string name="useThisPlayer">использовать этот плейер</string>
     <string name="selectTheme">Выбрать Тему (нужен перезапуск приложения)</string>
+    <string name="selectFontSize">Выбрать Размер Шрифтов (нужен перезапуск приложения)</string>
 
     <string-array name="categories_list_orig">
         <item>Europe</item>
