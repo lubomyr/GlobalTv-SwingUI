@@ -3,9 +3,9 @@ package atua.anddev.globaltv.service;
 import atua.anddev.globaltv.Global;
 import atua.anddev.globaltv.Services;
 import atua.anddev.globaltv.entity.Playlist;
-
-import org.json.*;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -325,6 +325,9 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
                     chLink = lineStr;
                     if (chName.startsWith("ALLFON.TV")) {
                         chName = chName.substring(10, chName.length());
+                    }
+                    if (chName.startsWith("ALLFON.ORG")) {
+                        chName = chName.substring(11, chName.length());
                     }
                     if (chName.startsWith(" ")) {
                         chName = chName.substring(1, chName.length());
