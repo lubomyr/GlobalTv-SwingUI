@@ -8,8 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,11 +58,8 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     @Override
     public void addNewActivePlaylist(Playlist plst) {
         String name = plst.getName();
-        File file = new File(myPath + "/" + plst.getFile());
-        long fileDate = file.lastModified();
-        plst.setUpdate(String.valueOf(fileDate));
-        activePlaylist.add(plst);
         activePlaylistName.add(name);
+        playlistDb.insertPlaylist(plst.getName(), plst.getUrl(), plst.getFile(), plst.getType());
     }
 
     @Override
@@ -116,7 +111,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     @Override
     public int sizeOfActivePlaylist() {
-        return activePlaylist.size();
+        return playlistDb.numberOfRows();
     }
 
     @Override
@@ -126,7 +121,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     @Override
     public List<Playlist> getAllActivePlaylist() {
-        return activePlaylist;
+        return playlistDb.getPlaylists();
     }
 
     @Override
@@ -136,11 +131,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     @Override
     public List<String> getAllNamesOfActivePlaylist() {
-        List<String> arr = new ArrayList<String>();
-        for (Playlist plst : activePlaylist) {
-            arr.add(plst.getName());
-        }
-        return arr;
+        return playlistDb.getPlaylistNames();
     }
 
     @Override
@@ -194,12 +185,10 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     public void addAllOfferedPlaylist() {
         for (Playlist plst : offeredPlaylist) {
-            if (!activePlaylistName.contains(plst.getName())) {
-                activePlaylist.add(plst);
-                activePlaylistName.add(plst.getName());
+            if (activePlaylistName.indexOf(plst.getName()) == -1) {
+                addNewActivePlaylist(plst);
             }
         }
-        saveData();
     }
 
     @Override
@@ -270,41 +259,14 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     }
 
     @Override
-    public void setupProvider(String opt) {
-        String name = null, url = null, type = null, md5 = "", update = String.valueOf(new Date().getTime());
-        String endTag, text = null;
-        if (opt.equals("default")) {
-            new Thread(new ParseTask()).start();
-        } else {
-            try {
-                File fXmlFile;
-                fXmlFile = new File(myPath + "userdata.xml");
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(fXmlFile);
+    public void setupProvider() {
+        new Thread(new ParseTask()).start();
+    }
 
-                doc.getDocumentElement().normalize();
-
-//                Global.torrentKey = doc.getElementsByTagName("torrentkey").item(0).getTextContent();
-                NodeList nList = doc.getElementsByTagName("provider");
-
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-                    Node nNode = nList.item(temp);
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eElement = (Element) nNode;
-                        name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                        url = eElement.getElementsByTagName("url").item(0).getTextContent();
-                        type = eElement.getElementsByTagName("type").item(0).getTextContent();
-                        md5 = eElement.getElementsByTagName("md5").item(0).getTextContent();
-                        update = eElement.getElementsByTagName("update").item(0).getTextContent();
-                        addToActivePlaylist(name, url, Integer.parseInt(type), md5, update);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+    @Override
+    public void fillNamesOfPlaylist() {
+        activePlaylistName.clear();
+        activePlaylistName.addAll(getAllNamesOfActivePlaylist());
     }
 
     public void readPlaylist(int num) {

@@ -2,7 +2,6 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.dialog.AddPlaylistDialog;
 import atua.anddev.globaltv.dialog.SearchDialog;
-import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.MainForm;
 import atua.anddev.globaltv.service.PlaylistService;
 import org.w3c.dom.Document;
@@ -39,14 +38,12 @@ public class MainActivity implements Services {
         if (lang == null)
             lang = Locale.getDefault().getISO3Language();
 
+        dbHelper.createDb();
+
         //guideService.doInBackground("http://api.torrent-tv.ru/ttv.xmltv.xml.gz");
 
-        if (playlistService.sizeOfActivePlaylist() == 0 && checkFile("userdata.xml")) {
-            playlistService.setupProvider("user");
-        }
-
         if (playlistService.sizeOfOfferedPlaylist() == 0) {
-            playlistService.setupProvider("default");
+            playlistService.setupProvider();
         }
 
         try {
@@ -142,8 +139,9 @@ public class MainActivity implements Services {
     }
 
     private static void setupProviderView() {
-        for (Playlist plst : PlaylistService.activePlaylist) {
-            mainForm.comboBox1.addItem(plst.getName());
+        playlistService.fillNamesOfPlaylist();
+        for (String str : PlaylistService.activePlaylistName) {
+            mainForm.comboBox1.addItem(str);
         }
     }
 

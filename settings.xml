@@ -3,4 +3,6 @@
   <aceplayer>/usr/bin/acestreamplayer</aceplayer>
   <vlcplayer>/usr/bin/vlc</vlcplayer>
   <otherplayer/>
+  <theme>Metal</theme>
+  <fontsize>16</fontsize>
 </root>

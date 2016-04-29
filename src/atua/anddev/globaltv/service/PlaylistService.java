@@ -1,11 +1,9 @@
 package atua.anddev.globaltv.service;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import atua.anddev.globaltv.entity.Playlist;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import atua.anddev.globaltv.entity.Playlist;
 
 public interface PlaylistService {
     List<Playlist> activePlaylist = new ArrayList<Playlist>();
@@ -54,7 +52,9 @@ public interface PlaylistService {
 
     void saveData();
 
-    void setupProvider(String opt);
+    void setupProvider();
+
+    void fillNamesOfPlaylist();
 
     void setDateFromFile(int num);
 

@@ -1,5 +1,7 @@
 package atua.anddev.globaltv;
 
+import atua.anddev.globaltv.dao.DBHelper;
+
 /**
  * Created by lubomyr on 29.03.16.
  */
@@ -13,4 +15,5 @@ public class Global {
     static boolean otherplayer;
     static String selectedTheme = "Metal";
     static String selectedFontSize = "12";
+    static DBHelper dbHelper;
 }
