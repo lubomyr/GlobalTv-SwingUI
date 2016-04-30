@@ -1,16 +1,23 @@
 package atua.anddev.globaltv.service;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import atua.anddev.globaltv.entity.Favorites;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import atua.anddev.globaltv.entity.Favorites;
-
 public interface FavoriteService {
-    List<Favorites> favorites = new ArrayList<Favorites>();
-    List<String> favoriteList = new ArrayList<String>();
-    List<String> favoriteProvList = new ArrayList<String>();
+    ArrayList<String> favoriteListName = new ArrayList<String>();
+    ArrayList<String> favoriteProvList = new ArrayList<String>();
+
+    List<Favorites> getAllFavorites();
+
+    List<Favorites> getFavoritesByPlist(String plist);
+
+    List<String> getAllFavoritesName();
+
+    List<String> getAllFavoritesProv();
+
+    List<String> getFavoritesNameByPlist(String plist);
 
     void addToFavoriteList(String name, String prov);
 
@@ -26,11 +33,5 @@ public interface FavoriteService {
 
     void deleteFromFavoritesById(int id);
 
-    List<String> getFavoriteListForSelProv();
-
     int indexOfFavoriteByNameAndProv(String name, String prov);
-
-    void saveFavorites();
-
-    void loadFavorites() throws IOException;
 }

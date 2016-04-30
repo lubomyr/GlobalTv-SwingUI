@@ -1,10 +1,14 @@
 package atua.anddev.globaltv.dao;
 
+import atua.anddev.globaltv.entity.Channel;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ChannelDb extends DBHelper {
     public static final String CHANNELS_TABLE_NAME = "channels";
@@ -32,7 +36,7 @@ public class ChannelDb extends DBHelper {
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(*) FROM " + CHANNELS_TABLE_NAME + ";");
-            numRows = rs.getRow();
+            numRows = rs.getInt(1);
             System.out.println("numRows = " + numRows);
 
             rs.close();
@@ -46,225 +50,433 @@ public class ChannelDb extends DBHelper {
         return numRows;
     }
 
-/*    public Integer deleteChannelbyPlist(String plist) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("channels",
-                "plist = ? ",
-                new String[]{plist});
+    public Integer deleteChannelbyPlist(String plist) {
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "DELETE from " + CHANNELS_TABLE_NAME + " where PLIST='" + plist + "';";
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
+        return 1;
     }
 
     public Channel getChannelById(int id) {
-        Channel channel;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where id = " + id, null);
-        res.moveToFirst();
-        channel = new Channel(res.getString(res.getColumnIndex(CHANNELS_COLUMN_NAME)),
-                res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL)),
-                res.getString(res.getColumnIndex(CHANNELS_COLUMN_GROUP)),
-                res.getString(res.getColumnIndex(CHANNELS_COLUMN_PLIST)));
+        Channel channel = null;
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + CHANNELS_TABLE_NAME + " where ID=" + id + ";");
+            String name = rs.getString(CHANNELS_COLUMN_NAME);
+            String url = rs.getString(CHANNELS_COLUMN_URL);
+            String group = rs.getString(CHANNELS_COLUMN_GROUP);
+            String plist = rs.getString(CHANNELS_COLUMN_PLIST);
+            channel = new Channel(name, url, group, plist);
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return channel;
     }
 
     public ArrayList<String> getChannelsByPlist(String plist) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_NAME)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
+            while (rs.next()) {
+                String name = rs.getString(CHANNELS_COLUMN_NAME);
+                array_list.add(name);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> getChannelsUrlByPlist(String plist) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
+            while (rs.next()) {
+                String url = rs.getString(CHANNELS_COLUMN_URL);
+                array_list.add(url);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> getChannelsByCategory(String plist, String category) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "' and category = '" + category + "'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_NAME)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
+                    + plist + "' AND CATEGORY='" + category + "';");
+            while (rs.next()) {
+                String name = rs.getString(CHANNELS_COLUMN_NAME);
+                array_list.add(name);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> getChannelsUrlByCategory(String plist, String category) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "' and category = '" + category + "'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
+                    + plist + "' AND CATEGORY='" + category + "';");
+            while (rs.next()) {
+                String url = rs.getString(CHANNELS_COLUMN_URL);
+                array_list.add(url);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public String getChannelsUrlByPlistAndName(String plist, String name) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "' and name ='" + name + "'", null);
-        res.moveToFirst();
-        String result = res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL));
+        String result = null;
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
+                    + plist + "' AND NAME='" + name + "';");
+            result = rs.getString(CHANNELS_COLUMN_URL);
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return result;
     }
 
     public ArrayList<String> searchChannelsByName(String search) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where name like '%" + search + "%'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_NAME)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME
+                    + " WHERE NAME LIKE '%" + search + "%';");
+            while (rs.next()) {
+                String name = rs.getString(CHANNELS_COLUMN_NAME);
+                array_list.add(name);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> searchChannelsProvByName(String search) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where name like '%" + search + "%'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_PLIST)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_PLIST + " FROM " + CHANNELS_TABLE_NAME
+                    + " WHERE NAME LIKE '%" + search + "%';");
+            while (rs.next()) {
+                String plist = rs.getString(CHANNELS_COLUMN_PLIST);
+                array_list.add(plist);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> searchChannelsUrlByName(String search) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where name like '%" + search + "%'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME
+                    + " WHERE NAME LIKE '%" + search + "%';");
+            while (rs.next()) {
+                String url = rs.getString(CHANNELS_COLUMN_URL);
+                array_list.add(url);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> searchChannelsByPlistAndName(String plist, String search) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "' and name like '%" + search + "%'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_NAME)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME
+                    + " WHERE PLIST='" + plist + "' AND NAME LIKE '%" + search + "%';");
+            while (rs.next()) {
+                String name = rs.getString(CHANNELS_COLUMN_NAME);
+                array_list.add(name);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public ArrayList<String> searchChannelsUrlByPlistAndName(String plist, String search) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels where plist = '" + plist + "' and name like '%" + search + "%'", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_URL)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME
+                    + " WHERE PLIST='" + plist + "' AND NAME LIKE '%" + search + "%';");
+            while (rs.next()) {
+                String url = rs.getString(CHANNELS_COLUMN_URL);
+                array_list.add(url);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public void deleteAllChannels() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("delete from channels");
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "DELETE from " + CHANNELS_TABLE_NAME + ";";
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
     }
 
     public ArrayList<String> getCategoriesList(String plist) {
         ArrayList<String> array_list = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select distinct category from channels where plist = '" + plist + "'", null);
-        res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_GROUP)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT DISTINCT " + CHANNELS_COLUMN_GROUP + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
+            while (rs.next()) {
+                String name = rs.getString(CHANNELS_COLUMN_GROUP);
+                array_list.add(name);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
-    }
-
-    public int getCategoriesNumber(String plist) {
-        ArrayList<String> array_list = new ArrayList<String>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select distinct category from channels where plist = '" + plist + "'", null);
-        res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(CHANNELS_COLUMN_GROUP)));
-            res.moveToNext();
-        }
-        return array_list.size();
     }
 
     public List<Integer> getAllChannelId() {
         List<Integer> array_list = new ArrayList<Integer>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from channels", null);
-        res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getInt(res.getColumnIndex(CHANNELS_COLUMN_ID)));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_ID + " FROM " + CHANNELS_TABLE_NAME + ";");
+            while (rs.next()) {
+                int id = rs.getInt(CHANNELS_COLUMN_ID);
+                array_list.add(id);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return array_list;
     }
 
     public void insertAllChannels(List<Channel> channels, String plist) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        db.beginTransaction();
-
+        Connection c = null;
+        Statement stmt = null;
         try {
-            for (Channel s : channels) {
-                cv.put("name", s.getName());
-                cv.put("url", s.getUrl());
-                cv.put("category", s.getCategory());
-                cv.put("plist", plist);
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-                db.insertOrThrow("channels", null, cv);
+            stmt = c.createStatement();
+            for (Channel s : channels) {
+                String sql = "INSERT INTO " + CHANNELS_TABLE_NAME + " (NAME,URL,CATEGORY,PLIST) " +
+                        "VALUES ('" + (s.getName().contains("\'") ? s.getName().replace("\'", "''") : s.getName()) + "', '" + s.getUrl() + "', '" + s.getCategory() + "', '" + plist + "' );";
+                stmt.executeUpdate(sql);
             }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
-    }*/
+        System.out.println("Records created successfully");
+    }
 
 }

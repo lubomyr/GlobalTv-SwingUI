@@ -1,7 +1,5 @@
 package atua.anddev.globaltv;
 
-import atua.anddev.globaltv.dialog.WarningDialog;
-import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.GlobalFavoritesForm;
 
 import javax.swing.table.DefaultTableModel;
@@ -87,7 +85,9 @@ public class GlobalFavoriteActivity implements Services {
         globalFavoritesForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 selected = globalFavoritesForm.table1.getSelectedRow();
-                openFavorite(selected);
+                String url = channelService.getChannelsUrlByPlistAndName(favoriteService.getFavoriteById(selected).getProv()
+                        , favoriteService.getFavoriteById(selected).getName());
+                channelService.openURL(url);
             }
         });
         globalFavoritesForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
@@ -95,24 +95,8 @@ public class GlobalFavoriteActivity implements Services {
                 selected = globalFavoritesForm.table1.getSelectedRow();
                 model.removeRow(selected);
                 favoriteService.deleteFromFavoritesById(selected);
-                favoriteService.saveFavorites();
             }
         });
     }
 
-    private void openFavorite(int itemNum) {
-        String getProvName = favoriteService.getFavoriteById(itemNum).getProv();
-        int numA = playlistService.indexNameForActivePlaylist(getProvName);
-        if (numA == -1) {
-            new WarningDialog(tService.local("playlistnotexist"));
-            return;
-        }
-        playlistService.readPlaylist(numA);
-        for (Channel chn : channelService.getAllChannels()) {
-            if (chn.getName().equals(favoriteService.getFavoriteById(itemNum).getName())) {
-                channelService.openURL(chn.getUrl());
-                break;
-            }
-        }
-    }
 }

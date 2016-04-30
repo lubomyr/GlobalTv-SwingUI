@@ -1,64 +1,85 @@
 package atua.anddev.globaltv.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import atua.anddev.globaltv.Player;
+import atua.anddev.globaltv.Services;
 import atua.anddev.globaltv.entity.Channel;
 
-public class ChannelServiceImpl implements ChannelService {
+import java.util.List;
+
+public class ChannelServiceImpl implements ChannelService, Services {
 
     @Override
-    public List<String> getCategoriesList() {
-        List<String> arr = new ArrayList<String>();
-        boolean cat_exist = false;
-        for (int i = 0; i < channel.size() - 1; i++) {
-            cat_exist = false;
-            for (int j = 0; j <= arr.size() - 1; j++)
-                if (channel.get(i).getCategory().equalsIgnoreCase(arr.get(j)))
-                    cat_exist = true;
-            if (!cat_exist && !channel.get(i).getCategory().equals(""))
-                arr.add(channel.get(i).getCategory());
-        }
-        return arr;
+    public String getCategoryById(String name, int id) {
+        return getCategoriesList(name).get(id);
     }
 
     @Override
-    public int indexNameForChannel(String name) {
-        return channelName.indexOf(name);
+    public String getChannelsUrlByPlistAndName(String plist, String name) {
+        return channelDb.getChannelsUrlByPlistAndName(plist, name);
+    }
+
+    @Override
+    public List<String> getChannelsByCategory(String plname, String catname) {
+        return channelDb.getChannelsByCategory(plname, catname);
+    }
+
+    @Override
+    public List<String> getChannelsUrlByCategory(String plname, String catname) {
+        return channelDb.getChannelsUrlByCategory(plname, catname);
+    }
+
+
+    @Override
+    public List<String> getChannelsUrlByPlist(String name) {
+        return channelDb.getChannelsUrlByPlist(name);
+    }
+
+    @Override
+    public void insertAllChannels(List<Channel> channels, String plist) {
+        channelDb.insertAllChannels(channels, plist);
+    }
+
+    @Override
+    public void deleteChannelbyPlist(String plist) {
+        channelDb.deleteChannelbyPlist(plist);
+    }
+
+    @Override
+    public List<String> getChannelsByPlist(String name) {
+        return channelDb.getChannelsByPlist(name);
+    }
+
+    @Override
+    public int getCategoriesNumber(String name) {
+        return channelDb.getCategoriesList(name).size();
+    }
+
+    @Override
+    public List<String> getCategoriesList(String name) {
+        return channelDb.getCategoriesList(name);
     }
 
     @Override
     public Channel getChannelById(int id) {
-        return channel.get(id);
-    }
-
-    @Override
-    public List<Channel> getAllChannels() {
-        return channel;
-    }
-
-    @Override
-    public void addToChannelList(String name, String url, String category) {
-        channel.add(new Channel(name, url, category));
-        channelName.add(name);
+        List<Integer> idList = channelDb.getAllChannelId();
+        int iddb = idList.get(id);
+        return channelDb.getChannelById(iddb);
     }
 
     @Override
     public void clearAllChannel() {
-        channel.clear();
-        channelName.clear();
+        channelDb.deleteAllChannels();
     }
 
     @Override
     public int sizeOfChannelList() {
-        return channel.size();
+        return channelDb.numberOfRows();
     }
 
     public void openChannel(String chName) {
-        for (Channel chn : channel) {
-            if (chName.equals(chn.getName())) {
-                openURL(chn.getUrl());
+        for (int i = 0; i < sizeOfChannelList(); i++) {
+            if (chName.equals(getChannelById(i).getName())) {
+                openURL(getChannelById(i).getUrl());
                 return;
             }
         }
@@ -72,4 +93,5 @@ public class ChannelServiceImpl implements ChannelService {
             }
         }).start();
     }
+
 }

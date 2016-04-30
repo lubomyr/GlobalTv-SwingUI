@@ -1,7 +1,6 @@
 package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.dialog.SearchDialog;
-import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.PlaylistForm;
 
@@ -38,15 +37,11 @@ public class PlaylistActivity implements Services {
     }
 
     private void openCategory(final String catName) {
-        for (Channel chn : channelService.getAllChannels()) {
-            if (catName.equals(tService.local("all"))) {
-                playlist.add(chn.getName());
-                playlistUrl.add(chn.getUrl());
-            } else if (catName.equals(chn.getCategory())) {
-                playlist.add(chn.getName());
-                playlistUrl.add(chn.getUrl());
-            }
-        }
+        String plname = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+        playlist = catName.equals(tService.local("all")) ?
+                channelService.getChannelsByPlist(plname) : channelService.getChannelsByCategory(plname, catName);
+        playlistUrl = catName.equals(tService.local("all")) ?
+                channelService.getChannelsUrlByPlist(plname) : channelService.getChannelsUrlByCategory(plname, catName);
 
         playlistForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.local("channels"));
 
@@ -104,7 +99,6 @@ public class PlaylistActivity implements Services {
         playlistForm.addToFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 favoriteService.addToFavoriteList(selectedChannel, selectedPlaylist.getName());
-                favoriteService.saveFavorites();
                 playlistForm.removeFromFavoritesButton.setVisible(true);
                 playlistForm.addToFavoritesButton.setVisible(false);
             }
@@ -113,7 +107,6 @@ public class PlaylistActivity implements Services {
             public void actionPerformed(ActionEvent arg0) {
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName());
                 favoriteService.deleteFromFavoritesById(index);
-                favoriteService.saveFavorites();
                 playlistForm.removeFromFavoritesButton.setVisible(false);
                 playlistForm.addToFavoritesButton.setVisible(true);
             }

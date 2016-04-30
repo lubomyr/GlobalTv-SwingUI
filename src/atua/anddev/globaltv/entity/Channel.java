@@ -4,11 +4,20 @@ public class Channel {
     private String name;
     private String url;
     private String category;
+    private String plist;
 
     public Channel(String name, String url, String category) {
         this.name = name;
         this.url = url;
         this.category = category;
+        this.plist = null;
+    }
+
+    public Channel(String name, String url, String category, String plist) {
+        this.name = name;
+        this.url = url;
+        this.category = category;
+        this.plist = plist;
     }
 
     public void setName(String name) {

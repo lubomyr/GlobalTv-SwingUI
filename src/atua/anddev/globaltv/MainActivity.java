@@ -44,13 +44,8 @@ public class MainActivity implements Services {
 
         if (playlistService.sizeOfOfferedPlaylist() == 0) {
             playlistService.setupProvider();
-        }
-
-        try {
-            if (favoriteService.sizeOfFavoriteList() == 0)
-                favoriteService.loadFavorites();
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            favoriteService.favoriteListName.addAll(favoriteService.getAllFavoritesName());
+            favoriteService.favoriteProvList.addAll(favoriteService.getAllFavoritesProv());
         }
 
         if (Global.path_aceplayer == null)
@@ -155,21 +150,18 @@ public class MainActivity implements Services {
     }
 
     public static boolean checkPlaylistFile(int num) {
-        String tmpText;
         String fname = playlistService.getActivePlaylistById(num).getFile();
         try {
             String updateDateStr = playlistService.getActivePlaylistById(num).getUpdate();
-            File file = new File(myPath + fname);
-            long fileDate = file.lastModified();
             long currDate = (new Date()).getTime();
             long diffDate, updateDate = 0;
+            String tmpText;
             try {
                 updateDate = Long.parseLong(updateDateStr);
                 diffDate = currDate - updateDate;
             } catch (Exception e) {
-                diffDate = currDate - fileDate;
-                updateDate = fileDate;
                 System.out.println("Error: " + e.toString());
+                return false;
             }
             int hoursPassed = (int) TimeUnit.MILLISECONDS.toHours(diffDate);
             if (hoursPassed > 12)
@@ -356,25 +348,24 @@ public class MainActivity implements Services {
                     mainForm.mainPlaylistInfoLabel.setText(tService.local("no_selected_playlist"));
                     return;
                 }
-                try {
-                    if (needUpdate) {
-                        downloadPlaylist(selectedProvider, true);
-                    }
-                } finally {
-                    playlistService.readPlaylist(selectedProvider);
-                    if (Global.playlistWithGroup) {
-                        new CatlistActivity();
-                    } else {
-                        Global.selectedCategory = tService.local("all");
-                        new PlaylistActivity();
-                    }
+                if (!checkPlaylistFile(selectedProvider) || needUpdate) {
+                    downloadPlaylist(selectedProvider, true);
+                }
+                int grpcnt = channelService.getCategoriesNumber(playlistService.getActivePlaylistById(selectedProvider).getName());
+
+                if (grpcnt > 1) {
+                    new CatlistActivity();
+                } else {
+                    Global.selectedCategory = tService.local("all");
+                    new PlaylistActivity();
                 }
             }
+
         });
 
         mainForm.searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                searchService.clearSearchList();
+                //searchService.clearSearchList();
                 new SearchDialog("global");
             }
         });
@@ -417,7 +408,7 @@ public class MainActivity implements Services {
                 if (!newMd5.equals(oldMd5)) {
                     playlistService.setMd5(num, newMd5);
                     playlistService.setUpdateDate(num, new Date().getTime());
-                    playlistService.saveData();
+                    playlistService.readPlaylist(num);
                     checkPlaylistFile(selectedProvider);
                     mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.local("updated"));
 

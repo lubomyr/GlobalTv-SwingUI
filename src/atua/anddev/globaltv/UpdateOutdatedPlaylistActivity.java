@@ -35,6 +35,11 @@ public class UpdateOutdatedPlaylistActivity implements Services {
         DownloadPlaylist dplst = new DownloadPlaylist(num);
         Thread threadDp = new Thread(dplst);
         threadDp.start();
+        try {
+            threadDp.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private class DownloadPlaylist implements Runnable {
@@ -54,7 +59,7 @@ public class UpdateOutdatedPlaylistActivity implements Services {
                 if (!newMd5.equals(oldMd5)) {
                     playlistService.setMd5(num, newMd5);
                     playlistService.setUpdateDate(num, new Date().getTime());
-                    playlistService.saveData();
+                    playlistService.readPlaylist(num);
                     updateOutdatedPlaylistForm.table1.setValueAt(playlistService.getActivePlaylistById(num).getName(),updNum,0);
                     updateOutdatedPlaylistForm.table1.setValueAt(tService.local("updated"),updNum,1);
                     updNum++;

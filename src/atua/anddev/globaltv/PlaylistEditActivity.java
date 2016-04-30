@@ -82,7 +82,6 @@ public class PlaylistEditActivity implements Services {
                         new WarningDialog(tService.local("playlistexist"));
                     }
                     if (success) {
-                        playlistService.saveData();
                         playlistEditForm.dispose();
                     }
                 }

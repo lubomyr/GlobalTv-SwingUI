@@ -93,7 +93,6 @@ public class PlaylistManagerActivity implements Services {
                 playlistService.addNewActivePlaylist(playlistService.getOfferedPlaylistById(index));
                 model_a.addElement(playlistService.getOfferedPlaylistById(index).getName());
                 MainActivity.mainForm.comboBox1.addItem(playlistService.getOfferedPlaylistById(index).getName());
-                playlistService.saveData();
             }
         });
         playlistManagerForm.editButton.addActionListener(new ActionListener() {
@@ -108,7 +107,6 @@ public class PlaylistManagerActivity implements Services {
                 model_a.removeElement(playlistService.getActivePlaylistById(index).getName());
                 MainActivity.mainForm.comboBox1.removeItem(playlistService.getActivePlaylistById(index).getName());
                 playlistService.deleteActivePlaylistById(index);
-                playlistService.saveData();
             }
         });
         playlistManagerForm.addAllOfferedPlaylistsButton.addActionListener(new ActionListener() {
@@ -118,7 +116,6 @@ public class PlaylistManagerActivity implements Services {
                 model_d.clear();
                 createProvlist();
                 showProvlist();
-                playlistService.saveData();
             }
         });
         playlistManagerForm.resetButton.addActionListener(new ActionListener() {

@@ -266,58 +266,161 @@ public class PlaylistDb extends DBHelper {
         System.out.println("Operation done successfully");
     }
 
-/*    public boolean setPlaylistMd5ById(Integer id, String md5) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("md5", md5);
-        db.update("playlists", contentValues, "id = ? ", new String[]{Integer.toString(id)});
+    public boolean setPlaylistMd5ById(Integer id, String md5) {
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "UPDATE " + PLAYLISTS_TABLE_NAME + " set MD5='" + md5 + "' where ID=" + id + ";";
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return true;
     }
 
     public boolean setPlaylistUpdatedById(Integer id, long updated) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("updated", updated);
-        db.update("playlists", contentValues, "id = ? ", new String[]{Integer.toString(id)});
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "UPDATE " + PLAYLISTS_TABLE_NAME + " set UPDATED='" + updated + "' where ID=" + id + ";";
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return true;
     }
 
     public String getPlaylistMd5ById(Integer id) {
-        String result;
+        String result = null;
+        Connection c = null;
+        Statement stmt = null;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from playlists where id = " + id, null);
-        res.moveToFirst();
-        result = res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_MD5));
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_MD5 + " FROM " + PLAYLISTS_TABLE_NAME + ";");
+            result = rs.getString(PLAYLISTS_COLUMN_MD5);
+
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return result;
     }
 
     public long getUpdatedDateById(Integer id) {
-        long result;
+        long result = 0;
+        Connection c = null;
+        Statement stmt = null;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from playlists where id = " + id, null);
-        res.moveToFirst();
-        result = res.getLong(res.getColumnIndex(PLAYLISTS_COLUMN_UPDATED));
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_UPDATED + " FROM " + PLAYLISTS_TABLE_NAME + ";");
+            result = rs.getLong(PLAYLISTS_COLUMN_UPDATED);
+
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
         return result;
     }
 
     public List<Playlist> getSortedByDatePlaylists() {
         List<Playlist> list = new ArrayList<Playlist>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from playlists order by updated desc", null);
-        res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            list.add(new Playlist(res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_NAME)),
-                    res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_URL)),
-                    res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_FILE)),
-                    res.getInt(res.getColumnIndex(PLAYLISTS_COLUMN_TYPE)),
-                    res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_MD5)),
-                    res.getString(res.getColumnIndex(PLAYLISTS_COLUMN_UPDATED))));
-            res.moveToNext();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + PLAYLISTS_TABLE_NAME + " ORDER BY " + PLAYLISTS_COLUMN_UPDATED + " desc;");
+            while (rs.next()) {
+                int id = rs.getInt(PLAYLISTS_COLUMN_ID);
+                String name = rs.getString(PLAYLISTS_COLUMN_NAME);
+                String url = rs.getString(PLAYLISTS_COLUMN_URL);
+                String file = rs.getString(PLAYLISTS_COLUMN_FILE);
+                int type = rs.getInt(PLAYLISTS_COLUMN_TYPE);
+                String md5 = rs.getString(PLAYLISTS_COLUMN_MD5);
+                String updated = rs.getString(PLAYLISTS_COLUMN_UPDATED);
+                list.add(new Playlist(name, url, file, type, md5, updated));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
+        System.out.println("Operation done successfully");
         return list;
-    }*/
+    }
+
+    public void insertAllPlaylists(List<Playlist> playlists) {
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            for (Playlist s : playlists) {
+                String sql = "INSERT INTO " + PLAYLISTS_TABLE_NAME + " (NAME,URL,FILE,TYPE) " +
+                        "VALUES ('" + s.getName() + "', '" + s.getUrl() + "', '" + s.getFile() + "', " + s.getType() + " );";
+                stmt.executeUpdate(sql);
+            }
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Records created successfully");
+    }
 }

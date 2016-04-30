@@ -6,11 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface PlaylistService {
-    List<Playlist> activePlaylist = new ArrayList<Playlist>();
     List<Playlist> offeredPlaylist = new ArrayList<Playlist>();
     List<String> activePlaylistName = new ArrayList<String>();
-
-    List<Playlist> getSortedByDatePlaylists();
 
     void addToActivePlaylist(String name, String url, int type, String md5, String update);
 
@@ -50,13 +47,11 @@ public interface PlaylistService {
 
     void setUpdateDate(int id, Long update);
 
-    void saveData();
-
     void setupProvider();
 
     void fillNamesOfPlaylist();
 
-    void setDateFromFile(int num);
+    List<Playlist> getSortedByDatePlaylists();
 
     void readPlaylist(int num);
 

@@ -16,13 +16,13 @@ public class DBHelper {
 
             stmt = c.createStatement();
             String sql1 = "CREATE TABLE IF NOT EXISTS channels (" +
-                    " ID INT IDENTITY PRIMARY KEY," +
+                    " ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " NAME           TEXT, " +
                     " URL            TEXT, " +
                     " CATEGORY       TEXT, " +
                     " PLIST          TEXT)";
             String sql2 = "CREATE TABLE IF NOT EXISTS favorites (" +
-                    " ID INT IDENTITY PRIMARY KEY," +
+                    " ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " NAME           TEXT, " +
                     " PLIST          TEXT)";
             String sql3 = "CREATE TABLE IF NOT EXISTS playlists (" +

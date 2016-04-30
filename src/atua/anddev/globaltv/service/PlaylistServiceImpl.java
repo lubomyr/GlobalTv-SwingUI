@@ -2,57 +2,28 @@ package atua.anddev.globaltv.service;
 
 import atua.anddev.globaltv.Global;
 import atua.anddev.globaltv.Services;
+import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class PlaylistServiceImpl implements PlaylistService, Services {
     public static String LOG_TAG = "GlobalTv";
-    /*Comparator for sorting the list by Playlist date*/
-    public static Comparator<Playlist> PlstDateComparator = new Comparator<Playlist>() {
-
-        public int compare(Playlist s1, Playlist s2) {
-            String PlaylistDate1 = s1.getUpdate().toUpperCase();
-            String PlaylistDate2 = s2.getUpdate().toUpperCase();
-
-            //ascending order
-            //return PlaylistDate1.compareTo(PlaylistDate2);
-
-            //descending order
-            return PlaylistDate2.compareTo(PlaylistDate1);
-        }
-    };
-
-    @Override
-    public void setDateFromFile(int id) {
-        File file = new File(myPath + "/" + getActivePlaylistById(id).getFile());
-        long fileDate = file.lastModified();
-        setUpdateDate(id, fileDate);
-    }
 
     @Override
     public List<Playlist> getSortedByDatePlaylists() {
-        List<Playlist> sortedList = new ArrayList<Playlist>();
-        sortedList.addAll(activePlaylist);
-        Collections.sort(sortedList, PlstDateComparator);
-        return sortedList;
+        return playlistDb.getSortedByDatePlaylists();
     }
 
     @Override
@@ -64,26 +35,31 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     @Override
     public void setMd5(int id, String md5) {
-        Playlist plst = getActivePlaylistById(id);
-        activePlaylist.set(id, plst).setMd5(md5);
+        List<Integer> idList = playlistDb.getPlaylistId();
+        int iddb = idList.get(id);
+        playlistDb.setPlaylistMd5ById(iddb, md5);
     }
 
     @Override
     public void setUpdateDate(int id, Long update) {
-        Playlist plst = getActivePlaylistById(id);
-        String updateStr = update.toString();
-        activePlaylist.set(id, plst).setUpdate(updateStr);
+        List<Integer> idList = playlistDb.getPlaylistId();
+        int iddb = idList.get(id);
+        playlistDb.setPlaylistUpdatedById(iddb, update);
     }
 
     @Override
     public void deleteActivePlaylistById(int id) {
-        activePlaylist.remove(id);
+        List<Integer> idList = playlistDb.getPlaylistId();
+        int iddb = idList.get(id);
         activePlaylistName.remove(id);
+        playlistDb.deletePlaylist(iddb);
     }
 
     @Override
     public Playlist getActivePlaylistById(int id) {
-        return activePlaylist.get(id);
+        List<Integer> idList = playlistDb.getPlaylistId();
+        int iddb = idList.get(id);
+        return playlistDb.getPlaylistById(iddb);
     }
 
     @Override
@@ -94,14 +70,16 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     @Override
     public void setActivePlaylistById(int id, String name, String url, int type) {
         String file = getFileName(name);
-        activePlaylist.set(id, new Playlist(name, url, file, type));
+        List<Integer> idList = playlistDb.getPlaylistId();
+        int iddb = idList.get(id);
         activePlaylistName.set(id, name);
+        playlistDb.updatePlaylist(iddb, name, url, file, type);
     }
 
     @Override
     public void clearActivePlaylist() {
-        activePlaylist.clear();
         activePlaylistName.clear();
+        playlistDb.deleteAllPlaylists();
     }
 
     @Override
@@ -159,6 +137,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         return result;
     }
 
+
     public String getFileName(String input) {
         String output = "playlist_" + input + ".m3u";
         output = output.replace(" ", "_");
@@ -171,9 +150,8 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     @Override
     public void addToActivePlaylist(String name, String url, int type, String md5, String update) {
         String file = getFileName(name);
-        Playlist plst = new Playlist(name, url, file, type, md5, update);
-        activePlaylist.add(plst);
         activePlaylistName.add(name);
+        playlistDb.insertPlaylist(name, url, file, type);
     }
 
     @Override
@@ -184,78 +162,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     }
 
     public void addAllOfferedPlaylist() {
-        for (Playlist plst : offeredPlaylist) {
-            if (activePlaylistName.indexOf(plst.getName()) == -1) {
-                addNewActivePlaylist(plst);
-            }
-        }
-    }
-
-    @Override
-    public void saveData() {
-        try {
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-            // root elements
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("root");
-            doc.appendChild(rootElement);
-
-//            Element torkey = doc.createElement("torrentkey");
-//            torkey.appendChild(doc.createTextNode(Global.torrentKey));
-//            rootElement.appendChild(torkey);
-
-            for (Playlist plst : activePlaylist) {
-                // favorites elements
-                Element provider = doc.createElement("provider");
-                rootElement.appendChild(provider);
-
-                // name elements
-                Element name = doc.createElement("name");
-                name.appendChild(doc.createTextNode(plst.getName()));
-                provider.appendChild(name);
-
-                // url elements
-                Element url = doc.createElement("url");
-                url.appendChild(doc.createTextNode(plst.getUrl()));
-                provider.appendChild(url);
-
-                // type elements
-                Element type = doc.createElement("type");
-                type.appendChild(doc.createTextNode(plst.getTypeString()));
-                provider.appendChild(type);
-
-                // md5 elements
-                Element md5 = doc.createElement("md5");
-                md5.appendChild(doc.createTextNode(plst.getMd5()));
-                provider.appendChild(md5);
-
-                // update elements
-                Element update = doc.createElement("update");
-                update.appendChild(doc.createTextNode(plst.getUpdate()));
-                provider.appendChild(update);
-            }
-
-            // write the content into xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("userdata.xml"));
-
-            // Output to console for testing
-            // StreamResult result = new StreamResult(System.out);
-
-            transformer.transform(source, result);
-
-            // System.out.println("File saved!");
-
-        } catch (ParserConfigurationException | TransformerException pce) {
-            pce.printStackTrace();
-        }
-
+        playlistDb.insertAllPlaylists(getAllOfferedPlaylist());
     }
 
     @Override
@@ -270,12 +177,12 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     }
 
     public void readPlaylist(int num) {
+        List<Channel> channels = new ArrayList<Channel>();
         String fname = getActivePlaylistById(num).getFile();
         int type = getActivePlaylistById(num).getType();
         Global.playlistWithGroup = false;
         String lineStr, chName = "", chCategory = "", chLink = "";
         String groupName = "", groupName2 = "";
-        channelService.clearAllChannel();
         try {
             InputStream myfile = new FileInputStream(myPath + fname);
             Scanner myInputFile = new Scanner(myfile, "UTF8").useDelimiter("[\n]");
@@ -298,7 +205,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
                         chName = chName.substring(0, chName.length() - 1);
                     }
                     chCategory = tService.translateCategory(chCategory);
-                    channelService.addToChannelList(chName, chLink, chCategory);
+                    channels.add(new Channel(chName, chLink, chCategory));
                     if (!chCategory.equals(""))
                         Global.playlistWithGroup = true;
                     chName = "";
@@ -337,6 +244,9 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
                 }
             }
             myInputFile.close();
+            String plist = getActivePlaylistById(num).getName();
+            channelService.deleteChannelbyPlist(plist);
+            channelService.insertAllChannels(channels, plist);
         } catch (Exception e) {
 //            Log.i("GlobalTV", "Error: " + e.toString());
         }

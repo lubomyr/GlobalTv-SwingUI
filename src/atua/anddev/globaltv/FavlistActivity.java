@@ -7,6 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class FavlistActivity implements Services {
     private FavoritesForm favoritesForm;
@@ -26,12 +27,14 @@ public class FavlistActivity implements Services {
     }
 
     private void showFavlist() {
+        String plname = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+        final List<String> playlist = favoriteService.getFavoritesNameByPlist(plname);
         model = new DefaultListModel<String>();
-        for (String str : favoriteService.getFavoriteListForSelProv()) {
+        for (String str : playlist) {
             model.addElement(str);
         }
         favoritesForm.list1.setModel(model);
-        favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.local("pcs"));
+        favoritesForm.favoritesLabel.setText(playlist.size() + " - " + tService.local("pcs"));
         favoritesForm.pack();
     }
 
@@ -54,23 +57,23 @@ public class FavlistActivity implements Services {
     }
 
     private void buttonActionListener() {
+        String plname = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
         favoritesForm.openChannelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = favoritesForm.list1.getSelectedIndex();
-                channelService.openChannel(favoriteService.getFavoriteListForSelProv().get(selected));
+                channelService.openChannel(favoriteService.getFavoritesNameByPlist(plname).get(selected));
             }
         });
         favoritesForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = favoritesForm.list1.getSelectedIndex();
-                String selectedName = favoriteService.getFavoriteListForSelProv().get(selected);
+                String selectedName = favoriteService.getFavoritesNameByPlist(plname).get(selected);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 model.removeElementAt(selected);
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
                 favoriteService.deleteFromFavoritesById(index);
-                favoriteService.saveFavorites();
             }
         });
     }

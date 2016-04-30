@@ -31,8 +31,9 @@ public class CatlistActivity implements Services {
     }
 
     private void createCatlist() {
+        String pname = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
         categoryList.add(tService.local("all"));
-        categoryList.addAll(channelService.getCategoriesList());
+        categoryList.addAll(channelService.getCategoriesList(pname));
     }
 
     private void showCatlist() {

@@ -4,7 +4,6 @@ import atua.anddev.globaltv.Services;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 public class ResetDialog extends JDialog implements Services {
     private JPanel contentPane;
@@ -50,9 +49,7 @@ public class ResetDialog extends JDialog implements Services {
 
     private void onOK() {
         favoriteService.clearAllFavorites();
-        favoriteService.saveFavorites();
         playlistService.clearActivePlaylist();
-        playlistService.saveData();
         dispose();
     }
 

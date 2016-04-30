@@ -32,14 +32,9 @@ public class SearchListActivity implements Services {
     }
 
     private void showSearchResults() {
-        String chName;
-        for (int i = 0; i < channelService.sizeOfChannelList(); i++) {
-            chName = channelService.getChannelById(i).getName().toLowerCase();
-            if (chName.contains(searchString.toLowerCase())) {
-                playlist.add(channelService.getChannelById(i).getName());
-                playlistUrl.add(channelService.getChannelById(i).getUrl());
-            }
-        }
+        String plist = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+        playlist = searchService.searchChannelsByPlistAndName(plist, searchString.toLowerCase());
+        playlistUrl = searchService.searchChannelsUrlByPlistAndName(plist, searchString.toLowerCase());
 
         DefaultListModel<String> model = new DefaultListModel<String>();
         for (String str : playlist) {
@@ -64,7 +59,6 @@ public class SearchListActivity implements Services {
                 String selectedName = playlist.get(selected);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 favoriteService.addToFavoriteList(selectedName, selectedProv);
-                favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(true);
                 searchForm.addToFavoritesButton.setVisible(false);
             }
@@ -77,7 +71,6 @@ public class SearchListActivity implements Services {
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
                 favoriteService.deleteFromFavoritesById(index);
-                favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(false);
                 searchForm.addToFavoritesButton.setVisible(true);
             }
