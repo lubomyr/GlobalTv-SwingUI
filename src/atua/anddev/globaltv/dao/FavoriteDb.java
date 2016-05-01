@@ -25,10 +25,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO " + FAVORITES_TABLE_NAME + " (NAME,PLIST) " +
@@ -42,7 +41,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
         return true;
     }
 
@@ -51,16 +49,13 @@ public class FavoriteDb extends DBHelper {
         Statement stmt = null;
         int numRows = 0;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(*) FROM " + FAVORITES_TABLE_NAME + ";");
             numRows = rs.getInt(1);
-            System.out.println("numRows = " + numRows);
-
             rs.close();
             stmt.close();
             c.close();
@@ -68,7 +63,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return numRows;
     }
 
@@ -76,10 +70,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + FAVORITES_TABLE_NAME + " where ID=" + id + ";";
@@ -92,7 +85,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return 1;
     }
 
@@ -101,10 +93,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + FAVORITES_TABLE_NAME + ";");
@@ -121,7 +112,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -130,10 +120,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + FAVORITES_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -149,7 +138,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -158,10 +146,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_NAME + " FROM " + FAVORITES_TABLE_NAME + ";");
@@ -176,7 +163,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -185,10 +171,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_PLIST + " FROM " + FAVORITES_TABLE_NAME + ";");
@@ -203,7 +188,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -212,10 +196,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_ID + " FROM " + FAVORITES_TABLE_NAME + ";");
@@ -230,7 +213,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -239,10 +221,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_NAME + " FROM " + FAVORITES_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -257,7 +238,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -266,10 +246,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_ID + " FROM " + FAVORITES_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -284,7 +263,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -293,10 +271,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + FAVORITES_TABLE_NAME + " where ID=" + id + ";");
@@ -310,7 +287,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return favorites;
     }
 
@@ -318,10 +294,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + FAVORITES_TABLE_NAME + ";";
@@ -334,7 +309,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
     }
 
     public List<Integer> getFavoritesIdByPlistAndName(String plist, String name) {
@@ -342,10 +316,9 @@ public class FavoriteDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + FAVORITES_COLUMN_ID + " FROM " + FAVORITES_TABLE_NAME
@@ -361,7 +334,6 @@ public class FavoriteDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 

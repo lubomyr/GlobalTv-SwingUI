@@ -29,10 +29,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO " + PLAYLISTS_TABLE_NAME + " (NAME,URL,FILE,TYPE) " +
@@ -46,7 +45,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
         return true;
     }
 
@@ -55,16 +53,13 @@ public class PlaylistDb extends DBHelper {
         Statement stmt = null;
         int numRows = 0;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(*) FROM " + PLAYLISTS_TABLE_NAME + ";");
             numRows = rs.getInt(1);
-            System.out.println("numRows = " + numRows);
-
             rs.close();
             stmt.close();
             c.close();
@@ -72,7 +67,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return numRows;
     }
 
@@ -80,10 +74,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "UPDATE " + PLAYLISTS_TABLE_NAME + " set NAME='" + name + "', URL='" + url + "', FILE='"
@@ -97,7 +90,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return true;
     }
 
@@ -105,10 +97,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + PLAYLISTS_TABLE_NAME + " where ID=" + id + ";";
@@ -121,7 +112,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return 1;
     }
 
@@ -130,10 +120,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + PLAYLISTS_TABLE_NAME + ";");
@@ -154,7 +143,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return list;
     }
 
@@ -163,10 +151,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + PLAYLISTS_TABLE_NAME + " where ID=" + id + ";");
@@ -184,7 +171,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return playlist;
     }
 
@@ -193,10 +179,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_ID + " FROM " + PLAYLISTS_TABLE_NAME + ";");
@@ -211,7 +196,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -221,10 +205,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_NAME + " FROM " + PLAYLISTS_TABLE_NAME + ";");
@@ -239,7 +222,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -247,10 +229,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + PLAYLISTS_TABLE_NAME + ";";
@@ -263,17 +244,15 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
     }
 
     public boolean setPlaylistMd5ById(Integer id, String md5) {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "UPDATE " + PLAYLISTS_TABLE_NAME + " set MD5='" + md5 + "' where ID=" + id + ";";
@@ -286,7 +265,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return true;
     }
 
@@ -294,10 +272,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "UPDATE " + PLAYLISTS_TABLE_NAME + " set UPDATED='" + updated + "' where ID=" + id + ";";
@@ -310,7 +287,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return true;
     }
 
@@ -320,10 +296,9 @@ public class PlaylistDb extends DBHelper {
         Statement stmt = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_MD5 + " FROM " + PLAYLISTS_TABLE_NAME + ";");
@@ -336,7 +311,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return result;
     }
 
@@ -346,10 +320,9 @@ public class PlaylistDb extends DBHelper {
         Statement stmt = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + PLAYLISTS_COLUMN_UPDATED + " FROM " + PLAYLISTS_TABLE_NAME + ";");
@@ -362,7 +335,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return result;
     }
 
@@ -371,10 +343,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + PLAYLISTS_TABLE_NAME + " ORDER BY " + PLAYLISTS_COLUMN_UPDATED + " desc;");
@@ -395,7 +366,6 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return list;
     }
 
@@ -403,10 +373,9 @@ public class PlaylistDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             for (Playlist s : playlists) {
@@ -421,6 +390,5 @@ public class PlaylistDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
     }
 }

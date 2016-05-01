@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class DBHelper {
+    protected String dbDriver = "org.sqlite.JDBC";
+    protected String dbConnection = "jdbc:sqlite:globaltv.db";
 
     public void createDb() {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
@@ -49,8 +51,8 @@ public class DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();

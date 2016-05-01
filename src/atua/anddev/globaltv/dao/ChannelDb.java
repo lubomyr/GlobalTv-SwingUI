@@ -29,16 +29,13 @@ public class ChannelDb extends DBHelper {
         Statement stmt = null;
         int numRows = 0;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(*) FROM " + CHANNELS_TABLE_NAME + ";");
             numRows = rs.getInt(1);
-            System.out.println("numRows = " + numRows);
-
             rs.close();
             stmt.close();
             c.close();
@@ -46,7 +43,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return numRows;
     }
 
@@ -54,10 +50,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + CHANNELS_TABLE_NAME + " where PLIST='" + plist + "';";
@@ -70,7 +65,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return 1;
     }
 
@@ -79,10 +73,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + CHANNELS_TABLE_NAME + " where ID=" + id + ";");
@@ -98,7 +91,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return channel;
     }
 
@@ -107,10 +99,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -125,7 +116,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -134,10 +124,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -152,7 +141,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -161,10 +149,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
@@ -180,7 +167,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -189,10 +175,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
@@ -208,7 +193,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -217,10 +201,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='"
@@ -233,7 +216,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return result;
     }
 
@@ -242,10 +224,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME
@@ -261,7 +242,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -270,10 +250,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_PLIST + " FROM " + CHANNELS_TABLE_NAME
@@ -289,7 +268,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -298,10 +276,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME
@@ -317,7 +294,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -326,10 +302,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_NAME + " FROM " + CHANNELS_TABLE_NAME
@@ -345,7 +320,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -354,10 +328,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_URL + " FROM " + CHANNELS_TABLE_NAME
@@ -373,7 +346,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -381,10 +353,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "DELETE from " + CHANNELS_TABLE_NAME + ";";
@@ -397,7 +368,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
     }
 
     public ArrayList<String> getCategoriesList(String plist) {
@@ -405,10 +375,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT DISTINCT " + CHANNELS_COLUMN_GROUP + " FROM " + CHANNELS_TABLE_NAME + " WHERE PLIST='" + plist + "';");
@@ -423,7 +392,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -432,10 +400,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + CHANNELS_COLUMN_ID + " FROM " + CHANNELS_TABLE_NAME + ";");
@@ -450,7 +417,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return array_list;
     }
 
@@ -458,10 +424,9 @@ public class ChannelDb extends DBHelper {
         Connection c = null;
         Statement stmt = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:globaltv.db");
+            Class.forName(dbDriver);
+            c = DriverManager.getConnection(dbConnection);
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             for (Channel s : channels) {
@@ -476,7 +441,6 @@ public class ChannelDb extends DBHelper {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
     }
 
 }
