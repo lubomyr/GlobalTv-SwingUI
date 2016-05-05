@@ -180,7 +180,7 @@ public class MainActivity implements Services {
                 needUpdate = false;
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(diffDate);
-            int daysPassed = cal.get(Calendar.DATE);
+            int daysPassed = cal.get(Calendar.DAY_OF_YEAR);
             switch (daysPassed) {
                 case 1:
                     tmpText = tService.local("updated") + " " + new Date(updateDate).toLocaleString();

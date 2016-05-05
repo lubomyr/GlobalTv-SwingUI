@@ -57,7 +57,7 @@ public class SortedListOfPlaylists implements Services {
         long diffDate = currDate - inputDate;
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(diffDate);
-        int daysPassed = cal.get(Calendar.DATE);
+        int daysPassed = cal.get(Calendar.DAY_OF_YEAR);
         switch (daysPassed) {
             case 1:
                 tmpText = tService.local("updated") + " " + new Date(inputDate).toLocaleString();
