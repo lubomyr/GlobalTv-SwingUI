@@ -116,8 +116,8 @@ public class MainActivity implements Services {
         localsList.add("Українська");
         localsList.add("Русский");
 
-        for (int i = 0; i < localsList.size(); i++)
-            mainForm.comboBox2.addItem(localsList.get(i));
+        for (String str : localsList)
+            mainForm.comboBox2.addItem(str);
 
         String translationFile = null;
 

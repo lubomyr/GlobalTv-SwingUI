@@ -23,7 +23,6 @@ public class UpdateOutdatedPlaylistActivity implements Services {
         colNames = new String[] { "name", "result" };
         data = new Object[playlistService.sizeOfActivePlaylist()][cols];
         for (int i = 0; i < playlistService.sizeOfActivePlaylist(); i++) {
-            MainActivity.checkPlaylistFile(i);
             downloadOutdatedPlaylist(i);
         }
         model = new DefaultTableModel(data, colNames);
@@ -57,6 +56,9 @@ public class UpdateOutdatedPlaylistActivity implements Services {
                     playlistService.saveData();
                     updateOutdatedPlaylistForm.table1.setValueAt(playlistService.getActivePlaylistById(num).getName(),updNum,0);
                     updateOutdatedPlaylistForm.table1.setValueAt(tService.local("updated"),updNum,1);
+                    if (num == MainActivity.selectedProvider) {
+                        MainActivity.checkPlaylistFile(MainActivity.selectedProvider);
+                    }
                     updNum++;
                 }
             } catch (Exception e) {
