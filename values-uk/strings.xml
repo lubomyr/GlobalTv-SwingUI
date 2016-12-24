@@ -79,13 +79,17 @@
         <item>Познавательные каналы</item>
         <item>Познавательные и Развлекательные</item>
         <item>Развлекательные</item>
+        <item>Документальные</item>
+        <item>Общественные</item>
         <item>Фильмы</item>
         <item>Фильмы и сериалы</item>
         <item>Детские</item>
         <item>Для взрослых</item>
         <item>Взрослые</item>
+        <item>Взрослое</item>
         <item>Мужские</item>
         <item>Религиозные</item>
+        <item>Религия</item>
         <item>Музыкальные</item>
         <item>Спортивные</item>
         <item>Кино</item>
@@ -98,6 +102,8 @@
         <item>Юмор</item>
         <item>Деловые</item>
         <item>Мир</item>
+        <item>Кулинария</item>
+        <item>Бизнес</item>	
         <item>Позновательные</item>
         <item>Новостные каналы</item>
         <item>Эфирные</item>
@@ -111,6 +117,7 @@
         <item>Детское</item>
         <item>Другие</item>
         <item>Другие каналы</item>
+		<item>Разное</item>
         <item>Радио</item>
         <item>Камеры</item>
         <item>Камера из студии</item>
@@ -155,13 +162,17 @@
         <item>Пізнавальні канали</item>
         <item>Пізнавальні і Розважальні</item>
         <item>Розважальні</item>
+        <item>Документальні</item>
+        <item>Громадські</item>
         <item>Фільми</item>
         <item>Фільми і серіали</item>
         <item>Дитячі</item>
         <item>Для дорослих</item>
         <item>Дорослі</item>
+        <item>Доросле</item>		
         <item>Чоловічі</item>
         <item>Релігійні</item>
+        <item>Релігія</item>
         <item>Музичні</item>
         <item>Спортивні</item>
         <item>Кіно</item>
@@ -174,6 +185,8 @@
         <item>Гумор</item>
         <item>Ділові</item>
         <item>Світ</item>
+        <item>Кулінарія</item>
+        <item>Бізнес</item>	
         <item>Пізнавальні</item>
         <item>Новини</item>
         <item>Ефірні</item>
@@ -187,6 +200,7 @@
         <item>Дитяче</item>
         <item>Інші</item>
         <item>Інші канали</item>
+		<item>Різне</item>
         <item>Радіо</item>
         <item>Камери</item>
         <item>Камера з студії</item>
