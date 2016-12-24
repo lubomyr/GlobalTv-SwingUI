@@ -15,7 +15,7 @@ public class CategoryForm extends JFrame {
     public CategoryForm() {
         super("Category list");
         setContentPane(categoryPanel);
-//        pack();
+        pack();
         setVisible(true);
     }
 

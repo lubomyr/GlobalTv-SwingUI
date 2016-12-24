@@ -18,7 +18,7 @@ public class PlaylistForm extends JFrame {
     public PlaylistForm() {
         super("Channel list");
         setContentPane(playlistPanel);
-//        pack();
+        pack();
         setVisible(true);
     }
 }
