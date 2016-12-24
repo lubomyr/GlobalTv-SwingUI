@@ -41,20 +41,15 @@ public class MainActivity implements Services {
 
         //guideService.doInBackground("http://api.torrent-tv.ru/ttv.xmltv.xml.gz");
 
-        if (playlistService.sizeOfActivePlaylist() == 0 && checkFile("userdata.xml")) {
-            playlistService.setupProvider("user");
-        }
-
-        if (playlistService.sizeOfOfferedPlaylist() == 0) {
-            playlistService.setupProvider("default");
-        }
-
         try {
             if (favoriteService.sizeOfFavoriteList() == 0)
                 favoriteService.loadFavorites();
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
+
+        if (guideService.checkForUpdate())
+            updateGuide();
 
         if (Global.path_aceplayer == null)
             loadSettings();
@@ -70,6 +65,14 @@ public class MainActivity implements Services {
             }
         } catch (Exception e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
+
+        if (playlistService.sizeOfActivePlaylist() == 0 && checkFile("userdata.xml")) {
+            playlistService.setupProvider("user");
+        }
+
+        if (playlistService.sizeOfOfferedPlaylist() == 0) {
+            playlistService.setupProvider("default");
         }
 
         mainForm = new MainForm();
@@ -334,6 +337,22 @@ public class MainActivity implements Services {
         };
         mainForm.comboBox2.addItemListener(itemListener);
     }
+
+    private static void updateGuide() {
+        Thread thread = new Thread(saveGuideRunnable);
+        thread.start();
+    }
+
+    static Runnable saveGuideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                saveUrl("ttv.xmltv.xml.gz", guideService.guideUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public static void mainButtonsActionListener() {
         mainForm.updatePlaylistButton.addActionListener(new ActionListener() {

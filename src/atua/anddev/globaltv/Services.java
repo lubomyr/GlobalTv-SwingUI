@@ -8,5 +8,6 @@ public interface Services {
     FavoriteService favoriteService = new FavoriteServiceImpl();
     SearchService searchService = new SearchServiceImpl();
     TranslationService tService = new TranslationServiceImpl();
+    GuideService guideService = new GuideServiceImpl();
     String myPath = "";
 }
