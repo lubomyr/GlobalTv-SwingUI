@@ -73,6 +73,7 @@ public class GlobalSearchActivity implements Services {
         globalSearchForm.openChannelButton.setVisible(false);
         globalSearchForm.removeFromFavoritesButton.setVisible(false);
         globalSearchForm.addToFavoritesButton.setVisible(false);
+        globalSearchForm.guidePanel.setVisible(false);
         globalSearchForm.table1.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -88,6 +89,23 @@ public class GlobalSearchActivity implements Services {
                         globalSearchForm.addToFavoritesButton.setVisible(false);
                         globalSearchForm.removeFromFavoritesButton.setVisible(true);
                     }
+
+                    String selectedChannel = globalSearchForm.table1.getValueAt(selected,0).toString();
+                    String title = guideService.getProgramTitle(selectedChannel);
+                    if ((title != null) && !title.isEmpty()) {
+                        globalSearchForm.guidePanel.setVisible(true);
+                        globalSearchForm.guideTextArea.setText(title);
+                    } else {
+                        globalSearchForm.guidePanel.setVisible(false);
+                    }
+
+                    String desc = guideService.getProgramDesc(selectedChannel);
+                    if ((desc != null) && !desc.isEmpty()) {
+                        globalSearchForm.guideTextArea.append("\n" + desc);
+                        globalSearchForm.guideTextArea.setLineWrap(true);
+                        globalSearchForm.guideTextArea.setWrapStyleWord(true);
+                    }
+                    globalSearchForm.pack();
                 } else {
                     globalSearchForm.openChannelButton.setVisible(false);
                     globalSearchForm.removeFromFavoritesButton.setVisible(false);

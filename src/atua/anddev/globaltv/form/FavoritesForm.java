@@ -8,6 +8,8 @@ public class FavoritesForm extends JFrame {
     private JPanel favoritesPanel;
     public JLabel favoritesLabel;
     public JTable table1;
+    public JTextArea guideTextArea;
+    public JScrollPane guidePanel;
 
     public FavoritesForm() {
         super("Favorites");

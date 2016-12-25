@@ -9,6 +9,8 @@ public class SearchForm extends JFrame {
     private JPanel searchPanel;
     public JLabel searchLabel;
     public JTable table1;
+    public JTextArea guideTextArea;
+    public JScrollPane guidePanel;
 
     public SearchForm() {
         super("Search");

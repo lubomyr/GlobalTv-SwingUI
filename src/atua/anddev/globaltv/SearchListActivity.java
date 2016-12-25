@@ -101,6 +101,7 @@ public class SearchListActivity implements Services {
         searchForm.openChannelButton.setVisible(false);
         searchForm.addToFavoritesButton.setVisible(false);
         searchForm.removeFromFavoritesButton.setVisible(false);
+        searchForm.guidePanel.setVisible(false);
         searchForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -117,6 +118,22 @@ public class SearchListActivity implements Services {
                         searchForm.addToFavoritesButton.setVisible(false);
                         searchForm.removeFromFavoritesButton.setVisible(true);
                     }
+                    String selectedChannel = searchForm.table1.getValueAt(index,0).toString();
+                    String title = guideService.getProgramTitle(selectedChannel);
+                    if ((title != null) && !title.isEmpty()) {
+                        searchForm.guidePanel.setVisible(true);
+                        searchForm.guideTextArea.setText(title);
+                    } else {
+                        searchForm.guidePanel.setVisible(false);
+                    }
+
+                    String desc = guideService.getProgramDesc(selectedChannel);
+                    if ((desc != null) && !desc.isEmpty()) {
+                        searchForm.guideTextArea.append("\n" + desc);
+                        searchForm.guideTextArea.setLineWrap(true);
+                        searchForm.guideTextArea.setWrapStyleWord(true);
+                    }
+                    searchForm.pack();
                 } else {
                     searchForm.openChannelButton.setVisible(false);
                     searchForm.addToFavoritesButton.setVisible(false);

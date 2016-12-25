@@ -6,7 +6,6 @@ import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.PlaylistForm;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -94,6 +93,7 @@ class PlaylistActivity implements Services {
                         playlistForm.removeFromFavoritesButton.setVisible(true);
                         playlistForm.addToFavoritesButton.setVisible(false);
                     }
+
                     String title = guideService.getProgramTitle(selectedChannel);
                     if ((title != null) && !title.isEmpty()) {
                         playlistForm.guidePanel.setVisible(true);
@@ -108,6 +108,7 @@ class PlaylistActivity implements Services {
                         playlistForm.guideTextArea.setLineWrap(true);
                         playlistForm.guideTextArea.setWrapStyleWord(true);
                     }
+
                     playlistForm.pack();
                 } else {
                     playlistForm.openChannelButton.setVisible(false);

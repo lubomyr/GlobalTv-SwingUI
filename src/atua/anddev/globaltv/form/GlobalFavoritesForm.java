@@ -9,6 +9,8 @@ public class GlobalFavoritesForm extends JFrame {
     public JButton removeFromFavoritesButton;
     public JTable table1;
     public JLabel globalFavoritesLabel;
+    public JTextArea guideTextArea;
+    public JScrollPane guidePanel;
 
     public GlobalFavoritesForm() {
         super("Favorites");

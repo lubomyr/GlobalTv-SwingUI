@@ -56,6 +56,7 @@ public class GlobalFavoriteActivity implements Services {
     private void actionSelector() {
         globalFavoritesForm.openChannelButton.setVisible(false);
         globalFavoritesForm.removeFromFavoritesButton.setVisible(false);
+        globalFavoritesForm.guidePanel.setVisible(false);
         globalFavoritesForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -64,6 +65,23 @@ public class GlobalFavoriteActivity implements Services {
                 if (selected != -1) {
                     globalFavoritesForm.openChannelButton.setVisible(true);
                     globalFavoritesForm.removeFromFavoritesButton.setVisible(true);
+
+                    String selectedChannel = globalFavoritesForm.table1.getValueAt(selected,0).toString();
+                    String title = guideService.getProgramTitle(selectedChannel);
+                    if ((title != null) && !title.isEmpty()) {
+                        globalFavoritesForm.guidePanel.setVisible(true);
+                        globalFavoritesForm.guideTextArea.setText(title);
+                    } else {
+                        globalFavoritesForm.guidePanel.setVisible(false);
+                    }
+
+                    String desc = guideService.getProgramDesc(selectedChannel);
+                    if ((desc != null) && !desc.isEmpty()) {
+                        globalFavoritesForm.guideTextArea.append("\n" + desc);
+                        globalFavoritesForm.guideTextArea.setLineWrap(true);
+                        globalFavoritesForm.guideTextArea.setWrapStyleWord(true);
+                    }
+                    globalFavoritesForm.pack();
                 } else {
                     globalFavoritesForm.openChannelButton.setVisible(false);
                     globalFavoritesForm.removeFromFavoritesButton.setVisible(false);

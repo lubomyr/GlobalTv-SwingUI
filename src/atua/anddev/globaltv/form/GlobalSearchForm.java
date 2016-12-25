@@ -9,6 +9,8 @@ public class GlobalSearchForm extends JFrame {
     public JButton removeFromFavoritesButton;
     private JPanel globalSearchPanel;
     public JLabel globalSearchLabel;
+    public JTextArea guideTextArea;
+    public JScrollPane guidePanel;
 
     public GlobalSearchForm() {
         super("Search");
