@@ -6,21 +6,32 @@ import atua.anddev.globaltv.entity.Programme;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 
 import static atua.anddev.globaltv.Services.myPath;
 
 public class GuideServiceImpl implements GuideService {
+    private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    private Calendar currentTime;
 
     public boolean checkForUpdate() {
         boolean result = false;
         if (!isGuideExist()) {
             result = true;
         } else {
-            result = false;
-            Thread thread = new Thread(parseGuideRunnable);
-            thread.start();
+            currentTime = Calendar.getInstance();
+            parseGuide();
+            result = checkGuideDates();
+            //Thread thread = new Thread(parseGuideRunnable);
+            //thread.start();
         }
         return result;
     }
@@ -32,11 +43,12 @@ public class GuideServiceImpl implements GuideService {
         return result;
     }
 
-    Runnable parseGuideRunnable = new Runnable() {
+    private Runnable parseGuideRunnable = new Runnable() {
 
         @Override
         public void run() {
             parseGuide();
+            checkGuideDates();
         }
     };
 
@@ -139,6 +151,80 @@ public class GuideServiceImpl implements GuideService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getProgramTitle(String chName) {
+        currentTime = Calendar.getInstance();
+        String id = getIdByProgramName(chName);
+        String title = getProgramTitlebyId(id);
+        return title;
+    }
+
+    private boolean checkGuideDates() {
+        boolean result = false;
+        List<String> dateList = new ArrayList<String>();
+        if (channelGuideList.size() > 0) {
+            String chId = channelGuideList.get(0).getId();
+            for (Programme programme : programmeList) {
+                if (programme.getChannel().equals(chId)) {
+                    dateList.add(programme.getStart());
+                }
+            }
+            String startDateStr = dateList.get(0);
+            String endDateStr = dateList.get(dateList.size() - 1);
+            Calendar startDate = Calendar.getInstance();
+            Calendar endDate = Calendar.getInstance();
+            try {
+                startDate.setTime(sdf.parse(startDateStr));
+                endDate.setTime(sdf.parse(endDateStr));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (currentTime.after(startDate) && currentTime.before(endDate))
+                result = false;
+            else
+                result = true;
+        }
+        return result;
+    }
+
+    private String getIdByProgramName(String chName) {
+        String result = null;
+        for (ChannelGuide channelGuide : channelGuideList) {
+            if (chName.equals(channelGuide.getDisplayName()))
+                result = channelGuide.getId();
+        }
+        return result;
+    }
+
+    private String getProgramTitlebyId(String id) {
+        String result = null;
+        for (Programme programme : programmeList) {
+            if (programme.getChannel().equals(id)) {
+                String startDateStr = programme.getStart();
+                String endDateStr = programme.getStop();
+                Calendar startDate = Calendar.getInstance();
+                Calendar endDate = Calendar.getInstance();
+                try {
+                    startDate.setTime(sdf.parse(startDateStr));
+                    endDate.setTime(sdf.parse(endDateStr));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // convert time to Ukrainian time zone
+                startDate.add(Calendar.HOUR,-1);
+                endDate.add(Calendar.HOUR,-1);
+                if (currentTime.after(startDate) && currentTime.before(endDate)) {
+                    result = programme.getTitle();
+                    if (result.contains("&amp;quot;"))
+                        result = result.replace("&amp;quot;","\"");
+                    if (result.contains("&amp;apos;"))
+                        result = result.replace("&amp;apos;","'");
+                }
+            }
+        }
+        return result;
     }
 
 }

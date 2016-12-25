@@ -12,4 +12,6 @@ public interface GuideService {
     List<Programme> programmeList = new ArrayList<Programme>();
 
     boolean checkForUpdate();
+    void parseGuide();
+    String getProgramTitle(String chName);
 }

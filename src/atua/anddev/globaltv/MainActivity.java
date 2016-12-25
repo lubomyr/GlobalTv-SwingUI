@@ -39,8 +39,6 @@ public class MainActivity implements Services {
         if (lang == null)
             lang = Locale.getDefault().getISO3Language();
 
-        //guideService.doInBackground("http://api.torrent-tv.ru/ttv.xmltv.xml.gz");
-
         try {
             if (favoriteService.sizeOfFavoriteList() == 0)
                 favoriteService.loadFavorites();
@@ -348,6 +346,7 @@ public class MainActivity implements Services {
         public void run() {
             try {
                 saveUrl("ttv.xmltv.xml.gz", guideService.guideUrl);
+                guideService.parseGuide();
             } catch (IOException e) {
                 e.printStackTrace();
             }

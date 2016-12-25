@@ -13,7 +13,7 @@ public class GlobalFavoritesForm extends JFrame {
     public GlobalFavoritesForm() {
         super("Favorites");
         setContentPane(globalFavoritesPanel);
-//        pack();
+        pack();
         setVisible(true);
     }
 }

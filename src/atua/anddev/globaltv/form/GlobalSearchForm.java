@@ -13,6 +13,7 @@ public class GlobalSearchForm extends JFrame {
     public GlobalSearchForm() {
         super("Search");
         setContentPane(globalSearchPanel);
+        pack();
         setVisible(true);
     }
 }

@@ -8,8 +8,11 @@ import atua.anddev.globaltv.form.PlaylistForm;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class PlaylistActivity implements Services {
     private String selectedChannel;
     private String selectedLink;
     private Playlist selectedPlaylist;
+    private DefaultTableModel model;
 
     public PlaylistActivity() {
         playlistForm = new PlaylistForm();
@@ -50,22 +54,36 @@ public class PlaylistActivity implements Services {
 
         playlistForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.local("channels"));
 
-        DefaultListModel<String> model = new DefaultListModel<String>();
-        for (String str : playlist) {
-            model.addElement(str);
+        String[] colNames;
+        Object[][] data;
+        int cols = 2;
+        colNames = new String[]{"name", "program"};
+        data = new Object[playlist.size()][cols];
+        for (int row = 0; row < playlist.size(); row++) {
+            data[row][0] = playlist.get(row);
         }
-        playlistForm.list1.setModel(model);
+        model = new DefaultTableModel(data, colNames);
+        playlistForm.table1.setModel(model);
         playlistForm.pack();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < playlist.size(); row++) {
+                    playlistForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                }
+            }
+        }).start();
     }
 
     private void actionSelector() {
         playlistForm.openChannelButton.setVisible(false);
         playlistForm.addToFavoritesButton.setVisible(false);
         playlistForm.removeFromFavoritesButton.setVisible(false);
-        playlistForm.list1.addListSelectionListener(new ListSelectionListener() {
+        playlistForm.table1.addMouseListener(new MouseListener() {
+
             @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                int index = playlistForm.list1.getSelectedIndex();
+            public void mouseClicked(MouseEvent e) {
+                int index = playlistForm.table1.getSelectedRow();
                 if (index != -1) {
                     selectedChannel = playlist.get(index);
                     selectedLink = playlistUrl.get(index);
@@ -81,6 +99,26 @@ public class PlaylistActivity implements Services {
                 } else {
                     playlistForm.openChannelButton.setVisible(false);
                 }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
     }
@@ -119,4 +157,5 @@ public class PlaylistActivity implements Services {
             }
         });
     }
+
 }
