@@ -14,6 +14,8 @@ public class PlaylistForm extends JFrame {
     public JButton removeFromFavoritesButton;
     public JLabel playlistInfoLabel;
     public JTable table1;
+    public JTextArea guideTextArea;
+    public JScrollPane guidePanel;
 
     public PlaylistForm() {
         super("Channel list");

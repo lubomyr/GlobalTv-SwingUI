@@ -156,9 +156,17 @@ public class GuideServiceImpl implements GuideService {
     @Override
     public String getProgramTitle(String chName) {
         currentTime = Calendar.getInstance();
-        String id = getIdByProgramName(chName);
+        String id = getIdByChannelName(chName);
         String title = getProgramTitlebyId(id);
         return title;
+    }
+
+    @Override
+    public String getProgramDesc(String chName) {
+        currentTime = Calendar.getInstance();
+        String id = getIdByChannelName(chName);
+        String desc = getProgramDescbyId(id);
+        return desc;
     }
 
     private boolean checkGuideDates() {
@@ -189,7 +197,7 @@ public class GuideServiceImpl implements GuideService {
         return result;
     }
 
-    private String getIdByProgramName(String chName) {
+    private String getIdByChannelName(String chName) {
         String result = null;
         for (ChannelGuide channelGuide : channelGuideList) {
             if (chName.equals(channelGuide.getDisplayName()))
@@ -221,6 +229,33 @@ public class GuideServiceImpl implements GuideService {
                         result = result.replace("&amp;quot;","\"");
                     if (result.contains("&amp;apos;"))
                         result = result.replace("&amp;apos;","'");
+                }
+            }
+        }
+        return result;
+    }
+
+    private String getProgramDescbyId(String id) {
+        String result = null;
+        for (Programme programme : programmeList) {
+            if (programme.getChannel().equals(id)) {
+                String startDateStr = programme.getStart();
+                String endDateStr = programme.getStop();
+                Calendar startDate = Calendar.getInstance();
+                Calendar endDate = Calendar.getInstance();
+                try {
+                    startDate.setTime(sdf.parse(startDateStr));
+                    endDate.setTime(sdf.parse(endDateStr));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // convert time to Ukrainian time zone
+                startDate.add(Calendar.HOUR,-1);
+                endDate.add(Calendar.HOUR,-1);
+                if (currentTime.after(startDate) && currentTime.before(endDate)) {
+                    result = programme.getDesc();
+                    if ((result != null) && result.contains("&amp;quot;"))
+                        result = result.replace("&amp;quot;","\"");
                 }
             }
         }

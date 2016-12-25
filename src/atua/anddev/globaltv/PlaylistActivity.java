@@ -6,6 +6,7 @@ import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.PlaylistForm;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -58,9 +59,6 @@ class PlaylistActivity implements Services {
         for (int row = 0; row < playlist.size(); row++) {
             data[row][0] = playlist.get(row);
         }
-        DefaultTableModel model = new DefaultTableModel(data, colNames);
-        playlistForm.table1.setModel(model);
-        playlistForm.pack();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,12 +67,16 @@ class PlaylistActivity implements Services {
                 }
             }
         }).start();
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        playlistForm.table1.setModel(model);
+        playlistForm.pack();
     }
 
     private void actionSelector() {
         playlistForm.openChannelButton.setVisible(false);
         playlistForm.addToFavoritesButton.setVisible(false);
         playlistForm.removeFromFavoritesButton.setVisible(false);
+        playlistForm.guidePanel.setVisible(false);
         playlistForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -92,6 +94,21 @@ class PlaylistActivity implements Services {
                         playlistForm.removeFromFavoritesButton.setVisible(true);
                         playlistForm.addToFavoritesButton.setVisible(false);
                     }
+                    String title = guideService.getProgramTitle(selectedChannel);
+                    if ((title != null) && !title.isEmpty()) {
+                        playlistForm.guidePanel.setVisible(true);
+                        playlistForm.guideTextArea.setText(title);
+                    } else {
+                        playlistForm.guidePanel.setVisible(false);
+                    }
+
+                    String desc = guideService.getProgramDesc(selectedChannel);
+                    if ((desc != null) && !desc.isEmpty()) {
+                        playlistForm.guideTextArea.append("\n" + desc);
+                        playlistForm.guideTextArea.setLineWrap(true);
+                        playlistForm.guideTextArea.setWrapStyleWord(true);
+                    }
+                    playlistForm.pack();
                 } else {
                     playlistForm.openChannelButton.setVisible(false);
                 }

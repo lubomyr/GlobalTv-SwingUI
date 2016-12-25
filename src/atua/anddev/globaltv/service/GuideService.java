@@ -14,4 +14,5 @@ public interface GuideService {
     boolean checkForUpdate();
     void parseGuide();
     String getProgramTitle(String chName);
+    String getProgramDesc(String chName);
 }
