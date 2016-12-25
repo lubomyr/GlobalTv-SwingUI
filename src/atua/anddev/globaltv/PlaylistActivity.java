@@ -5,9 +5,6 @@ import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.PlaylistForm;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,16 +13,15 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistActivity implements Services {
+class PlaylistActivity implements Services {
     private PlaylistForm playlistForm;
     private List<String> playlist = new ArrayList<String>();
     private List<String> playlistUrl = new ArrayList<String>();
     private String selectedChannel;
     private String selectedLink;
     private Playlist selectedPlaylist;
-    private DefaultTableModel model;
 
-    public PlaylistActivity() {
+    PlaylistActivity() {
         playlistForm = new PlaylistForm();
         applyLocals();
         openCategory(Global.selectedCategory);
@@ -62,14 +58,14 @@ public class PlaylistActivity implements Services {
         for (int row = 0; row < playlist.size(); row++) {
             data[row][0] = playlist.get(row);
         }
-        model = new DefaultTableModel(data, colNames);
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
         playlistForm.table1.setModel(model);
         playlistForm.pack();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < playlist.size(); row++) {
-                    playlistForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                    playlistForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row, 1);
                 }
             }
         }).start();

@@ -3,16 +3,18 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.form.FavoritesForm;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
 
-public class FavlistActivity implements Services {
+class FavlistActivity implements Services {
     private FavoritesForm favoritesForm;
     private DefaultListModel<String> model;
 
-    public FavlistActivity() {
+    FavlistActivity() {
         favoritesForm = new FavoritesForm();
         applyLocals();
         showFavlist();
@@ -26,11 +28,25 @@ public class FavlistActivity implements Services {
     }
 
     private void showFavlist() {
-        model = new DefaultListModel<String>();
-        for (String str : favoriteService.getFavoriteListForSelProv()) {
-            model.addElement(str);
+        List<String> playlist = favoriteService.getFavoriteListForSelProv();
+        String[] colNames;
+        Object[][] data;
+        int cols = 2;
+        colNames = new String[]{"name", "program"};
+        data = new Object[playlist.size()][cols];
+        for (int row = 0; row < playlist.size(); row++) {
+            data[row][0] = playlist.get(row);
         }
-        favoritesForm.list1.setModel(model);
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        favoritesForm.table1.setModel(model);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < playlist.size(); row++) {
+                    favoritesForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                }
+            }
+        }).start();
         favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.local("pcs"));
         favoritesForm.pack();
     }
@@ -38,10 +54,11 @@ public class FavlistActivity implements Services {
     private void actionSelector() {
         favoritesForm.openChannelButton.setVisible(false);
         favoritesForm.removeFromFavoritesButton.setVisible(false);
-        favoritesForm.list1.addListSelectionListener(new ListSelectionListener() {
+        favoritesForm.table1.addMouseListener(new MouseListener() {
 
-            public void valueChanged(ListSelectionEvent arg0) {
-                int index = favoritesForm.list1.getSelectedIndex();
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = favoritesForm.table1.getSelectedRow();
                 if (index != -1) {
                     favoritesForm.openChannelButton.setVisible(true);
                     favoritesForm.removeFromFavoritesButton.setVisible(true);
@@ -50,6 +67,26 @@ public class FavlistActivity implements Services {
                     favoritesForm.removeFromFavoritesButton.setVisible(false);
                 }
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
         });
     }
 
@@ -57,14 +94,14 @@ public class FavlistActivity implements Services {
         favoritesForm.openChannelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selected = favoritesForm.list1.getSelectedIndex();
+                int selected = favoritesForm.table1.getSelectedRow();
                 channelService.openChannel(favoriteService.getFavoriteListForSelProv().get(selected));
             }
         });
         favoritesForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selected = favoritesForm.list1.getSelectedIndex();
+                int selected = favoritesForm.table1.getSelectedRow();
                 String selectedName = favoriteService.getFavoriteListForSelProv().get(selected);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 model.removeElementAt(selected);

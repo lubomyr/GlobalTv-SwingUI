@@ -3,11 +3,11 @@ package atua.anddev.globaltv.form;
 import javax.swing.*;
 
 public class FavoritesForm extends JFrame {
-    public JList list1;
     public JButton openChannelButton;
     public JButton removeFromFavoritesButton;
     private JPanel favoritesPanel;
     public JLabel favoritesLabel;
+    public JTable table1;
 
     public FavoritesForm() {
         super("Favorites");

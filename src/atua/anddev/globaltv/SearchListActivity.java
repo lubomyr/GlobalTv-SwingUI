@@ -2,11 +2,11 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.form.SearchForm;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +41,24 @@ public class SearchListActivity implements Services {
             }
         }
 
-        DefaultListModel<String> model = new DefaultListModel<String>();
-        for (String str : playlist) {
-            model.addElement(str);
+        String[] colNames;
+        Object[][] data;
+        int cols = 2;
+        colNames = new String[]{"name", "program"};
+        data = new Object[playlist.size()][cols];
+        for (int row = 0; row < playlist.size(); row++) {
+            data[row][0] = playlist.get(row);
         }
-        searchForm.list1.setModel(model);
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        searchForm.table1.setModel(model);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < playlist.size(); row++) {
+                    searchForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                }
+            }
+        }).start();
         searchForm.searchLabel.setText(playlist.size() + " - " + tService.local("pcs"));
         searchForm.pack();
     }
@@ -53,14 +66,14 @@ public class SearchListActivity implements Services {
     private void buttonActionListener() {
         searchForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int index = searchForm.list1.getSelectedIndex();
+                int index = searchForm.table1.getSelectedRow();
                 channelService.openURL(playlistUrl.get(index));
             }
         });
         searchForm.addToFavoritesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selected = searchForm.list1.getSelectedIndex();
+                int selected = searchForm.table1.getSelectedRow();
                 String selectedName = playlist.get(selected);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 favoriteService.addToFavoriteList(selectedName, selectedProv);
@@ -72,7 +85,7 @@ public class SearchListActivity implements Services {
         searchForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selected = searchForm.list1.getSelectedIndex();
+                int selected = searchForm.table1.getSelectedRow();
                 String selectedName = playlist.get(selected);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
@@ -88,10 +101,11 @@ public class SearchListActivity implements Services {
         searchForm.openChannelButton.setVisible(false);
         searchForm.addToFavoritesButton.setVisible(false);
         searchForm.removeFromFavoritesButton.setVisible(false);
-        searchForm.list1.addListSelectionListener(new ListSelectionListener() {
+        searchForm.table1.addMouseListener(new MouseListener() {
+
             @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                int index = searchForm.list1.getSelectedIndex();
+            public void mouseClicked(MouseEvent e) {
+                int index = searchForm.table1.getSelectedRow();
                 String selectedName = playlist.get(index);
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 if (index != -1) {
@@ -109,7 +123,28 @@ public class SearchListActivity implements Services {
                     searchForm.removeFromFavoritesButton.setVisible(false);
                 }
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
         });
+
     }
 
 }
