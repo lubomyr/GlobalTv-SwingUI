@@ -31,13 +31,22 @@ public class GlobalFavoriteActivity implements Services {
     private void showFavorites() {
         String[] colNames;
         Object[][] data;
-        int cols = 2;
-        colNames = new String[]{"name", "playlist"};
+        int cols = 3;
+        colNames = new String[]{"name", "playlist", "program"};
         data = new Object[favoriteService.sizeOfFavoriteList()][cols];
         for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
             data[row][0] = favoriteService.getFavoriteById(row).getName();
             data[row][1] = favoriteService.getFavoriteById(row).getProv();
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
+                    globalFavoritesForm.table1.setValueAt(guideService.getProgramTitle(favoriteService.getFavoriteById(row).getName()),
+                            row , 2);
+                }
+            }
+        }).start();
         model = new DefaultTableModel(data, colNames);
         globalFavoritesForm.table1.setModel(model);
         globalFavoritesForm.globalFavoritesLabel.setText(favoriteService.sizeOfFavoriteList() + " - " + tService.local("pcs"));

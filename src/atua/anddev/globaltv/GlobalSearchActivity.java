@@ -47,13 +47,22 @@ public class GlobalSearchActivity implements Services {
     private void showSearchResults() {
         String[] colNames;
         Object[][] data;
-        int cols = 2;
-        colNames = new String[]{"name", "playlist"};
+        int cols = 3;
+        colNames = new String[]{"name", "playlist", "program"};
         data = new Object[searchService.sizeOfSearchList()][cols];
         for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
             data[row][0] = searchService.getSearchListById(row).getName();
             data[row][1] = searchService.getSearchListById(row).getProv();
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
+                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchListById(row).getName()),
+                            row , 2);
+                }
+            }
+        }).start();
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         globalSearchForm.table1.setModel(model);
         globalSearchForm.globalSearchLabel.setText(searchService.sizeOfSearchList() + " - " + tService.local("pcs"));
