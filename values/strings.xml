@@ -68,6 +68,7 @@
     <string name="useThisPlayer">use this player</string>
     <string name="selectTheme">Select GUI Theme (It requires restart app)</string>
     <string name="selectFontSize">Select Font Size (It requires restart app)</string>
+    <string name="showProgramGuide">Show Program Guide</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

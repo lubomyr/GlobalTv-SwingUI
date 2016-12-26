@@ -10,6 +10,7 @@ public class FavoritesForm extends JFrame {
     public JTable table1;
     public JTextArea guideTextArea;
     public JScrollPane guidePanel;
+    public JButton guideButton;
 
     public FavoritesForm() {
         super("Favorites");

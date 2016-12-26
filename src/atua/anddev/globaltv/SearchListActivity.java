@@ -29,6 +29,7 @@ public class SearchListActivity implements Services {
         searchForm.openChannelButton.setText(tService.local("openChannel"));
         searchForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
         searchForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
+        searchForm.guideButton.setText(tService.local("showProgramGuide"));
     }
 
     private void showSearchResults() {
@@ -95,6 +96,14 @@ public class SearchListActivity implements Services {
                 searchForm.addToFavoritesButton.setVisible(true);
             }
         });
+        searchForm.guideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selected = searchForm.table1.getSelectedRow();
+                String selectedName = playlist.get(selected);
+                new GuideActivity(selectedName);
+            }
+        });
     }
 
     private void actionSelector() {
@@ -102,6 +111,7 @@ public class SearchListActivity implements Services {
         searchForm.addToFavoritesButton.setVisible(false);
         searchForm.removeFromFavoritesButton.setVisible(false);
         searchForm.guidePanel.setVisible(false);
+        searchForm.guideButton.setVisible(false);
         searchForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -111,6 +121,7 @@ public class SearchListActivity implements Services {
                 String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
                 if (index != -1) {
                     searchForm.openChannelButton.setVisible(true);
+                    searchForm.guideButton.setVisible(true);
                     if (favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv) == -1) {
                         searchForm.addToFavoritesButton.setVisible(true);
                         searchForm.removeFromFavoritesButton.setVisible(false);

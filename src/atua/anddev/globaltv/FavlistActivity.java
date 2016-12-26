@@ -25,6 +25,7 @@ class FavlistActivity implements Services {
     private void applyLocals() {
         favoritesForm.openChannelButton.setText(tService.local("openChannel"));
         favoritesForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
+        favoritesForm.guideButton.setText(tService.local("showProgramGuide"));
     }
 
     private void showFavlist() {
@@ -37,8 +38,6 @@ class FavlistActivity implements Services {
         for (int row = 0; row < playlist.size(); row++) {
             data[row][0] = playlist.get(row);
         }
-        DefaultTableModel model = new DefaultTableModel(data, colNames);
-        favoritesForm.table1.setModel(model);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -47,6 +46,8 @@ class FavlistActivity implements Services {
                 }
             }
         }).start();
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        favoritesForm.table1.setModel(model);
         favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.local("pcs"));
         favoritesForm.pack();
     }
@@ -55,6 +56,7 @@ class FavlistActivity implements Services {
         favoritesForm.openChannelButton.setVisible(false);
         favoritesForm.removeFromFavoritesButton.setVisible(false);
         favoritesForm.guidePanel.setVisible(false);
+        favoritesForm.guideButton.setVisible(false);
         favoritesForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -63,6 +65,7 @@ class FavlistActivity implements Services {
                 if (index != -1) {
                     favoritesForm.openChannelButton.setVisible(true);
                     favoritesForm.removeFromFavoritesButton.setVisible(true);
+                    favoritesForm.guideButton.setVisible(true);
 
                     String selectedChannel = favoritesForm.table1.getValueAt(index,0).toString();
                     String title = guideService.getProgramTitle(selectedChannel);
@@ -126,6 +129,14 @@ class FavlistActivity implements Services {
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
+            }
+        });
+        favoritesForm.guideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selected = favoritesForm.table1.getSelectedRow();
+                String selectedName = favoriteService.getFavoriteListForSelProv().get(selected);
+                new GuideActivity(selectedName);
             }
         });
     }

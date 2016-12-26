@@ -25,6 +25,8 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Arrays.asList;
+
 /**
  * Created by lubomyr on 31.03.16.
  */
@@ -33,7 +35,6 @@ public class MainActivity implements Services {
     static MainForm mainForm;
     static Boolean needUpdate;
     private static String lang;
-    private static List<String> localsList = new ArrayList<String>();
 
     public static void main(String[] args) {
         if (lang == null)
@@ -82,7 +83,6 @@ public class MainActivity implements Services {
             checkPlaylistFile(selectedProvider);
         } catch (Exception ignored) {
         }
-        LanguageListActionAdapter();
         ProviderListActionAdapter();
         mainButtonsActionListener();
     }
@@ -98,7 +98,7 @@ public class MainActivity implements Services {
         mainForm.playlistLabel.setText(tService.local("playlist"));
     }
 
-    public static void setUIFont(FontUIResource f) {
+    private static void setUIFont(FontUIResource f) {
         Enumeration keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
@@ -112,10 +112,7 @@ public class MainActivity implements Services {
     }
 
     private static void showLocals() {
-        localsList = new ArrayList<String>();
-        localsList.add("English");
-        localsList.add("Українська");
-        localsList.add("Русский");
+        List<String> localsList = asList("English", "Українська", "Русский");
 
         for (String str : localsList)
             mainForm.comboBox2.addItem(str);
@@ -140,6 +137,7 @@ public class MainActivity implements Services {
             AddPlaylistDialog.main(null);
         }
 
+        LanguageListActionAdapter(localsList);
     }
 
     private static void setupProviderView() {
@@ -157,7 +155,7 @@ public class MainActivity implements Services {
         return true;
     }
 
-    public static boolean checkPlaylistFile(int num) {
+    static boolean checkPlaylistFile(int num) {
         String tmpText;
         String fname = playlistService.getActivePlaylistById(num).getFile();
         try {
@@ -223,7 +221,7 @@ public class MainActivity implements Services {
         }
     }
 
-    public static void saveUrl(final String filename, final String urlString)
+    static void saveUrl(final String filename, final String urlString)
             throws MalformedURLException, IOException {
         BufferedInputStream in = null;
         FileOutputStream fout = null;
@@ -251,7 +249,7 @@ public class MainActivity implements Services {
         }
     }
 
-    public static String getMd5OfFile(String filePath) {
+    static String getMd5OfFile(String filePath) {
         String returnVal = "";
         try {
             InputStream input = new FileInputStream(filePath);
@@ -276,7 +274,7 @@ public class MainActivity implements Services {
         return returnVal.toUpperCase();
     }
 
-    public static void loadSettings() {
+    private static void loadSettings() {
         try {
             File fXmlFile;
             fXmlFile = new File(myPath + "settings.xml");
@@ -298,7 +296,7 @@ public class MainActivity implements Services {
 
     }
 
-    public static void ProviderListActionAdapter() {
+    private static void ProviderListActionAdapter() {
         ItemListener itemListener = new ItemListener() {
             public void itemStateChanged(ItemEvent itemEvent) {
                 int index = playlistService.indexNameForActivePlaylist(itemEvent.getItem().toString());
@@ -309,7 +307,7 @@ public class MainActivity implements Services {
         mainForm.comboBox1.addItemListener(itemListener);
     }
 
-    private static void LanguageListActionAdapter() {
+    private static void LanguageListActionAdapter(List<String> localsList) {
         ItemListener itemListener = new ItemListener() {
             public void itemStateChanged(ItemEvent itemEvent) {
                 int index = localsList.indexOf(itemEvent.getItem());
@@ -353,7 +351,7 @@ public class MainActivity implements Services {
         }
     };
 
-    public static void mainButtonsActionListener() {
+    private static void mainButtonsActionListener() {
         mainForm.updatePlaylistButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (playlistService.sizeOfActivePlaylist() == 0) {

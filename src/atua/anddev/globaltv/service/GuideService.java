@@ -7,12 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface GuideService {
-   String guideUrl = "http://api.torrent-tv.ru/ttv.xmltv.xml.gz";
+    String guideUrl = "http://api.torrent-tv.ru/ttv.xmltv.xml.gz";
     List<ChannelGuide> channelGuideList = new ArrayList<ChannelGuide>();
     List<Programme> programmeList = new ArrayList<Programme>();
 
     boolean checkForUpdate();
+
     void parseGuide();
+
     String getProgramTitle(String chName);
+
     String getProgramDesc(String chName);
+
+    List<Programme> getChannelGuide(String chName);
+
+    String decodeSymbols(String str);
 }

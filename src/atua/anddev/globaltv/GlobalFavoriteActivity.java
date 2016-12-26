@@ -26,6 +26,7 @@ public class GlobalFavoriteActivity implements Services {
     private void applyLocals() {
         globalFavoritesForm.openChannelButton.setText(tService.local("openChannel"));
         globalFavoritesForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
+        globalFavoritesForm.guideButton.setText(tService.local("showProgramGuide"));
     }
 
     private void showFavorites() {
@@ -57,6 +58,7 @@ public class GlobalFavoriteActivity implements Services {
         globalFavoritesForm.openChannelButton.setVisible(false);
         globalFavoritesForm.removeFromFavoritesButton.setVisible(false);
         globalFavoritesForm.guidePanel.setVisible(false);
+        globalFavoritesForm.guideButton.setVisible(false);
         globalFavoritesForm.table1.addMouseListener(new MouseListener() {
 
             @Override
@@ -65,6 +67,7 @@ public class GlobalFavoriteActivity implements Services {
                 if (selected != -1) {
                     globalFavoritesForm.openChannelButton.setVisible(true);
                     globalFavoritesForm.removeFromFavoritesButton.setVisible(true);
+                    globalFavoritesForm.guideButton.setVisible(true);
 
                     String selectedChannel = globalFavoritesForm.table1.getValueAt(selected,0).toString();
                     String title = guideService.getProgramTitle(selectedChannel);
@@ -123,6 +126,14 @@ public class GlobalFavoriteActivity implements Services {
                 model.removeRow(selected);
                 favoriteService.deleteFromFavoritesById(selected);
                 favoriteService.saveFavorites();
+            }
+        });
+        globalFavoritesForm.guideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selected = globalFavoritesForm.table1.getSelectedRow();
+                String selectedName = favoriteService.getFavoriteById(selected).getName();
+                new GuideActivity(selectedName);
             }
         });
     }

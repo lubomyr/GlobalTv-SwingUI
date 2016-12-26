@@ -11,6 +11,7 @@ public class GlobalSearchForm extends JFrame {
     public JLabel globalSearchLabel;
     public JTextArea guideTextArea;
     public JScrollPane guidePanel;
+    public JButton guideButton;
 
     public GlobalSearchForm() {
         super("Search");

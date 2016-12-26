@@ -35,6 +35,7 @@ class PlaylistActivity implements Services {
         playlistForm.openChannelButton.setText(tService.local("openChannel"));
         playlistForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
         playlistForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
+        playlistForm.guideButton.setText(tService.local("showProgramGuide"));
     }
 
     private void openCategory(final String catName) {
@@ -75,6 +76,7 @@ class PlaylistActivity implements Services {
         playlistForm.openChannelButton.setVisible(false);
         playlistForm.addToFavoritesButton.setVisible(false);
         playlistForm.removeFromFavoritesButton.setVisible(false);
+        playlistForm.guideButton.setVisible(false);
         playlistForm.guidePanel.setVisible(false);
         playlistForm.table1.addMouseListener(new MouseListener() {
 
@@ -86,6 +88,7 @@ class PlaylistActivity implements Services {
                     selectedLink = playlistUrl.get(index);
                     selectedPlaylist = playlistService.getActivePlaylistById(MainActivity.selectedProvider);
                     playlistForm.openChannelButton.setVisible(true);
+                    playlistForm.guideButton.setVisible(true);
                     if (favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName()) == -1) {
                         playlistForm.addToFavoritesButton.setVisible(true);
                         playlistForm.removeFromFavoritesButton.setVisible(false);
@@ -168,6 +171,12 @@ class PlaylistActivity implements Services {
                 favoriteService.saveFavorites();
                 playlistForm.removeFromFavoritesButton.setVisible(false);
                 playlistForm.addToFavoritesButton.setVisible(true);
+            }
+        });
+        playlistForm.guideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GuideActivity(selectedChannel);
             }
         });
     }

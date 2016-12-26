@@ -11,6 +11,7 @@ public class SearchForm extends JFrame {
     public JTable table1;
     public JTextArea guideTextArea;
     public JScrollPane guidePanel;
+    public JButton guideButton;
 
     public SearchForm() {
         super("Search");

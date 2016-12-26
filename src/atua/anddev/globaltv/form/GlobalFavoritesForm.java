@@ -11,6 +11,7 @@ public class GlobalFavoritesForm extends JFrame {
     public JLabel globalFavoritesLabel;
     public JTextArea guideTextArea;
     public JScrollPane guidePanel;
+    public JButton guideButton;
 
     public GlobalFavoritesForm() {
         super("Favorites");

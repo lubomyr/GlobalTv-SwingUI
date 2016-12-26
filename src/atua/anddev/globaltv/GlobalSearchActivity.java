@@ -27,6 +27,7 @@ public class GlobalSearchActivity implements Services {
         globalSearchForm.openChannelButton.setText(tService.local("openChannel"));
         globalSearchForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
         globalSearchForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
+        globalSearchForm.guideButton.setText(tService.local("showProgramGuide"));
     }
 
     private void prepare_globalSearch() {
@@ -74,6 +75,7 @@ public class GlobalSearchActivity implements Services {
         globalSearchForm.removeFromFavoritesButton.setVisible(false);
         globalSearchForm.addToFavoritesButton.setVisible(false);
         globalSearchForm.guidePanel.setVisible(false);
+        globalSearchForm.guideButton.setVisible(false);
         globalSearchForm.table1.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -82,6 +84,7 @@ public class GlobalSearchActivity implements Services {
                 String selectedProv = searchService.getSearchListById(selected).getProv();
                 if (selected != -1) {
                     globalSearchForm.openChannelButton.setVisible(true);
+                    globalSearchForm.guideButton.setVisible(true);
                     if (favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv) == -1) {
                         globalSearchForm.addToFavoritesButton.setVisible(true);
                         globalSearchForm.removeFromFavoritesButton.setVisible(false);
@@ -163,6 +166,14 @@ public class GlobalSearchActivity implements Services {
                 favoriteService.saveFavorites();
                 globalSearchForm.removeFromFavoritesButton.setVisible(false);
                 globalSearchForm.addToFavoritesButton.setVisible(true);
+            }
+        });
+        globalSearchForm.guideButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selected = globalSearchForm.table1.getSelectedRow();
+                String selectedName = searchService.getSearchListById(selected).getName();
+                new GuideActivity(selectedName);
             }
         });
     }

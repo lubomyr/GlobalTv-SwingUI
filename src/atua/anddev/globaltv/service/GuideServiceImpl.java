@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -157,16 +156,14 @@ public class GuideServiceImpl implements GuideService {
     public String getProgramTitle(String chName) {
         currentTime = Calendar.getInstance();
         String id = getIdByChannelName(chName);
-        String title = getProgramTitlebyId(id);
-        return title;
+        return getProgramTitlebyId(id);
     }
 
     @Override
     public String getProgramDesc(String chName) {
         currentTime = Calendar.getInstance();
         String id = getIdByChannelName(chName);
-        String desc = getProgramDescbyId(id);
-        return desc;
+        return getProgramDescbyId(id);
     }
 
     private boolean checkGuideDates() {
@@ -189,10 +186,7 @@ public class GuideServiceImpl implements GuideService {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (currentTime.after(startDate) && currentTime.before(endDate))
-                result = false;
-            else
-                result = true;
+            result = !(currentTime.after(startDate) && currentTime.before(endDate));
         }
         return result;
     }
@@ -225,10 +219,7 @@ public class GuideServiceImpl implements GuideService {
                 endDate.add(Calendar.HOUR,-1);
                 if (currentTime.after(startDate) && currentTime.before(endDate)) {
                     result = programme.getTitle();
-                    if (result.contains("&amp;quot;"))
-                        result = result.replace("&amp;quot;","\"");
-                    if (result.contains("&amp;apos;"))
-                        result = result.replace("&amp;apos;","'");
+                    result = decodeSymbols(result);
                 }
             }
         }
@@ -244,8 +235,10 @@ public class GuideServiceImpl implements GuideService {
                 Calendar startDate = Calendar.getInstance();
                 Calendar endDate = Calendar.getInstance();
                 try {
-                    startDate.setTime(sdf.parse(startDateStr));
-                    endDate.setTime(sdf.parse(endDateStr));
+                    if (!startDateStr.isEmpty())
+                        startDate.setTime(sdf.parse(startDateStr));
+                    if (!endDateStr.isEmpty())
+                        endDate.setTime(sdf.parse(endDateStr));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -254,12 +247,34 @@ public class GuideServiceImpl implements GuideService {
                 endDate.add(Calendar.HOUR,-1);
                 if (currentTime.after(startDate) && currentTime.before(endDate)) {
                     result = programme.getDesc();
-                    if ((result != null) && result.contains("&amp;quot;"))
-                        result = result.replace("&amp;quot;","\"");
+                    result = decodeSymbols(result);
                 }
             }
         }
         return result;
+    }
+
+    public List<Programme> getChannelGuide(String chName) {
+        List<Programme> result = new ArrayList<Programme>();
+        String id = getIdByChannelName(chName);
+        for (Programme programme : programmeList) {
+            if (programme.getChannel().equals(id)) {
+                result.add(programme);
+            }
+        }
+        return result;
+    }
+
+    public String decodeSymbols(String str) {
+        String res = str;
+        if ((res != null) && !res.isEmpty()) {
+            if (res.contains("&amp;quot;"))
+                res = res.replace("&amp;quot;", "\"");
+            if (res.contains("&amp;apos;"))
+                res = res.replace("&amp;apos;", "'");
+        } else
+            res = "";
+        return res;
     }
 
 }
