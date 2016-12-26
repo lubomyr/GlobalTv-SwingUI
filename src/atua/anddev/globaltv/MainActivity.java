@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -342,7 +343,16 @@ public class MainActivity implements Services {
         OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
         switch (ostype) {
             case Windows:
-                detectPlayersPathForWindows();
+                try {
+                    Global.path_vlc = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\VideoLAN\\VLC", "");
+                    String acep = WinRegistry.readString(WinRegistry.HKEY_CLASSES_ROOT, "acestream\\shell\\open\\command","");
+                    if ((acep != null) && !acep.isEmpty())
+                        Global.path_aceplayer = acep.substring(acep.indexOf("\"") + 1, acep.indexOf("ace_player.exe") + 14);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Linux:
                 Global.path_aceplayer = "/usr/bin/acestreamplayer";
@@ -351,19 +361,7 @@ public class MainActivity implements Services {
         }
     }
 
-    private static void detectPlayersPathForWindows() {
-        String path = System.getenv("PATH");
-        String pathSeparator = System.getProperty("path.separator");
-
-        for (String pathElement : path.split(pathSeparator)) {
-            File file = new File(pathElement, "vlc.exe");
-            if (file.isFile()) {
-                Global.path_vlc = pathElement;
-            }
-        }
-    }
-
-    static Runnable saveGuideRunnable = new Runnable() {
+    private static Runnable saveGuideRunnable = new Runnable() {
         @Override
         public void run() {
             try {

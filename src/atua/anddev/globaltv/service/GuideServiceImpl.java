@@ -52,7 +52,7 @@ public class GuideServiceImpl implements GuideService {
     };
 
     public void parseGuide() {
-        System.out.println("parsing...");
+        System.out.println("parsing program guide...");
         try {
             File fXmlFile;
             fXmlFile = new File(myPath + "ttv.xmltv.xml.gz");
@@ -145,7 +145,7 @@ public class GuideServiceImpl implements GuideService {
             }
             gzipIs.close();
             is.close();
-            System.out.println("succesfuly parsed");
+            System.out.println("parsing finished");
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -168,8 +168,7 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
                     addToFavoriteList(channel, playlist);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 }

@@ -24,9 +24,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class SettingsActivity implements Services {
+import static atua.anddev.globaltv.Services.tService;
+
+public class SettingsActivity {
     private SettingForm settingForm;
-    private List<String> themeList = Arrays.asList("Metal", "Nimbus", "CDE/Motif", "GTK+");
+    private List<String> themeList = Arrays.asList("Metal", "Nimbus", "CDE/Motif", "GTK+", "Windows", "Windows Classic");
     private List<String> fontSizeList = Arrays.asList("12", "16", "20", "24");
 
     public SettingsActivity() {
@@ -147,11 +149,8 @@ public class SettingsActivity implements Services {
 
     }
 
-    public void saveSettings() {
-        if (settingForm.useThisPlayerRadioButton1.isSelected())
-            Global.otherplayer = true;
-        else
-            Global.otherplayer = false;
+    private void saveSettings() {
+        Global.otherplayer = settingForm.useThisPlayerRadioButton1.isSelected();
         Global.path_aceplayer = settingForm.textField1.getText();
         Global.path_vlc = settingForm.textField2.getText();
         Global.path_other = settingForm.textField3.getText();
