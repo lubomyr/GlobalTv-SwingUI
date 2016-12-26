@@ -289,9 +289,8 @@ public class MainActivity implements Services {
             Global.path_other = doc.getElementsByTagName("otherplayer").item(0).getTextContent();
             Global.selectedTheme = doc.getElementsByTagName("theme").item(0).getTextContent();
             Global.selectedFontSize = doc.getElementsByTagName("fontsize").item(0).getTextContent();
-
         } catch (Exception e) {
-            e.printStackTrace();
+            setDefaultSetting();
         }
 
     }
@@ -337,6 +336,31 @@ public class MainActivity implements Services {
     private static void updateGuide() {
         Thread thread = new Thread(saveGuideRunnable);
         thread.start();
+    }
+
+    private static void setDefaultSetting() {
+        OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
+        switch (ostype) {
+            case Windows:
+                detectPlayersPathForWindows();
+                break;
+            case Linux:
+                Global.path_aceplayer = "/usr/bin/acestreamplayer";
+                Global.path_vlc = "/usr/bin/vlc";
+                break;
+        }
+    }
+
+    private static void detectPlayersPathForWindows() {
+        String path = System.getenv("PATH");
+        String pathSeparator = System.getProperty("path.separator");
+
+        for (String pathElement : path.split(pathSeparator)) {
+            File file = new File(pathElement, "vlc.exe");
+            if (file.isFile()) {
+                Global.path_vlc = pathElement;
+            }
+        }
     }
 
     static Runnable saveGuideRunnable = new Runnable() {

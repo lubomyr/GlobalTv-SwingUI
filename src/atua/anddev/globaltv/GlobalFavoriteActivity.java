@@ -12,7 +12,6 @@ import java.awt.event.MouseListener;
 
 public class GlobalFavoriteActivity implements Services {
     private GlobalFavoritesForm globalFavoritesForm;
-    private int selected;
     private DefaultTableModel model;
 
     public GlobalFavoriteActivity() {
@@ -63,7 +62,7 @@ public class GlobalFavoriteActivity implements Services {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                selected = globalFavoritesForm.table1.getSelectedRow();
+                int selected = globalFavoritesForm.table1.getSelectedRow();
                 if (selected != -1) {
                     globalFavoritesForm.openChannelButton.setVisible(true);
                     globalFavoritesForm.removeFromFavoritesButton.setVisible(true);
@@ -116,13 +115,13 @@ public class GlobalFavoriteActivity implements Services {
     private void buttonActionListener() {
         globalFavoritesForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                selected = globalFavoritesForm.table1.getSelectedRow();
+                int selected = globalFavoritesForm.table1.getSelectedRow();
                 openFavorite(selected);
             }
         });
         globalFavoritesForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                selected = globalFavoritesForm.table1.getSelectedRow();
+                int selected = globalFavoritesForm.table1.getSelectedRow();
                 model.removeRow(selected);
                 favoriteService.deleteFromFavoritesById(selected);
                 favoriteService.saveFavorites();
@@ -131,7 +130,7 @@ public class GlobalFavoriteActivity implements Services {
         globalFavoritesForm.guideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selected = globalFavoritesForm.table1.getSelectedRow();
+                int selected = globalFavoritesForm.table1.getSelectedRow();
                 String selectedName = favoriteService.getFavoriteById(selected).getName();
                 new GuideActivity(selectedName);
             }
