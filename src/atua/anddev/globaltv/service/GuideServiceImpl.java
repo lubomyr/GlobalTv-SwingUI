@@ -18,7 +18,7 @@ import java.util.zip.GZIPInputStream;
 import static atua.anddev.globaltv.Services.myPath;
 
 public class GuideServiceImpl implements GuideService {
-    private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss Z");
     private Calendar currentTime;
 
     public boolean checkForUpdate() {
@@ -214,9 +214,6 @@ public class GuideServiceImpl implements GuideService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                // convert time to Ukrainian time zone
-                startDate.add(Calendar.HOUR,-1);
-                endDate.add(Calendar.HOUR,-1);
                 if (currentTime.after(startDate) && currentTime.before(endDate)) {
                     result = programme.getTitle();
                     result = decodeSymbols(result);
@@ -242,9 +239,6 @@ public class GuideServiceImpl implements GuideService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                // convert time to Ukrainian time zone
-                startDate.add(Calendar.HOUR,-1);
-                endDate.add(Calendar.HOUR,-1);
                 if (currentTime.after(startDate) && currentTime.before(endDate)) {
                     result = programme.getDesc();
                     result = decodeSymbols(result);

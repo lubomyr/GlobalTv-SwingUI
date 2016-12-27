@@ -33,7 +33,7 @@ class GuideActivity implements Services {
     private void showChannelGuide(String chName) {
         List<Programme> guideList = guideService.getChannelGuide(chName);
         Calendar currentTime = Calendar.getInstance();
-        final DateFormat sdfInput = new SimpleDateFormat("yyyyMMddHHmmss");
+        final DateFormat sdfInput = new SimpleDateFormat("yyyyMMddHHmmss Z");
         final DateFormat sdfStartOutput = new SimpleDateFormat("dd.MM HH:mm");
         final DateFormat sdfEndOutput = new SimpleDateFormat("HH:mm");
         String[] colNames;
@@ -56,9 +56,6 @@ class GuideActivity implements Services {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            // convert time to Ukrainian time zone
-            startDate.add(Calendar.HOUR, -1);
-            endDate.add(Calendar.HOUR, -1);
             String timeOutput = sdfStartOutput.format(startDate.getTime()) + " - " + sdfEndOutput.format(endDate.getTime());
             data[row][0] = timeOutput;
             data[row][1] = guideService.decodeSymbols(guideList.get(row).getTitle());
