@@ -72,6 +72,7 @@ public class SettingsActivity {
             settingForm.comboBox2.addItem(str);
         }
         settingForm.comboBox2.setSelectedItem(Global.selectedFontSize);
+        settingForm.setMinimumSize(new Dimension(400, settingForm.getHeight()));
         settingForm.pack();
     }
 
