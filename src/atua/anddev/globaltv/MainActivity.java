@@ -205,6 +205,7 @@ public class MainActivity implements Services {
             needUpdate = true;
             return false;
         } finally {
+            mainForm.setMinimumSize(new Dimension(250, mainForm.getHeight()));
             mainForm.pack();
         }
         return true;
