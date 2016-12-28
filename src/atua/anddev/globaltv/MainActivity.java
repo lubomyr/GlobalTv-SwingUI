@@ -363,6 +363,10 @@ public class MainActivity implements Services {
             case Windows:
                 try {
                     Global.path_vlc = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\VideoLAN\\VLC", "");
+                    if (Global.path_vlc == null || Global.path_vlc.isEmpty()) {
+                        String vlcp = WinRegistry.readString(WinRegistry.HKEY_CLASSES_ROOT, "Applications\\vlc.exe\\shell\\open\\command", "");
+                        Global.path_vlc = vlcp.substring(vlcp.indexOf("\"") + 1, vlcp.indexOf("vlc.exe") + 7);
+                    }
                     String acep = WinRegistry.readString(WinRegistry.HKEY_CLASSES_ROOT, "acestream\\shell\\open\\command","");
                     if ((acep != null) && !acep.isEmpty())
                         Global.path_aceplayer = acep.substring(acep.indexOf("\"") + 1, acep.indexOf("ace_player.exe") + 14);
