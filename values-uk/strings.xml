@@ -21,6 +21,7 @@
     <string name="search">Пошук</string>
     <string name="searching">Пошук…</string>
     <string name="channels"> каналів</string>
+    <string name="channel">Канал</string>
     <string name="request">Запит</string>
     <string name="doyouwant">Чи ви хочете </string>
     <string name="add">Додати</string>
@@ -66,8 +67,12 @@
     <string name="sortedListButton">Сортований список за датою оновлення</string>
     <string name="useThisPlayer">використати цей плейер</string>
     <string name="selectTheme">Вибрати Тему (вимагає перезапуск програми)</string>
-    <string name="selectFontSize">Вибрати Розмір Шрифтів (вимагає перезапуск програми)</string>
+    <string name="selectFontSize">Вибрати Розмір Шрифтів (вимагає перезапуск)</string>
     <string name="showProgramGuide">Програма Передач</string>
+    <string name="programGuideSource">Джерело програми передач</string>
+    <string name="update">Оновити</string>
+    <string name="fileSize">розмір</string>
+    <string name="period">період</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

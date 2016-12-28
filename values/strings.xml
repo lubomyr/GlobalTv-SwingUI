@@ -21,6 +21,7 @@
     <string name="search">Search</string>
     <string name="searching">Searching…</string>
     <string name="channels"> channel(s)</string>
+    <string name="channel">Channel</string>
     <string name="request">Request</string>
     <string name="doyouwant">Do you want </string>
     <string name="add">Add</string>
@@ -69,6 +70,10 @@
     <string name="selectTheme">Select GUI Theme (It requires restart app)</string>
     <string name="selectFontSize">Select Font Size (It requires restart app)</string>
     <string name="showProgramGuide">Show Program Guide</string>
+    <string name="programGuideSource">Program Guide Source</string>
+    <string name="update">Update</string>
+    <string name="fileSize">file size</string>
+    <string name="period">period</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

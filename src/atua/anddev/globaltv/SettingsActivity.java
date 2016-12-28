@@ -1,5 +1,6 @@
 package atua.anddev.globaltv;
 
+import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.form.SettingForm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,10 +22,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static atua.anddev.globaltv.Services.guideService;
 import static atua.anddev.globaltv.Services.tService;
+import static atua.anddev.globaltv.service.GuideService.channelGuideList;
+import static atua.anddev.globaltv.service.GuideService.guideProvList;
 
 public class SettingsActivity {
     private SettingForm settingForm;
@@ -37,7 +42,9 @@ public class SettingsActivity {
         showSettings();
         fontSizeListActionAdapter();
         themeListActionAdapter();
+        guideProvListActionAdapter();
         buttonActionListener();
+        showGuideProvInfo(false);
     }
 
     private void applyLocals() {
@@ -49,6 +56,11 @@ public class SettingsActivity {
         settingForm.useThisPlayerRadioButton1.setText(tService.local("useThisPlayer"));
         settingForm.themeLabel.setText(tService.local("selectTheme"));
         settingForm.fontSizeLabel.setText(tService.local("selectFontSize"));
+        settingForm.guideLabel.setText(tService.local("programGuideSource"));
+        settingForm.downloadButton.setText(tService.local("update"));
+        settingForm.fileSizeLabel.setText(tService.local("fileSize"));
+        settingForm.channelsLabel.setText(tService.local("channels"));
+        settingForm.TimePeriodLabel.setText(tService.local("period"));
     }
 
     private void showSettings() {
@@ -72,8 +84,41 @@ public class SettingsActivity {
             settingForm.comboBox2.addItem(str);
         }
         settingForm.comboBox2.setSelectedItem(Global.selectedFontSize);
-        settingForm.setMinimumSize(new Dimension(400, settingForm.getHeight()));
+
+        for (GuideProv guideProv : guideProvList) {
+            settingForm.comboBox3.addItem(guideProv.getName());
+        }
+        settingForm.comboBox3.setSelectedIndex(Global.selectedGuideProv);
+        setupMinWidth();
+    }
+
+    private void setupMinWidth() {
+        switch (Global.selectedFontSize) {
+            case "12":
+                settingForm.setMinimumSize(new Dimension(394, settingForm.getHeight()));
+                break;
+            case "16":
+                settingForm.setMinimumSize(new Dimension(458, settingForm.getHeight()));
+                break;
+        }
         settingForm.pack();
+    }
+
+    private void showGuideProvInfo(boolean parse) {
+        GuideProv guideProv = guideProvList.get(Global.selectedGuideProv);
+        File file = new File(guideProv.getFile());
+        if (file.exists()) {
+            if (parse) {
+                settingForm.fileSizeTextField.setText("Parsing...");
+                guideService.parseGuide();
+            }
+            settingForm.fileSizeTextField.setText(file.length() + " kb");
+            settingForm.channelsNumTextField.setText(channelGuideList.size() + " pcs");
+            settingForm.timePeriodTextField.setText(guideService.getTotalTimePeriod());
+        } else {
+            settingForm.fileSizeTextField.setText("File not exist");
+            updateGuideProv();
+        }
     }
 
     private void fontSizeListActionAdapter() {
@@ -92,6 +137,22 @@ public class SettingsActivity {
             }
         };
         settingForm.comboBox1.addItemListener(itemListener);
+    }
+
+    private void guideProvListActionAdapter() {
+        ItemListener itemListener = new ItemListener() {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                String str = itemEvent.getItem().toString();
+                for (int i = 0; i < guideProvList.size(); i++) {
+                    if (str.equals(guideProvList.get(i).getName())) {
+                        Global.selectedGuideProv = i;
+                    }
+                }
+                if (itemEvent.getStateChange() == 1)
+                    showGuideProvInfo(true);
+            }
+        };
+        settingForm.comboBox3.addItemListener(itemListener);
     }
 
     private void buttonActionListener() {
@@ -141,6 +202,13 @@ public class SettingsActivity {
             }
         });
 
+        settingForm.downloadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateGuideProv();
+            }
+        });
+
         settingForm.saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 saveSettings();
@@ -148,6 +216,17 @@ public class SettingsActivity {
             }
         });
 
+    }
+
+    private void updateGuideProv() {
+        settingForm.fileSizeTextField.setText("Downloading...");
+        GuideProv guideProv = guideProvList.get(Global.selectedGuideProv);
+        try {
+            MainActivity.saveUrl(guideProv.getFile(), guideProv.getUrl());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        showGuideProvInfo(true);
     }
 
     private void saveSettings() {
@@ -188,6 +267,16 @@ public class SettingsActivity {
             Element fontsize = doc.createElement("fontsize");
             fontsize.appendChild(doc.createTextNode(Global.selectedFontSize));
             rootElement.appendChild(fontsize);
+
+            // selected language element
+            Element language = doc.createElement("language");
+            language.appendChild(doc.createTextNode(Global.lang));
+            rootElement.appendChild(language);
+
+            // selected gui theme element
+            Element guideprov = doc.createElement("guideprov");
+            guideprov.appendChild(doc.createTextNode(String.valueOf(Global.selectedGuideProv)));
+            rootElement.appendChild(guideprov);
 
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();

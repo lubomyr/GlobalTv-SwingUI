@@ -6,6 +6,7 @@ package atua.anddev.globaltv;
 public class Global {
     public static String torrentKey = "";
     public static boolean playlistWithGroup;
+    public static int selectedGuideProv = 2;
     static String selectedCategory;
     static String path_aceplayer;
     static String path_vlc;
@@ -13,4 +14,5 @@ public class Global {
     static boolean otherplayer;
     static String selectedTheme = "Metal";
     static String selectedFontSize = "12";
+    static String lang;
 }

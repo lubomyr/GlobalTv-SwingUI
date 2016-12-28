@@ -21,6 +21,7 @@
     <string name="search">Поиск</string>
     <string name="searching">Поиск…</string>
     <string name="channels"> каналов</string>
+    <string name="channel">Канал</string>
     <string name="request">Запрос</string>
     <string name="doyouwant">Вы хотите </string>
     <string name="add">Добавить</string>
@@ -66,8 +67,12 @@
     <string name="sortedListButton">Сортированый список по дате обновления</string>
     <string name="useThisPlayer">использовать этот плейер</string>
     <string name="selectTheme">Выбрать Тему (нужен перезапуск приложения)</string>
-    <string name="selectFontSize">Выбрать Размер Шрифтов (нужен перезапуск приложения)</string>
+    <string name="selectFontSize">Выбрать Размер Шрифтов (нужен перезапуск)</string>
     <string name="showProgramGuide">Программа передач</string>
+    <string name="programGuideSource">Источник программы передач</string>
+    <string name="update">Обновить</string>
+    <string name="fileSize">размер</string>
+    <string name="period">период</string>
 
     <string-array name="categories_list_orig">
         <item>Europe</item>

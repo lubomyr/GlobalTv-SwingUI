@@ -1,6 +1,8 @@
 package atua.anddev.globaltv.service;
 
+import atua.anddev.globaltv.Global;
 import atua.anddev.globaltv.entity.ChannelGuide;
+import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.entity.Programme;
 
 import java.io.File;
@@ -37,7 +39,8 @@ public class GuideServiceImpl implements GuideService {
 
     private boolean isGuideExist() {
         boolean result;
-        File file = new File(myPath + "ttv.xmltv.xml.gz");
+        GuideProv guideProv = guideProvList.get(Global.selectedGuideProv);
+        File file = new File(myPath + guideProv.getFile());
         result = file.exists();
         return result;
     }
@@ -53,9 +56,12 @@ public class GuideServiceImpl implements GuideService {
 
     public void parseGuide() {
         System.out.println("parsing program guide...");
+        channelGuideList.clear();
+        programmeList.clear();
         try {
             File fXmlFile;
-            fXmlFile = new File(myPath + "ttv.xmltv.xml.gz");
+            GuideProv guideProv = guideProvList.get(Global.selectedGuideProv);
+            fXmlFile = new File(myPath + guideProv.getFile());
             InputStream is = new FileInputStream(fXmlFile);
             GZIPInputStream gzipIs = new GZIPInputStream(is);
             Scanner sc = new Scanner(gzipIs, "UTF8").useDelimiter("[\n]");
@@ -65,13 +71,13 @@ public class GuideServiceImpl implements GuideService {
             boolean descHasNext = false;
             while(sc.hasNext()) {
                 String lineStr = sc.next();
-                if (lineStr.startsWith("<channel")) {
+                if (lineStr.contains("<channel")) {
                     int idIndex = -1;
                     if (lineStr.contains("id="))
                         idIndex = lineStr.indexOf("id=");
                         id = lineStr.substring(idIndex + 4, lineStr.lastIndexOf("\""));
                 }
-                if (lineStr.startsWith("<display-name")) {
+                if (lineStr.contains("<display-name")) {
                     int langIndex = -1;
                     if (lineStr.contains("lang=")) {
                         langIndex = lineStr.indexOf("lang=");
@@ -80,14 +86,14 @@ public class GuideServiceImpl implements GuideService {
                     displayName = lineStr.substring(lineStr.indexOf(">") + 1, lineStr.indexOf("</display-name>"));
 
                 }
-                if (lineStr.startsWith("</channel>")) {
+                if (lineStr.contains("</channel>")) {
                     ChannelGuide channelGuide = new ChannelGuide(id, lang, displayName);
                     channelGuideList.add(channelGuide);
                     id = null;
                     lang = null;
                     displayName = null;
                 }
-                if (lineStr.startsWith("<programme")) {
+                if (lineStr.contains("<programme")) {
                     int startPos = -1;
                     if (lineStr.contains("start=")) {
                         startPos = lineStr.indexOf("start=");
@@ -105,7 +111,7 @@ public class GuideServiceImpl implements GuideService {
                         channel = lineStr.substring(channelPos + 9, lineStr.lastIndexOf("\""));
                     }
                 }
-                if (lineStr.startsWith("<title")) {
+                if (lineStr.contains("<title")) {
                     title = lineStr.substring(lineStr.indexOf(">") + 1, lineStr.indexOf("</title>"));
                 }
                 if (descHasNext) {
@@ -117,7 +123,7 @@ public class GuideServiceImpl implements GuideService {
                         descHasNext = true;
                     }
                 }
-                if (lineStr.startsWith("<desc")) {
+                if (lineStr.contains("<desc")) {
                     if (lineStr.contains("</desc>")) {
                         desc = lineStr.substring(lineStr.indexOf(">") + 1, lineStr.indexOf("</desc>"));
                         descHasNext = false;
@@ -127,11 +133,11 @@ public class GuideServiceImpl implements GuideService {
                         descHasNext = true;
                     }
                 }
-                if (lineStr.startsWith("<category")) {
+                if (lineStr.contains("<category")) {
                     category = lineStr.substring(lineStr.indexOf(">") + 1, lineStr.indexOf("</category>"));
                 }
 
-                if (lineStr.startsWith("</programme>")) {
+                if (lineStr.contains("</programme>")) {
                     Programme programme = new Programme(start, stop, channel, title, desc, category);
                     programmeList.add(programme);
                     start = null;
@@ -208,10 +214,12 @@ public class GuideServiceImpl implements GuideService {
                 String endDateStr = programme.getStop();
                 Calendar startDate = Calendar.getInstance();
                 Calendar endDate = Calendar.getInstance();
+
                 try {
                     startDate.setTime(sdf.parse(startDateStr));
                     endDate.setTime(sdf.parse(endDateStr));
                 } catch (ParseException e) {
+                    System.out.println(endDateStr);
                     e.printStackTrace();
                 }
                 if (currentTime.after(startDate) && currentTime.before(endDate)) {
@@ -269,6 +277,41 @@ public class GuideServiceImpl implements GuideService {
         } else
             res = "";
         return res;
+    }
+
+    public void setupGuideProvList() {
+        guideProvList.add(new GuideProv("Epg.in.ua", "http://epg.in.ua/epg/tvprogram_ua_ru.gz",
+                "epginua.xml.gz"));
+        guideProvList.add(new GuideProv("TeleGuide.info", "http://www.teleguide.info/download/new3/xmltv.xml.gz",
+                "teleguide.xml.gz"));
+        guideProvList.add(new GuideProv("Torrent-tv.ru", "http://api.torrent-tv.ru/ttv.xmltv.xml.gz",
+                "ttvru.xml.gz"));
+    }
+
+    public String getTotalTimePeriod() {
+        String result = null;
+        final DateFormat totalSdf = new SimpleDateFormat("dd.MM");
+        List<String> dateList = new ArrayList<String>();
+        if (channelGuideList.size() > 0) {
+            String chId = channelGuideList.get(0).getId();
+            for (Programme programme : programmeList) {
+                if (programme.getChannel().equals(chId)) {
+                    dateList.add(programme.getStart());
+                }
+            }
+            String startDateStr = dateList.get(0);
+            String endDateStr = dateList.get(dateList.size() - 1);
+            Calendar startDate = Calendar.getInstance();
+            Calendar endDate = Calendar.getInstance();
+            try {
+                startDate.setTime(sdf.parse(startDateStr));
+                endDate.setTime(sdf.parse(endDateStr));
+                result = totalSdf.format(startDate.getTime()) + " - " + totalSdf.format(endDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
 }

@@ -2,6 +2,7 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.dialog.AddPlaylistDialog;
 import atua.anddev.globaltv.dialog.SearchDialog;
+import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.MainForm;
 import atua.anddev.globaltv.service.PlaylistService;
@@ -26,6 +27,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static atua.anddev.globaltv.service.GuideService.guideProvList;
 import static java.util.Arrays.asList;
 
 /**
@@ -35,24 +37,25 @@ public class MainActivity implements Services {
     public static int selectedProvider;
     static MainForm mainForm;
     static Boolean needUpdate;
-    private static String lang;
 
     public static void main(String[] args) {
-        if (lang == null)
-            lang = Locale.getDefault().getISO3Language();
 
         try {
             if (favoriteService.sizeOfFavoriteList() == 0)
                 favoriteService.loadFavorites();
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+        } catch (IOException ignored) {
         }
 
-        if (guideService.checkForUpdate())
-            updateGuide();
+        guideService.setupGuideProvList();
 
         if (Global.path_aceplayer == null)
             loadSettings();
+
+        if (Global.lang == null)
+            Global.lang = Locale.getDefault().getISO3Language();
+
+        if (guideService.checkForUpdate())
+            updateGuide();
 
         setUIFont(new FontUIResource(new Font("Dialog", 0, Integer.valueOf(Global.selectedFontSize))));
 
@@ -120,15 +123,15 @@ public class MainActivity implements Services {
 
         String translationFile = null;
 
-        if (lang.equals("eng")) {
+        if (Global.lang.equals("eng")) {
             mainForm.comboBox2.setSelectedItem(localsList.get(0));
             translationFile = "values/strings.xml";
         }
-        if (lang.equals("ukr")) {
+        if (Global.lang.equals("ukr")) {
             mainForm.comboBox2.setSelectedItem(localsList.get(1));
             translationFile = "values-uk/strings.xml";
         }
-        if (lang.equals("rus")) {
+        if (Global.lang.equals("rus")) {
             mainForm.comboBox2.setSelectedItem(localsList.get(2));
             translationFile = "values-ru/strings.xml";
         }
@@ -205,10 +208,21 @@ public class MainActivity implements Services {
             needUpdate = true;
             return false;
         } finally {
-            mainForm.setMinimumSize(new Dimension(250, mainForm.getHeight()));
-            mainForm.pack();
+            setupMinWidth();
         }
         return true;
+    }
+
+    private static void setupMinWidth() {
+        switch (Global.selectedFontSize) {
+            case "12":
+                mainForm.setMinimumSize(new Dimension(250, mainForm.getHeight()));
+                break;
+            case "16":
+                mainForm.setMinimumSize(new Dimension(288, mainForm.getHeight()));
+                break;
+        }
+        mainForm.pack();
     }
 
     private static void downloadPlaylist(final int num, boolean waitforfinish) {
@@ -291,6 +305,9 @@ public class MainActivity implements Services {
             Global.path_other = doc.getElementsByTagName("otherplayer").item(0).getTextContent();
             Global.selectedTheme = doc.getElementsByTagName("theme").item(0).getTextContent();
             Global.selectedFontSize = doc.getElementsByTagName("fontsize").item(0).getTextContent();
+            Global.lang = doc.getElementsByTagName("language").item(0).getTextContent();
+            String selectedGuideProv = doc.getElementsByTagName("guideprov").item(0).getTextContent();
+            Global.selectedGuideProv = Integer.valueOf(selectedGuideProv);
         } catch (Exception e) {
             setDefaultSetting();
         }
@@ -315,15 +332,15 @@ public class MainActivity implements Services {
                 String translationFile = null;
                 switch (index) {
                     case 0:
-                        MainActivity.lang = "eng";
+                        Global.lang = "eng";
                         translationFile = "values/strings.xml";
                         break;
                     case 1:
-                        MainActivity.lang = "ukr";
+                        Global.lang = "ukr";
                         translationFile = "values-uk/strings.xml";
                         break;
                     case 2:
-                        MainActivity.lang = "rus";
+                        Global.lang = "rus";
                         translationFile = "values-ru/strings.xml";
                         break;
                 }
@@ -359,6 +376,9 @@ public class MainActivity implements Services {
                 Global.path_aceplayer = "/usr/bin/acestreamplayer";
                 Global.path_vlc = "/usr/bin/vlc";
                 break;
+            case MacOS:
+                Global.path_vlc = "/Applications/VLC.app/Contents/MacOS/VLC";
+                break;
         }
     }
 
@@ -366,7 +386,8 @@ public class MainActivity implements Services {
         @Override
         public void run() {
             try {
-                saveUrl("ttv.xmltv.xml.gz", guideService.guideUrl);
+                GuideProv guideProv = guideProvList.get(Global.selectedGuideProv);
+                saveUrl(guideProv.getFile(), guideProv.getUrl());
                 guideService.parseGuide();
             } catch (IOException e) {
                 e.printStackTrace();

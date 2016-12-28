@@ -17,6 +17,15 @@ public class SettingForm extends JFrame {
     public JComboBox comboBox2;
     public JLabel fontSizeLabel;
     private JPanel settingsPanel;
+    public JComboBox comboBox3;
+    public JButton downloadButton;
+    public JLabel guideLabel;
+    public JTextField fileSizeTextField;
+    public JTextField channelsNumTextField;
+    public JTextField timePeriodTextField;
+    public JLabel fileSizeLabel;
+    public JLabel channelsLabel;
+    public JLabel TimePeriodLabel;
 
     public SettingForm() {
         super("Settings");
