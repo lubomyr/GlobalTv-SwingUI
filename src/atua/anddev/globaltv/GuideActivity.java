@@ -59,8 +59,10 @@ class GuideActivity implements Services {
             String timeOutput = sdfStartOutput.format(startDate.getTime()) + " - " + sdfEndOutput.format(endDate.getTime());
             data[row][0] = timeOutput;
             data[row][1] = guideService.decodeSymbols(guideList.get(row).getTitle());
-            if (currentTime.after(startDate) && currentTime.before(endDate))
+            if (currentTime.after(startDate) && currentTime.before(endDate)) {
+                data[row][0] += " *";
                 selected = row;
+            }
         }
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         guideForm.table1.setModel(model);
