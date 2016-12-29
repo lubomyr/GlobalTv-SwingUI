@@ -156,6 +156,13 @@ public class SettingsActivity {
         settingForm.comboBox3.addItemListener(itemListener);
     }
 
+    private void setupExtension(JFileChooser chooser, String description) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("AcePlayer Executable", "exe");
+        OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
+        if (ostype == Windows)
+            chooser.setFileFilter(filter);
+    }
+
     private void buttonActionListener() {
 
         settingForm.selectButton.addActionListener(new ActionListener() {
@@ -163,10 +170,7 @@ public class SettingsActivity {
 
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("AcePlayer Executable", "exe");
-                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
-                if (ostype == Windows)
-                    chooser.setFileFilter(filter);
+                setupExtension(chooser, "AcePlayer Executable");
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_aceplayer = chooser.getSelectedFile().getPath();
@@ -180,10 +184,7 @@ public class SettingsActivity {
 
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("VLC Executable", "exe");
-                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
-                if (ostype == Windows)
-                    chooser.setFileFilter(filter);
+                setupExtension(chooser, "VLC Executable");
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_vlc = chooser.getSelectedFile().getPath();
@@ -197,11 +198,7 @@ public class SettingsActivity {
 
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
-
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Player Executable", "exe");
-                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
-                if (ostype == Windows)
-                    chooser.setFileFilter(filter);
+                setupExtension(chooser, "Player Executable");
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_other = chooser.getSelectedFile().getPath();
