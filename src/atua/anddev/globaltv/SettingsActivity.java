@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static atua.anddev.globaltv.OsCheck.OSType.Windows;
 import static atua.anddev.globaltv.Services.guideService;
 import static atua.anddev.globaltv.Services.tService;
 import static atua.anddev.globaltv.service.GuideService.channelGuideList;
@@ -163,7 +164,9 @@ public class SettingsActivity {
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("AcePlayer Executable", "exe");
-                chooser.setFileFilter(filter);
+                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
+                if (ostype == Windows)
+                    chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_aceplayer = chooser.getSelectedFile().getPath();
@@ -178,7 +181,9 @@ public class SettingsActivity {
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("VLC Executable", "exe");
-                chooser.setFileFilter(filter);
+                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
+                if (ostype == Windows)
+                    chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_vlc = chooser.getSelectedFile().getPath();
@@ -192,8 +197,11 @@ public class SettingsActivity {
 
             public void actionPerformed(ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
+
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("Player Executable", "exe");
-                chooser.setFileFilter(filter);
+                OsCheck.OSType ostype = OsCheck.getOperatingSystemType();
+                if (ostype == Windows)
+                    chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(parent);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     Global.path_other = chooser.getSelectedFile().getPath();
