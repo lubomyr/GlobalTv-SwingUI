@@ -4,6 +4,7 @@ import atua.anddev.globaltv.entity.Programme;
 import atua.anddev.globaltv.form.GuideForm;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
@@ -66,8 +67,10 @@ class GuideActivity implements Services {
         }
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         guideForm.table1.setModel(model);
-        if (selected != -1)
+        if (selected != -1) {
+            guideForm.table1.scrollRectToVisible(new Rectangle(guideForm.table1.getCellRect(selected, 0, true)));
             guideForm.table1.setRowSelectionInterval(selected, selected);
+        }
         guideForm.pack();
         actionSelector(guideList);
     }
