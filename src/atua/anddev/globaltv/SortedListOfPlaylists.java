@@ -5,6 +5,7 @@ import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.SortedListofPlaylistsForm;
 
 import javax.swing.table.DefaultTableModel;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,7 +61,8 @@ public class SortedListOfPlaylists implements Services {
         int daysPassed = cal.get(Calendar.DAY_OF_YEAR);
         switch (daysPassed) {
             case 1:
-                tmpText = tService.local("updated") + " " + new Date(inputDate).toLocaleString();
+                DateFormat format = DateFormat.getDateTimeInstance();
+                tmpText = tService.local("updated") + " " + format.format(new Date(inputDate));
                 break;
             case 2:
                 tmpText = tService.local("updated") + " 1 " + tService.local("dayago");

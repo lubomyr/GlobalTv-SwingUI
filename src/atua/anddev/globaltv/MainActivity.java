@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -142,6 +143,8 @@ public class MainActivity implements Services {
         }
 
         LanguageListActionAdapter(localsList);
+        mainForm.comboBox2.setMaximumSize(new Dimension(mainForm.comboBox2.getWidth(),
+                Integer.parseInt(Global.selectedFontSize)));
     }
 
     private static void setupProviderView() {
@@ -186,7 +189,8 @@ public class MainActivity implements Services {
             int daysPassed = cal.get(Calendar.DAY_OF_YEAR);
             switch (daysPassed) {
                 case 1:
-                    tmpText = tService.local("updated") + " " + new Date(updateDate).toLocaleString();
+                    DateFormat format = DateFormat.getDateTimeInstance();
+                    tmpText = tService.local("updated") + " " + format.format(new Date(updateDate));
                     break;
                 case 2:
                     tmpText = tService.local("updated") + " 1 " + tService.local("dayago");
