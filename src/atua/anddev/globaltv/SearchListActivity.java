@@ -26,10 +26,10 @@ public class SearchListActivity implements Services {
     }
 
     private void applyLocals() {
-        searchForm.openChannelButton.setText(tService.local("openChannel"));
-        searchForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
-        searchForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
-        searchForm.guideButton.setText(tService.local("showProgramGuide"));
+        searchForm.openChannelButton.setText(tService.getString("openChannel"));
+        searchForm.addToFavoritesButton.setText(tService.getString("addToFavorites"));
+        searchForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        searchForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void showSearchResults() {
@@ -60,7 +60,7 @@ public class SearchListActivity implements Services {
                 }
             }
         }).start();
-        searchForm.searchLabel.setText(playlist.size() + " - " + tService.local("pcs"));
+        searchForm.searchLabel.setText(playlist.size() + " - " + tService.getString("pcs"));
         searchForm.pack();
     }
 

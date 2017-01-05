@@ -12,7 +12,7 @@ public interface TranslationService {
 
     void getTranslationData(String path);
 
-    String local(String input);
+    String getString(String input);
 
     String translateCategory(String input);
 }

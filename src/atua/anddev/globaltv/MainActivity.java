@@ -93,14 +93,14 @@ public class MainActivity implements Services {
     }
 
     private static void applyLocals() {
-        mainForm.updatePlaylistButton.setText(tService.local("updatePlaylistButton"));
-        mainForm.updateOutdatedPlaylistButton.setText(tService.local("updateOutdatedPlaylists"));
-        mainForm.openPlaylistButton.setText(tService.local("openPlaylistButton"));
-        mainForm.searchButton.setText(tService.local("search"));
-        mainForm.favoritesButton.setText(tService.local("favorites"));
-        mainForm.settingsButton.setText(tService.local("settings"));
-        mainForm.playlistManagerButton.setText(tService.local("playlistsManagerButton"));
-        mainForm.playlistLabel.setText(tService.local("playlist"));
+        mainForm.updatePlaylistButton.setText(tService.getString("updatePlaylistButton"));
+        mainForm.updateOutdatedPlaylistButton.setText(tService.getString("updateOutdatedPlaylists"));
+        mainForm.openPlaylistButton.setText(tService.getString("openPlaylistButton"));
+        mainForm.searchButton.setText(tService.getString("search"));
+        mainForm.favoritesButton.setText(tService.getString("favorites"));
+        mainForm.settingsButton.setText(tService.getString("settings"));
+        mainForm.playlistManagerButton.setText(tService.getString("playlistsManagerButton"));
+        mainForm.playlistLabel.setText(tService.getString("playlist"));
     }
 
     private static void setUIFont(FontUIResource f) {
@@ -190,25 +190,25 @@ public class MainActivity implements Services {
             switch (daysPassed) {
                 case 1:
                     DateFormat format = DateFormat.getDateTimeInstance();
-                    tmpText = tService.local("updated") + " " + format.format(new Date(updateDate));
+                    tmpText = tService.getString("updated") + " " + format.format(new Date(updateDate));
                     break;
                 case 2:
-                    tmpText = tService.local("updated") + " 1 " + tService.local("dayago");
+                    tmpText = tService.getString("updated") + " 1 " + tService.getString("dayago");
                     break;
                 case 3:
                 case 4:
                 case 5:
-                    tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
+                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("daysago");
                     break;
                 default:
-                    tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("fivedaysago");
+                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("fivedaysago");
                     break;
 
             }
             mainForm.mainPlaylistInfoLabel.setText(tmpText);
             InputStream myfile = new FileInputStream(myPath + fname);
         } catch (FileNotFoundException e) {
-            mainForm.mainPlaylistInfoLabel.setText(tService.local("playlistnotexist"));
+            mainForm.mainPlaylistInfoLabel.setText(tService.getString("playlistnotexist"));
             needUpdate = true;
             return false;
         } finally {
@@ -407,7 +407,7 @@ public class MainActivity implements Services {
         mainForm.updatePlaylistButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (playlistService.sizeOfActivePlaylist() == 0) {
-                    mainForm.mainPlaylistInfoLabel.setText(tService.local("no_selected_playlist"));
+                    mainForm.mainPlaylistInfoLabel.setText(tService.getString("no_selected_playlist"));
                     return;
                 }
                 downloadPlaylist(selectedProvider, false);
@@ -423,7 +423,7 @@ public class MainActivity implements Services {
         mainForm.openPlaylistButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (playlistService.sizeOfActivePlaylist() == 0) {
-                    mainForm.mainPlaylistInfoLabel.setText(tService.local("no_selected_playlist"));
+                    mainForm.mainPlaylistInfoLabel.setText(tService.getString("no_selected_playlist"));
                     return;
                 }
                 try {
@@ -435,7 +435,7 @@ public class MainActivity implements Services {
                     if (Global.playlistWithGroup) {
                         new CatlistActivity();
                     } else {
-                        Global.selectedCategory = tService.local("all");
+                        Global.selectedCategory = tService.getString("all");
                         new PlaylistActivity();
                     }
                 }
@@ -489,12 +489,12 @@ public class MainActivity implements Services {
                     playlistService.setUpdateDate(num, new Date().getTime());
                     playlistService.saveData();
                     checkPlaylistFile(selectedProvider);
-                    mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.local("updated"));
+                    mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.getString("updated"));
 
                 }
                 ;
             } catch (Exception e) {
-                mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.local("failed"));
+                mainForm.mainWarningLabel.setText(playlistService.getActivePlaylistById(num).getName() + " - " + tService.getString("failed"));
                 System.out.println("Error: " + e.toString());
             } finally {
                 mainForm.pack();

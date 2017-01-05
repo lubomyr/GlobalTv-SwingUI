@@ -48,7 +48,7 @@ public class SortedListOfPlaylists implements Services {
         }
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         sortedListofPlaylistsForm.table1.setModel(model);
-        sortedListofPlaylistsForm.sortedlistLabel.setText(tService.local("sortedListButton"));
+        sortedListofPlaylistsForm.sortedlistLabel.setText(tService.getString("sortedListButton"));
         sortedListofPlaylistsForm.pack();
     }
 
@@ -62,18 +62,18 @@ public class SortedListOfPlaylists implements Services {
         switch (daysPassed) {
             case 1:
                 DateFormat format = DateFormat.getDateTimeInstance();
-                tmpText = tService.local("updated") + " " + format.format(new Date(inputDate));
+                tmpText = tService.getString("updated") + " " + format.format(new Date(inputDate));
                 break;
             case 2:
-                tmpText = tService.local("updated") + " 1 " + tService.local("dayago");
+                tmpText = tService.getString("updated") + " 1 " + tService.getString("dayago");
                 break;
             case 3:
             case 4:
             case 5:
-                tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("daysago");
+                tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("daysago");
                 break;
             default:
-                tmpText = tService.local("updated") + " " + (daysPassed - 1) + " " + tService.local("fivedaysago");
+                tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("fivedaysago");
                 break;
         }
         return tmpText;

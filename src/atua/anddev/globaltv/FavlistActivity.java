@@ -23,9 +23,9 @@ class FavlistActivity implements Services {
     }
 
     private void applyLocals() {
-        favoritesForm.openChannelButton.setText(tService.local("openChannel"));
-        favoritesForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
-        favoritesForm.guideButton.setText(tService.local("showProgramGuide"));
+        favoritesForm.openChannelButton.setText(tService.getString("openChannel"));
+        favoritesForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        favoritesForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void showFavlist() {
@@ -48,7 +48,7 @@ class FavlistActivity implements Services {
         }).start();
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         favoritesForm.table1.setModel(model);
-        favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.local("pcs"));
+        favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.getString("pcs"));
         favoritesForm.pack();
     }
 

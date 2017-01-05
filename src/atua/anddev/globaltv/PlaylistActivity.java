@@ -30,17 +30,17 @@ class PlaylistActivity implements Services {
     }
 
     private void applyLocals() {
-        playlistForm.favoritesButton.setText(tService.local("favorites"));
-        playlistForm.searchButton.setText(tService.local("search"));
-        playlistForm.openChannelButton.setText(tService.local("openChannel"));
-        playlistForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
-        playlistForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
-        playlistForm.guideButton.setText(tService.local("showProgramGuide"));
+        playlistForm.favoritesButton.setText(tService.getString("favorites"));
+        playlistForm.searchButton.setText(tService.getString("search"));
+        playlistForm.openChannelButton.setText(tService.getString("openChannel"));
+        playlistForm.addToFavoritesButton.setText(tService.getString("addToFavorites"));
+        playlistForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        playlistForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void openCategory(final String catName) {
         for (Channel chn : channelService.getAllChannels()) {
-            if (catName.equals(tService.local("all"))) {
+            if (catName.equals(tService.getString("all"))) {
                 playlist.add(chn.getName());
                 playlistUrl.add(chn.getUrl());
             } else if (catName.equals(chn.getCategory())) {
@@ -49,7 +49,7 @@ class PlaylistActivity implements Services {
             }
         }
 
-        playlistForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.local("channels"));
+        playlistForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.getString("channels"));
 
         String[] colNames;
         Object[][] data;
@@ -153,7 +153,7 @@ class PlaylistActivity implements Services {
         });
         playlistForm.searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new SearchDialog("local");
+                new SearchDialog("getString");
             }
         });
         playlistForm.addToFavoritesButton.addActionListener(new ActionListener() {

@@ -26,13 +26,13 @@ public class PlaylistManagerActivity implements Services {
     }
 
     private void applyLocals() {
-        playlistManagerForm.resetButton.setText(tService.local("reset"));
-        playlistManagerForm.addToSelectedPlaylistsButton.setText(tService.local("addToSelectedPlaylists"));
-        playlistManagerForm.editButton.setText(tService.local("modify"));
-        playlistManagerForm.removeButton.setText(tService.local("remove"));
-        playlistManagerForm.addNewPlaylistButton.setText(tService.local("addnewplaylist"));
-        playlistManagerForm.addAllOfferedPlaylistsButton.setText(tService.local("addAllOfferedPlaylist"));
-        playlistManagerForm.sortedListByUpdateButton.setText(tService.local("sortedListButton"));
+        playlistManagerForm.resetButton.setText(tService.getString("reset"));
+        playlistManagerForm.addToSelectedPlaylistsButton.setText(tService.getString("addToSelectedPlaylists"));
+        playlistManagerForm.editButton.setText(tService.getString("modify"));
+        playlistManagerForm.removeButton.setText(tService.getString("remove"));
+        playlistManagerForm.addNewPlaylistButton.setText(tService.getString("addnewplaylist"));
+        playlistManagerForm.addAllOfferedPlaylistsButton.setText(tService.getString("addAllOfferedPlaylist"));
+        playlistManagerForm.sortedListByUpdateButton.setText(tService.getString("sortedListButton"));
     }
 
     private void createProvlist() {
@@ -49,10 +49,10 @@ public class PlaylistManagerActivity implements Services {
     private void showProvlist() {
         playlistManagerForm.list1.setModel(model_a);
         playlistManagerForm.list2.setModel(model_d);
-        playlistManagerForm.selectedPlaylistLabel.setText(tService.local("selected") + " - " + playlistService.sizeOfActivePlaylist()
-                + " " + tService.local("pcs"));
-        playlistManagerForm.offeredPlaylistLabel.setText(tService.local("offered") + " - " + playlistService.sizeOfOfferedPlaylist()
-                + " " + tService.local("pcs"));
+        playlistManagerForm.selectedPlaylistLabel.setText(tService.getString("selected") + " - " + playlistService.sizeOfActivePlaylist()
+                + " " + tService.getString("pcs"));
+        playlistManagerForm.offeredPlaylistLabel.setText(tService.getString("offered") + " - " + playlistService.sizeOfOfferedPlaylist()
+                + " " + tService.getString("pcs"));
         playlistManagerForm.pack();
     }
 

@@ -31,10 +31,10 @@ public class PlaylistEditActivity implements Services {
 
     private void applyLocals() {
         if (editAction.equals("addNew")) {
-            playlistEditForm.editButton.setText(tService.local("add"));
+            playlistEditForm.editButton.setText(tService.getString("add"));
         }
         if (editAction.equals("modify")) {
-            playlistEditForm.editButton.setText(tService.local("modify"));
+            playlistEditForm.editButton.setText(tService.getString("modify"));
         }
     }
 
@@ -68,7 +68,7 @@ public class PlaylistEditActivity implements Services {
                 else
                     type = 1;
                 if (name.length() == 0 || url.length() == 0) {
-                    new WarningDialog(tService.local("pleasefillallfields"));
+                    new WarningDialog(tService.getString("pleasefillallfields"));
                 } else {
                     if (editAction.equals("modify")) {
                         playlistService.setActivePlaylistById(num, name, url, type);
@@ -79,7 +79,7 @@ public class PlaylistEditActivity implements Services {
                         PlaylistManagerActivity.model_a.addElement(name);
                         success = true;
                     } else {
-                        new WarningDialog(tService.local("playlistexist"));
+                        new WarningDialog(tService.getString("playlistexist"));
                     }
                     if (success) {
                         playlistService.saveData();

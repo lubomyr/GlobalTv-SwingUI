@@ -24,10 +24,10 @@ public class GlobalSearchActivity implements Services {
     }
 
     private void applyLocals() {
-        globalSearchForm.openChannelButton.setText(tService.local("openChannel"));
-        globalSearchForm.addToFavoritesButton.setText(tService.local("addToFavorites"));
-        globalSearchForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
-        globalSearchForm.guideButton.setText(tService.local("showProgramGuide"));
+        globalSearchForm.openChannelButton.setText(tService.getString("openChannel"));
+        globalSearchForm.addToFavoritesButton.setText(tService.getString("addToFavorites"));
+        globalSearchForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        globalSearchForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void prepare_globalSearch() {
@@ -66,7 +66,7 @@ public class GlobalSearchActivity implements Services {
         }).start();
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         globalSearchForm.table1.setModel(model);
-        globalSearchForm.globalSearchLabel.setText(searchService.sizeOfSearchList() + " - " + tService.local("pcs"));
+        globalSearchForm.globalSearchLabel.setText(searchService.sizeOfSearchList() + " - " + tService.getString("pcs"));
         globalSearchForm.pack();
     }
 

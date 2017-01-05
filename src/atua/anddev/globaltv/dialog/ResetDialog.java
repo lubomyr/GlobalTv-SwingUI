@@ -4,7 +4,6 @@ import atua.anddev.globaltv.Services;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 public class ResetDialog extends JDialog implements Services {
     private JPanel contentPane;
@@ -16,9 +15,9 @@ public class ResetDialog extends JDialog implements Services {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        resetLabel.setText(tService.local("resetwarn"));
-        buttonOK.setText(tService.local("reset"));
-        buttonCancel.setText(tService.local("cancel"));
+        resetLabel.setText(tService.getString("resetwarn"));
+        buttonOK.setText(tService.getString("reset"));
+        buttonCancel.setText(tService.getString("cancel"));
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

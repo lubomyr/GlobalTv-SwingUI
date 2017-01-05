@@ -16,9 +16,9 @@ public class AddPlaylistDialog extends JDialog implements Services {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        addPlaylistDialogLabel.setText(tService.local("provider_list_is_empty"));
-        buttonOK.setText(tService.local("addAllOfferedPlaylist"));
-        buttonCancel.setText(tService.local("playlistsManagerButton"));
+        addPlaylistDialogLabel.setText(tService.getString("provider_list_is_empty"));
+        buttonOK.setText(tService.getString("addAllOfferedPlaylist"));
+        buttonCancel.setText(tService.getString("playlistsManagerButton"));
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -21,9 +21,9 @@ public class SearchDialog extends JDialog implements Services {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        searchLabel.setText(tService.local("pleaseentertext"));
-        buttonOK.setText(tService.local("search"));
-        buttonCancel.setText(tService.local("cancel"));
+        searchLabel.setText(tService.getString("pleaseentertext"));
+        buttonOK.setText(tService.getString("search"));
+        buttonCancel.setText(tService.getString("cancel"));
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

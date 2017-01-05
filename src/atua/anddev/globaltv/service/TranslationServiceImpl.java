@@ -56,7 +56,7 @@ public class TranslationServiceImpl implements TranslationService, Services {
     }
 
     @Override
-    public String local(String input) {
+    public String getString(String input) {
         return localMap.get(input);
     }
 

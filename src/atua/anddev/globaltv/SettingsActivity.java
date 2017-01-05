@@ -49,19 +49,19 @@ public class SettingsActivity {
     }
 
     private void applyLocals() {
-        settingForm.saveButton.setText(tService.local("save"));
-        settingForm.selectButton.setText(tService.local("select"));
-        settingForm.selectButton1.setText(tService.local("select"));
-        settingForm.selectButton2.setText(tService.local("select"));
-        settingForm.useThisPlayerRadioButton.setText(tService.local("useThisPlayer"));
-        settingForm.useThisPlayerRadioButton1.setText(tService.local("useThisPlayer"));
-        settingForm.themeLabel.setText(tService.local("selectTheme"));
-        settingForm.fontSizeLabel.setText(tService.local("selectFontSize"));
-        settingForm.guideLabel.setText(tService.local("programGuideSource"));
-        settingForm.downloadButton.setText(tService.local("update"));
-        settingForm.fileSizeLabel.setText(tService.local("fileSize"));
-        settingForm.channelsLabel.setText(tService.local("channels"));
-        settingForm.TimePeriodLabel.setText(tService.local("period"));
+        settingForm.saveButton.setText(tService.getString("save"));
+        settingForm.selectButton.setText(tService.getString("select"));
+        settingForm.selectButton1.setText(tService.getString("select"));
+        settingForm.selectButton2.setText(tService.getString("select"));
+        settingForm.useThisPlayerRadioButton.setText(tService.getString("useThisPlayer"));
+        settingForm.useThisPlayerRadioButton1.setText(tService.getString("useThisPlayer"));
+        settingForm.themeLabel.setText(tService.getString("selectTheme"));
+        settingForm.fontSizeLabel.setText(tService.getString("selectFontSize"));
+        settingForm.guideLabel.setText(tService.getString("programGuideSource"));
+        settingForm.downloadButton.setText(tService.getString("update"));
+        settingForm.fileSizeLabel.setText(tService.getString("fileSize"));
+        settingForm.channelsLabel.setText(tService.getString("channels"));
+        settingForm.TimePeriodLabel.setText(tService.getString("period"));
     }
 
     private void showSettings() {

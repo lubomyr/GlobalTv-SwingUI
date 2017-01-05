@@ -25,13 +25,13 @@ public class CatlistActivity implements Services {
     }
 
     private void applyLocals() {
-        catlistForm.favoritesButton.setText(tService.local("favorites"));
-        catlistForm.searchButton.setText(tService.local("search"));
-        catlistForm.catlistInfoLabel.setText(tService.local("selectCategory"));
+        catlistForm.favoritesButton.setText(tService.getString("favorites"));
+        catlistForm.searchButton.setText(tService.getString("search"));
+        catlistForm.catlistInfoLabel.setText(tService.getString("selectCategory"));
     }
 
     private void createCatlist() {
-        categoryList.add(tService.local("all"));
+        categoryList.add(tService.getString("all"));
         categoryList.addAll(channelService.getCategoriesList());
     }
 
@@ -65,7 +65,7 @@ public class CatlistActivity implements Services {
         });
         catlistForm.searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new SearchDialog("local");
+                new SearchDialog("getString");
             }
         });
     }

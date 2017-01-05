@@ -23,9 +23,9 @@ public class GlobalFavoriteActivity implements Services {
     }
 
     private void applyLocals() {
-        globalFavoritesForm.openChannelButton.setText(tService.local("openChannel"));
-        globalFavoritesForm.removeFromFavoritesButton.setText(tService.local("removeFromFavorites"));
-        globalFavoritesForm.guideButton.setText(tService.local("showProgramGuide"));
+        globalFavoritesForm.openChannelButton.setText(tService.getString("openChannel"));
+        globalFavoritesForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        globalFavoritesForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void showFavorites() {
@@ -49,7 +49,7 @@ public class GlobalFavoriteActivity implements Services {
         }).start();
         model = new DefaultTableModel(data, colNames);
         globalFavoritesForm.table1.setModel(model);
-        globalFavoritesForm.globalFavoritesLabel.setText(favoriteService.sizeOfFavoriteList() + " - " + tService.local("pcs"));
+        globalFavoritesForm.globalFavoritesLabel.setText(favoriteService.sizeOfFavoriteList() + " - " + tService.getString("pcs"));
         globalFavoritesForm.pack();
     }
 
@@ -141,7 +141,7 @@ public class GlobalFavoriteActivity implements Services {
         String getProvName = favoriteService.getFavoriteById(itemNum).getProv();
         int numA = playlistService.indexNameForActivePlaylist(getProvName);
         if (numA == -1) {
-            new WarningDialog(tService.local("playlistnotexist"));
+            new WarningDialog(tService.getString("playlistnotexist"));
             return;
         }
         playlistService.readPlaylist(numA);

@@ -55,7 +55,7 @@ public class UpdateOutdatedPlaylistActivity implements Services {
                     playlistService.setUpdateDate(num, new Date().getTime());
                     playlistService.saveData();
                     updateOutdatedPlaylistForm.table1.setValueAt(playlistService.getActivePlaylistById(num).getName(),updNum,0);
-                    updateOutdatedPlaylistForm.table1.setValueAt(tService.local("updated"),updNum,1);
+                    updateOutdatedPlaylistForm.table1.setValueAt(tService.getString("updated"), updNum, 1);
                     if (num == MainActivity.selectedProvider) {
                         MainActivity.checkPlaylistFile(MainActivity.selectedProvider);
                     }
@@ -63,7 +63,7 @@ public class UpdateOutdatedPlaylistActivity implements Services {
                 }
             } catch (Exception e) {
                 updateOutdatedPlaylistForm.table1.setValueAt(playlistService.getActivePlaylistById(num).getName(),updNum,0);
-                updateOutdatedPlaylistForm.table1.setValueAt(tService.local("failed"),updNum,1);
+                updateOutdatedPlaylistForm.table1.setValueAt(tService.getString("failed"), updNum, 1);
                 updNum++;
                 System.out.println("Error: " + e.toString());
             }
