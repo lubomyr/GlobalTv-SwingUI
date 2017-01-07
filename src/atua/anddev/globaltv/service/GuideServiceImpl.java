@@ -174,7 +174,7 @@ public class GuideServiceImpl implements GuideService {
 
     private boolean checkGuideDates() {
         boolean result = false;
-        List<String> dateList = new ArrayList<String>();
+        List<String> dateList = new ArrayList<>();
         if (channelGuideList.size() > 0) {
             String chId = channelGuideList.get(0).getId();
             for (Programme programme : programmeList) {
@@ -210,19 +210,9 @@ public class GuideServiceImpl implements GuideService {
         String result = null;
         for (Programme programme : programmeList) {
             if (programme.getChannel().equals(id)) {
-                String startDateStr = programme.getStart();
-                String endDateStr = programme.getStop();
-                Calendar startDate = Calendar.getInstance();
-                Calendar endDate = Calendar.getInstance();
-
-                try {
-                    startDate.setTime(sdf.parse(startDateStr));
-                    endDate.setTime(sdf.parse(endDateStr));
-                } catch (ParseException e) {
-                    System.out.println(endDateStr);
-                    e.printStackTrace();
-                }
-                if (currentTime.after(startDate) && currentTime.before(endDate)) {
+                Calendar startTime = decodeDateTime(programme.getStart());
+                Calendar stopTime = decodeDateTime(programme.getStop());
+                if (currentTime.after(startTime) && currentTime.before(stopTime)) {
                     result = programme.getTitle();
                     result = decodeSymbols(result);
                 }
@@ -235,19 +225,9 @@ public class GuideServiceImpl implements GuideService {
         String result = null;
         for (Programme programme : programmeList) {
             if (programme.getChannel().equals(id)) {
-                String startDateStr = programme.getStart();
-                String endDateStr = programme.getStop();
-                Calendar startDate = Calendar.getInstance();
-                Calendar endDate = Calendar.getInstance();
-                try {
-                    if (!startDateStr.isEmpty())
-                        startDate.setTime(sdf.parse(startDateStr));
-                    if (!endDateStr.isEmpty())
-                        endDate.setTime(sdf.parse(endDateStr));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if (currentTime.after(startDate) && currentTime.before(endDate)) {
+                Calendar startTime = decodeDateTime(programme.getStart());
+                Calendar stopTime = decodeDateTime(programme.getStop());
+                if (currentTime.after(startTime) && currentTime.before(stopTime)) {
                     result = programme.getDesc();
                     result = decodeSymbols(result);
                 }
@@ -256,8 +236,19 @@ public class GuideServiceImpl implements GuideService {
         return result;
     }
 
+    private Calendar decodeDateTime(String str) {
+        Calendar result = Calendar.getInstance();
+        try {
+            if (!str.isEmpty())
+                result.setTime(sdf.parse(str));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public List<Programme> getChannelGuide(String chName) {
-        List<Programme> result = new ArrayList<Programme>();
+        List<Programme> result = new ArrayList<>();
         String id = getIdByChannelName(chName);
         for (Programme programme : programmeList) {
             if (programme.getChannel().equals(id)) {
@@ -291,7 +282,7 @@ public class GuideServiceImpl implements GuideService {
     public String getTotalTimePeriod() {
         String result = null;
         final DateFormat totalSdf = new SimpleDateFormat("dd.MM");
-        List<String> dateList = new ArrayList<String>();
+        List<String> dateList = new ArrayList<>();
         if (channelGuideList.size() > 0) {
             String chId = channelGuideList.get(0).getId();
             for (Programme programme : programmeList) {
