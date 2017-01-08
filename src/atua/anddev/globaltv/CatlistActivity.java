@@ -51,7 +51,7 @@ public class CatlistActivity implements Services {
                 int index = catlistForm.list1.getSelectedIndex();
                 if (!arg0.getValueIsAdjusting() && index != -1) {
                     Global.selectedCategory = categoryList.get(index);
-                    new PlaylistActivity();
+                    new ChannelListActivity();
                 }
             }
         });

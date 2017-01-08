@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static atua.anddev.globaltv.service.GuideService.guideProvList;
+import static atua.anddev.globaltv.service.LogoService.logoList;
 import static java.util.Arrays.asList;
 
 /**
@@ -78,6 +79,9 @@ public class MainActivity implements Services {
         if (playlistService.sizeOfOfferedPlaylist() == 0) {
             playlistService.setupProvider("default");
         }
+
+        if (logoList.size() == 0)
+            logoService.setupLogos();
 
         mainForm = new MainForm();
 
@@ -436,7 +440,7 @@ public class MainActivity implements Services {
                         new CatlistActivity();
                     } else {
                         Global.selectedCategory = tService.getString("all");
-                        new PlaylistActivity();
+                        new ChannelListActivity();
                     }
                 }
             }

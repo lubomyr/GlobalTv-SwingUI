@@ -391,7 +391,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
             onPostExecute(json);
         }
 
-        protected String doInBackground() {
+        String doInBackground() {
             try {
                 URL url = new URL("https://dl.dropboxusercontent.com/u/47797448/playlist/playlists.json");
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -411,7 +411,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
             return resultJson;
         }
 
-        protected void onPostExecute(String strJson) {
+        void onPostExecute(String strJson) {
             JSONObject dataJsonObj = null;
 
             try {

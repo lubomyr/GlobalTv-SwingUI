@@ -1,10 +1,10 @@
 package atua.anddev.globaltv.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import atua.anddev.globaltv.Player;
 import atua.anddev.globaltv.entity.Channel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelServiceImpl implements ChannelService {
 
@@ -24,11 +24,6 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public int indexNameForChannel(String name) {
-        return channelName.indexOf(name);
-    }
-
-    @Override
     public Channel getChannelById(int id) {
         return channel.get(id);
     }
@@ -41,13 +36,11 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public void addToChannelList(String name, String url, String category) {
         channel.add(new Channel(name, url, category));
-        channelName.add(name);
     }
 
     @Override
     public void clearAllChannel() {
         channel.clear();
-        channelName.clear();
     }
 
     @Override

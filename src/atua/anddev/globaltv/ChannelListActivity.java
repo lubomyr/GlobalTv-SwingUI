@@ -3,7 +3,7 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.dialog.SearchDialog;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
-import atua.anddev.globaltv.form.PlaylistForm;
+import atua.anddev.globaltv.form.ChannelListForm;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -13,16 +13,15 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-class PlaylistActivity implements Services {
-    private PlaylistForm playlistForm;
-    private List<String> playlist = new ArrayList<String>();
-    private List<String> playlistUrl = new ArrayList<String>();
+class ChannelListActivity implements Services {
+    private ChannelListForm channelListForm;
+    private List<Channel> playlist = new ArrayList<>();
     private String selectedChannel;
     private String selectedLink;
     private Playlist selectedPlaylist;
 
-    PlaylistActivity() {
-        playlistForm = new PlaylistForm();
+    ChannelListActivity() {
+        channelListForm = new ChannelListForm();
         applyLocals();
         openCategory(Global.selectedCategory);
         actionSelector();
@@ -30,26 +29,24 @@ class PlaylistActivity implements Services {
     }
 
     private void applyLocals() {
-        playlistForm.favoritesButton.setText(tService.getString("favorites"));
-        playlistForm.searchButton.setText(tService.getString("search"));
-        playlistForm.openChannelButton.setText(tService.getString("openChannel"));
-        playlistForm.addToFavoritesButton.setText(tService.getString("addToFavorites"));
-        playlistForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
-        playlistForm.guideButton.setText(tService.getString("showProgramGuide"));
+        channelListForm.favoritesButton.setText(tService.getString("favorites"));
+        channelListForm.searchButton.setText(tService.getString("search"));
+        channelListForm.openChannelButton.setText(tService.getString("openChannel"));
+        channelListForm.addToFavoritesButton.setText(tService.getString("addToFavorites"));
+        channelListForm.removeFromFavoritesButton.setText(tService.getString("removeFromFavorites"));
+        channelListForm.guideButton.setText(tService.getString("showProgramGuide"));
     }
 
     private void openCategory(final String catName) {
         for (Channel chn : channelService.getAllChannels()) {
             if (catName.equals(tService.getString("all"))) {
-                playlist.add(chn.getName());
-                playlistUrl.add(chn.getUrl());
+                playlist.add(chn);
             } else if (catName.equals(chn.getCategory())) {
-                playlist.add(chn.getName());
-                playlistUrl.add(chn.getUrl());
+                playlist.add(chn);
             }
         }
 
-        playlistForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.getString("channels"));
+        channelListForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.getString("channels"));
 
         String[] colNames;
         Object[][] data;
@@ -57,64 +54,64 @@ class PlaylistActivity implements Services {
         colNames = new String[]{"name", "program"};
         data = new Object[playlist.size()][cols];
         for (int row = 0; row < playlist.size(); row++) {
-            data[row][0] = playlist.get(row);
+            data[row][0] = playlist.get(row).getName();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < playlist.size(); row++) {
-                    playlistForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row, 1);
+                    channelListForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row).getName()), row, 1);
                 }
             }
         }).start();
         DefaultTableModel model = new DefaultTableModel(data, colNames);
-        playlistForm.table1.setModel(model);
-        playlistForm.pack();
+        channelListForm.table1.setModel(model);
+        channelListForm.pack();
     }
 
     private void actionSelector() {
-        playlistForm.openChannelButton.setVisible(false);
-        playlistForm.addToFavoritesButton.setVisible(false);
-        playlistForm.removeFromFavoritesButton.setVisible(false);
-        playlistForm.guideButton.setVisible(false);
-        playlistForm.guidePanel.setVisible(false);
-        playlistForm.table1.addMouseListener(new MouseListener() {
+        channelListForm.openChannelButton.setVisible(false);
+        channelListForm.addToFavoritesButton.setVisible(false);
+        channelListForm.removeFromFavoritesButton.setVisible(false);
+        channelListForm.guideButton.setVisible(false);
+        channelListForm.guidePanel.setVisible(false);
+        channelListForm.table1.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                int index = playlistForm.table1.getSelectedRow();
+                int index = channelListForm.table1.getSelectedRow();
                 if (index != -1) {
-                    selectedChannel = playlist.get(index);
-                    selectedLink = playlistUrl.get(index);
+                    selectedChannel = playlist.get(index).getName();
+                    selectedLink = playlist.get(index).getUrl();
                     selectedPlaylist = playlistService.getActivePlaylistById(MainActivity.selectedProvider);
-                    playlistForm.openChannelButton.setVisible(true);
-                    playlistForm.guideButton.setVisible(true);
+                    channelListForm.openChannelButton.setVisible(true);
+                    channelListForm.guideButton.setVisible(true);
                     if (favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName()) == -1) {
-                        playlistForm.addToFavoritesButton.setVisible(true);
-                        playlistForm.removeFromFavoritesButton.setVisible(false);
+                        channelListForm.addToFavoritesButton.setVisible(true);
+                        channelListForm.removeFromFavoritesButton.setVisible(false);
                     } else {
-                        playlistForm.removeFromFavoritesButton.setVisible(true);
-                        playlistForm.addToFavoritesButton.setVisible(false);
+                        channelListForm.removeFromFavoritesButton.setVisible(true);
+                        channelListForm.addToFavoritesButton.setVisible(false);
                     }
 
                     String title = guideService.getProgramTitle(selectedChannel);
                     if ((title != null) && !title.isEmpty()) {
-                        playlistForm.guidePanel.setVisible(true);
-                        playlistForm.guideTextArea.setText(title);
+                        channelListForm.guidePanel.setVisible(true);
+                        channelListForm.guideTextArea.setText(title);
                     } else {
-                        playlistForm.guidePanel.setVisible(false);
+                        channelListForm.guidePanel.setVisible(false);
                     }
 
                     String desc = guideService.getProgramDesc(selectedChannel);
                     if ((desc != null) && !desc.isEmpty()) {
-                        playlistForm.guideTextArea.append("\n" + desc);
-                        playlistForm.guideTextArea.setLineWrap(true);
-                        playlistForm.guideTextArea.setWrapStyleWord(true);
+                        channelListForm.guideTextArea.append("\n" + desc);
+                        channelListForm.guideTextArea.setLineWrap(true);
+                        channelListForm.guideTextArea.setWrapStyleWord(true);
                     }
 
-                    playlistForm.pack();
+                    channelListForm.pack();
                 } else {
-                    playlistForm.openChannelButton.setVisible(false);
+                    channelListForm.openChannelButton.setVisible(false);
                 }
             }
 
@@ -141,39 +138,39 @@ class PlaylistActivity implements Services {
     }
 
     private void buttonActionListener() {
-        playlistForm.openChannelButton.addActionListener(new ActionListener() {
+        channelListForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 channelService.openURL(selectedLink);
             }
         });
-        playlistForm.favoritesButton.addActionListener(new ActionListener() {
+        channelListForm.favoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new FavlistActivity();
             }
         });
-        playlistForm.searchButton.addActionListener(new ActionListener() {
+        channelListForm.searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new SearchDialog("getString");
             }
         });
-        playlistForm.addToFavoritesButton.addActionListener(new ActionListener() {
+        channelListForm.addToFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 favoriteService.addToFavoriteList(selectedChannel, selectedPlaylist.getName());
                 favoriteService.saveFavorites();
-                playlistForm.removeFromFavoritesButton.setVisible(true);
-                playlistForm.addToFavoritesButton.setVisible(false);
+                channelListForm.removeFromFavoritesButton.setVisible(true);
+                channelListForm.addToFavoritesButton.setVisible(false);
             }
         });
-        playlistForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
+        channelListForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName());
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
-                playlistForm.removeFromFavoritesButton.setVisible(false);
-                playlistForm.addToFavoritesButton.setVisible(true);
+                channelListForm.removeFromFavoritesButton.setVisible(false);
+                channelListForm.addToFavoritesButton.setVisible(true);
             }
         });
-        playlistForm.guideButton.addActionListener(new ActionListener() {
+        channelListForm.guideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new GuideActivity(selectedChannel);

@@ -9,5 +9,6 @@ public interface Services {
     SearchService searchService = new SearchServiceImpl();
     TranslationService tService = new TranslationServiceImpl();
     GuideService guideService = new GuideServiceImpl();
+    LogoService logoService = new LogoServiceImpl();
     String myPath = "";
 }

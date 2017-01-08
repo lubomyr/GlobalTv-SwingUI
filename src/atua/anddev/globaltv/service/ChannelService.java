@@ -1,13 +1,12 @@
 package atua.anddev.globaltv.service;
 
+import atua.anddev.globaltv.entity.Channel;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import atua.anddev.globaltv.entity.Channel;
-
 public interface ChannelService {
     List<Channel> channel = new ArrayList<Channel>();
-    List<String> channelName = new ArrayList<String>();
 
     List<Channel> getAllChannels();
 
@@ -18,8 +17,6 @@ public interface ChannelService {
     void clearAllChannel();
 
     int sizeOfChannelList();
-
-    int indexNameForChannel(String name);
 
     List<String> getCategoriesList();
 

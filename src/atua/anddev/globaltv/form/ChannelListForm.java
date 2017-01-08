@@ -5,7 +5,7 @@ import javax.swing.*;
 /**
  * Created by lubomyr on 29.03.16.
  */
-public class PlaylistForm extends JFrame {
+public class ChannelListForm extends JFrame {
     public JButton favoritesButton;
     public JButton searchButton;
     private JPanel playlistPanel;
@@ -18,7 +18,7 @@ public class PlaylistForm extends JFrame {
     public JScrollPane guidePanel;
     public JButton guideButton;
 
-    public PlaylistForm() {
+    public ChannelListForm() {
         super("Channel list");
         setContentPane(playlistPanel);
         pack();
