@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface TranslationService {
-    Map<String, String> localMap = new HashMap<String, String>();
-    List<String> origNames = new ArrayList<String>();
-    List<String> tranNames = new ArrayList<String>();
+    Map<String, String> localMap = new HashMap<>();
+    List<String> origNames = new ArrayList<>();
+    List<String> tranNames = new ArrayList<>();
 
     void getTranslationData(String path);
 

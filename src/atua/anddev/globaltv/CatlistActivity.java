@@ -11,12 +11,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CatlistActivity implements Services {
+class CatlistActivity implements Services {
     CategoryForm catlistForm;
-    private List<String> categoryList = new ArrayList<String>();
+    private List<String> categoryList;
 
-    public CatlistActivity() {
+    CatlistActivity() {
         catlistForm = new CategoryForm();
+        categoryList = new ArrayList<>();
         applyLocals();
         createCatlist();
         showCatlist();

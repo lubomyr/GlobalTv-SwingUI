@@ -1,6 +1,5 @@
 package atua.anddev.globaltv.service;
 
-import atua.anddev.globaltv.Global;
 import atua.anddev.globaltv.MainActivity;
 import atua.anddev.globaltv.Services;
 import atua.anddev.globaltv.entity.Favorites;
@@ -18,7 +17,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,22 +50,13 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
     }
 
     @Override
-    public boolean containsNameForFavorite(String name) {
-        return favoriteList.contains(name);
-    }
-
-    @Override
     public void deleteFromFavoritesById(int id) {
         favorites.remove(id);
-        favoriteList.remove(id);
-        favoriteProvList.remove(id);
     }
 
     @Override
     public void addToFavoriteList(String name, String prov) {
         favorites.add(new Favorites(name, prov));
-        favoriteList.add(name);
-        favoriteProvList.add(prov);
     }
 
     @Override
@@ -76,18 +67,11 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
     @Override
     public void clearAllFavorites() {
         favorites.clear();
-        favoriteList.clear();
-        favoriteProvList.clear();
     }
 
     @Override
     public int sizeOfFavoriteList() {
         return favorites.size();
-    }
-
-    @Override
-    public int indexNameForFavorite(String name) {
-        return favoriteList.indexOf(name);
     }
 
     @Override

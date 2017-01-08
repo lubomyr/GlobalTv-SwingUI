@@ -184,10 +184,7 @@ public class MainActivity implements Services {
                 System.out.println("Error: " + e.toString());
             }
             int hoursPassed = (int) TimeUnit.MILLISECONDS.toHours(diffDate);
-            if (hoursPassed > 12)
-                needUpdate = true;
-            else
-                needUpdate = false;
+            needUpdate = hoursPassed > 12;
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(diffDate);
             int daysPassed = cal.get(Calendar.DAY_OF_YEAR);
@@ -202,10 +199,12 @@ public class MainActivity implements Services {
                 case 3:
                 case 4:
                 case 5:
-                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("daysago");
+                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " +
+                            tService.getString("daysago");
                     break;
                 default:
-                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " + tService.getString("fivedaysago");
+                    tmpText = tService.getString("updated") + " " + (daysPassed - 1) + " " +
+                            tService.getString("fivedaysago");
                     break;
 
             }
@@ -378,9 +377,7 @@ public class MainActivity implements Services {
                     String acep = WinRegistry.readString(WinRegistry.HKEY_CLASSES_ROOT, "acestream\\shell\\open\\command","");
                     if ((acep != null) && !acep.isEmpty())
                         Global.path_aceplayer = acep.substring(acep.indexOf("\"") + 1, acep.indexOf("ace_player.exe") + 14);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 break;

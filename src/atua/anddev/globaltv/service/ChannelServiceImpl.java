@@ -10,8 +10,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<String> getCategoriesList() {
-        List<String> arr = new ArrayList<String>();
-        boolean cat_exist = false;
+        List<String> arr = new ArrayList<>();
+        boolean cat_exist;
         for (int i = 0; i < channel.size() - 1; i++) {
             cat_exist = false;
             for (int j = 0; j <= arr.size() - 1; j++)

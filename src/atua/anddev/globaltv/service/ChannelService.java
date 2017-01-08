@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ChannelService {
-    List<Channel> channel = new ArrayList<Channel>();
+    List<Channel> channel = new ArrayList<>();
 
     List<Channel> getAllChannels();
 

@@ -1,5 +1,6 @@
 package atua.anddev.globaltv;
 
+import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.SearchForm;
 
 import javax.swing.table.DefaultTableModel;
@@ -13,11 +14,11 @@ import java.util.List;
 public class SearchListActivity implements Services {
     private SearchForm searchForm;
     private String searchString;
-    private List<String> playlist = new ArrayList<String>();
-    private List<String> playlistUrl = new ArrayList<String>();
+    private List<Channel> searchlist;
 
     public SearchListActivity(String searchString) {
         searchForm = new SearchForm();
+        searchlist = new ArrayList<>();
         this.searchString = searchString;
         applyLocals();
         showSearchResults();
@@ -37,8 +38,9 @@ public class SearchListActivity implements Services {
         for (int i = 0; i < channelService.sizeOfChannelList(); i++) {
             chName = channelService.getChannelById(i).getName().toLowerCase();
             if (chName.contains(searchString.toLowerCase())) {
-                playlist.add(channelService.getChannelById(i).getName());
-                playlistUrl.add(channelService.getChannelById(i).getUrl());
+                Channel channel = channelService.getChannelById(i);
+                channel.setProvider(playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName());
+                searchlist.add(channel);
             }
         }
 
@@ -46,21 +48,21 @@ public class SearchListActivity implements Services {
         Object[][] data;
         int cols = 2;
         colNames = new String[]{"name", "program"};
-        data = new Object[playlist.size()][cols];
-        for (int row = 0; row < playlist.size(); row++) {
-            data[row][0] = playlist.get(row);
+        data = new Object[searchlist.size()][cols];
+        for (int row = 0; row < searchlist.size(); row++) {
+            data[row][0] = searchlist.get(row).getName();
         }
         DefaultTableModel model = new DefaultTableModel(data, colNames);
         searchForm.table1.setModel(model);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int row = 0; row < playlist.size(); row++) {
-                    searchForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                for (int row = 0; row < searchlist.size(); row++) {
+                    searchForm.table1.setValueAt(guideService.getProgramTitle(searchlist.get(row).getName()), row, 1);
                 }
             }
         }).start();
-        searchForm.searchLabel.setText(playlist.size() + " - " + tService.getString("pcs"));
+        searchForm.searchLabel.setText(searchlist.size() + " - " + tService.getString("pcs"));
         searchForm.pack();
     }
 
@@ -68,15 +70,15 @@ public class SearchListActivity implements Services {
         searchForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = searchForm.table1.getSelectedRow();
-                channelService.openURL(playlistUrl.get(index));
+                channelService.openURL(searchlist.get(index).getUrl());
             }
         });
         searchForm.addToFavoritesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
-                String selectedName = playlist.get(selected);
-                String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+                String selectedName = searchlist.get(selected).getName();
+                String selectedProv = searchlist.get(selected).getProvider();
                 favoriteService.addToFavoriteList(selectedName, selectedProv);
                 favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(true);
@@ -87,8 +89,9 @@ public class SearchListActivity implements Services {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
-                String selectedName = playlist.get(selected);
-                String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+                String selectedName = searchlist.get(selected).getName();
+                String selectedProv = searchlist.get(selected).getProvider();
+                ;
                 int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
@@ -100,7 +103,7 @@ public class SearchListActivity implements Services {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
-                String selectedName = playlist.get(selected);
+                String selectedName = searchlist.get(selected).getName();
                 new GuideActivity(selectedName);
             }
         });
@@ -117,8 +120,9 @@ public class SearchListActivity implements Services {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int index = searchForm.table1.getSelectedRow();
-                String selectedName = playlist.get(index);
-                String selectedProv = playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName();
+                String selectedName = searchlist.get(index).getName();
+                String selectedProv = searchlist.get(index).getProvider();
+                ;
                 if (index != -1) {
                     searchForm.openChannelButton.setVisible(true);
                     searchForm.guideButton.setVisible(true);

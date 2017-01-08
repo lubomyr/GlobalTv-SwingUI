@@ -4,6 +4,7 @@ public class Channel {
     private String name;
     private String url;
     private String category;
+    private String provider;
 
     public Channel(String name, String url, String category) {
         this.name = name;
@@ -33,5 +34,13 @@ public class Channel {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }

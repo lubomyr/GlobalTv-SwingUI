@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface GuideService {
-    List<GuideProv> guideProvList = new ArrayList<GuideProv>();
-    List<ChannelGuide> channelGuideList = new ArrayList<ChannelGuide>();
-    List<Programme> programmeList = new ArrayList<Programme>();
+    List<GuideProv> guideProvList = new ArrayList<>();
+    List<ChannelGuide> channelGuideList = new ArrayList<>();
+    List<Programme> programmeList = new ArrayList<>();
 
     boolean checkForUpdate();
 

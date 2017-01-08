@@ -26,9 +26,9 @@ import java.net.URL;
 import java.util.*;
 
 public class PlaylistServiceImpl implements PlaylistService, Services {
-    public static String LOG_TAG = "GlobalTv";
+
     /*Comparator for sorting the list by Playlist date*/
-    public static Comparator<Playlist> PlstDateComparator = new Comparator<Playlist>() {
+    private static Comparator<Playlist> PlstDateComparator = new Comparator<Playlist>() {
 
         public int compare(Playlist s1, Playlist s2) {
             String PlaylistDate1 = s1.getUpdate().toUpperCase();
@@ -41,13 +41,6 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
             return PlaylistDate2.compareTo(PlaylistDate1);
         }
     };
-
-    @Override
-    public void setDateFromFile(int id) {
-        File file = new File(myPath + "/" + getActivePlaylistById(id).getFile());
-        long fileDate = file.lastModified();
-        setUpdateDate(id, fileDate);
-    }
 
     @Override
     public List<Playlist> getSortedByDatePlaylists() {
@@ -64,7 +57,6 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         long fileDate = file.lastModified();
         plst.setUpdate(String.valueOf(fileDate));
         activePlaylist.add(plst);
-        activePlaylistName.add(name);
     }
 
     @Override
@@ -83,7 +75,6 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     @Override
     public void deleteActivePlaylistById(int id) {
         activePlaylist.remove(id);
-        activePlaylistName.remove(id);
     }
 
     @Override
@@ -100,13 +91,11 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     public void setActivePlaylistById(int id, String name, String url, int type) {
         String file = getFileName(name);
         activePlaylist.set(id, new Playlist(name, url, file, type));
-        activePlaylistName.set(id, name);
     }
 
     @Override
     public void clearActivePlaylist() {
         activePlaylist.clear();
-        activePlaylistName.clear();
     }
 
     @Override
@@ -135,40 +124,16 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     }
 
     @Override
-    public List<String> getAllNamesOfActivePlaylist() {
-        List<String> arr = new ArrayList<String>();
-        for (Playlist plst : activePlaylist) {
-            arr.add(plst.getName());
-        }
-        return arr;
-    }
-
-    @Override
-    public List<String> getAllNamesOfOfferedPlaylist() {
-        List<String> arr = new ArrayList<String>();
-        for (Playlist plst : offeredPlaylist) {
-            arr.add(plst.getName());
-        }
-        return arr;
-    }
-
-    @Override
     public int indexNameForActivePlaylist(String name) {
-        return activePlaylistName.indexOf(name);
-    }
-
-    @Override
-    public int indexNameForOfferedPlaylist(String name) {
         int result = -1;
-        for (int i = 0; i < offeredPlaylist.size(); i++) {
-            if (offeredPlaylist.get(i).getName().equals(name)) {
+        for (int i = 0; i < activePlaylist.size(); i++) {
+            if (name.equals(activePlaylist.get(i).getName()))
                 result = i;
-            }
         }
         return result;
     }
 
-    public String getFileName(String input) {
+    private String getFileName(String input) {
         String output = "playlist_" + input + ".m3u";
         output = output.replace(" ", "_");
         output = output.replace("(", "_");
@@ -182,7 +147,6 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         String file = getFileName(name);
         Playlist plst = new Playlist(name, url, file, type, md5, update);
         activePlaylist.add(plst);
-        activePlaylistName.add(name);
     }
 
     @Override
@@ -194,9 +158,8 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     public void addAllOfferedPlaylist() {
         for (Playlist plst : offeredPlaylist) {
-            if (!activePlaylistName.contains(plst.getName())) {
+            if (indexNameForActivePlaylist(plst.getName()) != -1) {
                 activePlaylist.add(plst);
-                activePlaylistName.add(plst.getName());
             }
         }
         saveData();

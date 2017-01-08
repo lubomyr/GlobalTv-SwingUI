@@ -7,12 +7,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PlaylistEditActivity implements Services {
+class PlaylistEditActivity implements Services {
     private static int num = 0;
     private String editAction;
     private PlaylistEditForm playlistEditForm;
 
-    public PlaylistEditActivity(String mode) {
+    PlaylistEditActivity(String mode) {
         editAction = mode;
         playlistEditForm = new PlaylistEditForm();
         applyLocals();
@@ -20,7 +20,7 @@ public class PlaylistEditActivity implements Services {
         buttonActionListener();
     }
 
-    public PlaylistEditActivity(String mode, int num) {
+    PlaylistEditActivity(String mode, int num) {
         editAction = mode;
         PlaylistEditActivity.num = num;
         playlistEditForm = new PlaylistEditForm();

@@ -15,13 +15,14 @@ import java.util.List;
 
 class ChannelListActivity implements Services {
     private ChannelListForm channelListForm;
-    private List<Channel> playlist = new ArrayList<>();
+    private List<Channel> channellist;
     private String selectedChannel;
     private String selectedLink;
     private Playlist selectedPlaylist;
 
     ChannelListActivity() {
         channelListForm = new ChannelListForm();
+        channellist = new ArrayList<>();
         applyLocals();
         openCategory(Global.selectedCategory);
         actionSelector();
@@ -40,27 +41,27 @@ class ChannelListActivity implements Services {
     private void openCategory(final String catName) {
         for (Channel chn : channelService.getAllChannels()) {
             if (catName.equals(tService.getString("all"))) {
-                playlist.add(chn);
+                channellist.add(chn);
             } else if (catName.equals(chn.getCategory())) {
-                playlist.add(chn);
+                channellist.add(chn);
             }
         }
 
-        channelListForm.playlistInfoLabel.setText(playlist.size() + " - " + tService.getString("channels"));
+        channelListForm.playlistInfoLabel.setText(channellist.size() + " - " + tService.getString("channels"));
 
         String[] colNames;
         Object[][] data;
         int cols = 2;
         colNames = new String[]{"name", "program"};
-        data = new Object[playlist.size()][cols];
-        for (int row = 0; row < playlist.size(); row++) {
-            data[row][0] = playlist.get(row).getName();
+        data = new Object[channellist.size()][cols];
+        for (int row = 0; row < channellist.size(); row++) {
+            data[row][0] = channellist.get(row).getName();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int row = 0; row < playlist.size(); row++) {
-                    channelListForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row).getName()), row, 1);
+                for (int row = 0; row < channellist.size(); row++) {
+                    channelListForm.table1.setValueAt(guideService.getProgramTitle(channellist.get(row).getName()), row, 1);
                 }
             }
         }).start();
@@ -81,8 +82,8 @@ class ChannelListActivity implements Services {
             public void mouseClicked(MouseEvent e) {
                 int index = channelListForm.table1.getSelectedRow();
                 if (index != -1) {
-                    selectedChannel = playlist.get(index).getName();
-                    selectedLink = playlist.get(index).getUrl();
+                    selectedChannel = channellist.get(index).getName();
+                    selectedLink = channellist.get(index).getUrl();
                     selectedPlaylist = playlistService.getActivePlaylistById(MainActivity.selectedProvider);
                     channelListForm.openChannelButton.setVisible(true);
                     channelListForm.guideButton.setVisible(true);
