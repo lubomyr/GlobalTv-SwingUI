@@ -5,7 +5,6 @@ import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.ChannelListForm;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -13,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +64,7 @@ class ChannelListActivity implements Services {
             public void run() {
                 for (int row = 0; row < channellist.size(); row++) {
                     Channel channel = channellist.get(row);
-                    ImageIcon imageIcon = getIcon(channel.getName());
+                    ImageIcon imageIcon = logoService.getIcon(channel.getName());
                     if (imageIcon == null)
                         imageIcon = new ImageIcon("");
                     channelListForm.table1.setValueAt(imageIcon, row, 0);
@@ -105,23 +101,6 @@ class ChannelListActivity implements Services {
         channelListForm.table1.getColumnModel().getColumn(2).setMinWidth(250);
         channelListForm.setMinimumSize(new Dimension(680, channelListForm.getHeight()));
         channelListForm.pack();
-    }
-
-    private ImageIcon getIcon(String name) {
-        ImageIcon imageIcon = null;
-        try {
-            String urlPath = logoService.getLogoByName(name);
-            if (urlPath != null) {
-                URL url = new URL(urlPath);
-                BufferedImage image = ImageIO.read(url);
-                imageIcon = new ImageIcon(image);
-                //if (imageIcon.getIconHeight() > 25)
-                imageIcon = logoService.scaleImage(imageIcon, 100,
-                        25);
-            }
-        } catch (IOException ignored) {
-        }
-        return imageIcon;
     }
 
     private void actionSelector() {

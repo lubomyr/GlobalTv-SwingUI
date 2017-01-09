@@ -5,9 +5,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -32,7 +35,23 @@ public class LogoServiceImpl implements LogoService {
         return null;
     }
 
-    public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
+    @Override
+    public ImageIcon getIcon(String name) {
+        ImageIcon imageIcon = null;
+        try {
+            String urlPath = getLogoByName(name);
+            if (urlPath != null) {
+                URL url = new URL(urlPath);
+                BufferedImage image = ImageIO.read(url);
+                imageIcon = new ImageIcon(image);
+                imageIcon = scaleImage(imageIcon, 100, 25);
+            }
+        } catch (IOException ignored) {
+        }
+        return imageIcon;
+    }
+
+    private ImageIcon scaleImage(ImageIcon icon, int w, int h) {
         int nw = icon.getIconWidth();
         int nh = icon.getIconHeight();
 

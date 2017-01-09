@@ -44,7 +44,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     @Override
     public List<Playlist> getSortedByDatePlaylists() {
-        List<Playlist> sortedList = new ArrayList<Playlist>();
+        List<Playlist> sortedList = new ArrayList<>();
         sortedList.addAll(activePlaylist);
         Collections.sort(sortedList, PlstDateComparator);
         return sortedList;

@@ -13,5 +13,5 @@ public interface LogoService {
 
     String getLogoByName(String str);
 
-    ImageIcon scaleImage(ImageIcon icon, int w, int h);
+    ImageIcon getIcon(String name);
 }
