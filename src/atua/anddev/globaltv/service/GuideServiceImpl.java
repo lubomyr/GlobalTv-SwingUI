@@ -182,16 +182,8 @@ public class GuideServiceImpl implements GuideService {
                     dateList.add(programme.getStart());
                 }
             }
-            String startDateStr = dateList.get(0);
-            String endDateStr = dateList.get(dateList.size() - 1);
-            Calendar startDate = Calendar.getInstance();
-            Calendar endDate = Calendar.getInstance();
-            try {
-                startDate.setTime(sdf.parse(startDateStr));
-                endDate.setTime(sdf.parse(endDateStr));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Calendar startDate = decodeDateTime(dateList.get(0));
+            Calendar endDate = decodeDateTime(dateList.get(dateList.size() - 1));
             result = !(currentTime.after(startDate) && currentTime.before(endDate));
         }
         return result;
@@ -236,7 +228,7 @@ public class GuideServiceImpl implements GuideService {
         return result;
     }
 
-    private Calendar decodeDateTime(String str) {
+    public Calendar decodeDateTime(String str) {
         Calendar result = Calendar.getInstance();
         try {
             if (!str.isEmpty())
@@ -290,17 +282,9 @@ public class GuideServiceImpl implements GuideService {
                     dateList.add(programme.getStart());
                 }
             }
-            String startDateStr = dateList.get(0);
-            String endDateStr = dateList.get(dateList.size() - 1);
-            Calendar startDate = Calendar.getInstance();
-            Calendar endDate = Calendar.getInstance();
-            try {
-                startDate.setTime(sdf.parse(startDateStr));
-                endDate.setTime(sdf.parse(endDateStr));
-                result = totalSdf.format(startDate.getTime()) + " - " + totalSdf.format(endDate.getTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Calendar startDate = decodeDateTime(dateList.get(0));
+            Calendar endDate = decodeDateTime(dateList.get(dateList.size() - 1));
+            result = totalSdf.format(startDate.getTime()) + " - " + totalSdf.format(endDate.getTime());
         }
         return result;
     }

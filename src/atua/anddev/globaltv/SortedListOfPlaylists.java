@@ -11,10 +11,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class SortedListOfPlaylists implements Services {
+class SortedListOfPlaylists implements Services {
     private SortedListofPlaylistsForm sortedListofPlaylistsForm;
 
-    public SortedListOfPlaylists() {
+    SortedListOfPlaylists() {
         sortedListofPlaylistsForm = new SortedListofPlaylistsForm();
         showSortedDateOfPlaylist();
     }

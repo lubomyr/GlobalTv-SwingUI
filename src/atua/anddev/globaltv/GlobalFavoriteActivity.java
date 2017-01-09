@@ -10,11 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class GlobalFavoriteActivity implements Services {
+class GlobalFavoriteActivity implements Services {
     private GlobalFavoritesForm globalFavoritesForm;
     private DefaultTableModel model;
 
-    public GlobalFavoriteActivity() {
+    GlobalFavoriteActivity() {
         globalFavoritesForm = new GlobalFavoritesForm();
         applyLocals();
         showFavorites();

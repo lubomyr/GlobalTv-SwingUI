@@ -5,6 +5,7 @@ import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.entity.Programme;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public interface GuideService {
@@ -27,4 +28,6 @@ public interface GuideService {
     void setupGuideProvList();
 
     String getTotalTimePeriod();
+
+    Calendar decodeDateTime(String str);
 }

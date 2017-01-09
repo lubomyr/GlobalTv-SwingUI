@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -45,22 +44,12 @@ class GuideActivity implements Services {
         data = new Object[guideList.size()][cols];
         for (int row = 0; row < guideList.size(); row++) {
             Programme programme = guideList.get(row);
-            String startDateInput = programme.getStart();
-            String endDateInput = programme.getStop();
-            Calendar startDate = Calendar.getInstance();
-            Calendar endDate = Calendar.getInstance();
-            try {
-                if (!startDateInput.isEmpty())
-                    startDate.setTime(sdfInput.parse(startDateInput));
-                if (!endDateInput.isEmpty())
-                    endDate.setTime(sdfInput.parse(endDateInput));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            String timeOutput = sdfStartOutput.format(startDate.getTime()) + " - " + sdfEndOutput.format(endDate.getTime());
+            Calendar startTime = guideService.decodeDateTime(programme.getStart());
+            Calendar stopTime = guideService.decodeDateTime(programme.getStop());
+            String timeOutput = sdfStartOutput.format(startTime.getTime()) + " - " + sdfEndOutput.format(stopTime.getTime());
             data[row][0] = timeOutput;
             data[row][1] = guideService.decodeSymbols(guideList.get(row).getTitle());
-            if (currentTime.after(startDate) && currentTime.before(endDate)) {
+            if (currentTime.after(startTime) && currentTime.before(stopTime)) {
                 data[row][0] += " *";
                 selected = row;
             }

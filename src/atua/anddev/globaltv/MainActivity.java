@@ -6,6 +6,8 @@ import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.MainForm;
 import atua.anddev.globaltv.service.PlaylistService;
+import atua.anddev.globaltv.utils.OsCheck;
+import atua.anddev.globaltv.utils.WinRegistry;
 import org.w3c.dom.Document;
 
 import javax.swing.*;

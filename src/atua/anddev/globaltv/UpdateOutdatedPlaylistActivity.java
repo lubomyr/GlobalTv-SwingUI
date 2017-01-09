@@ -5,12 +5,11 @@ import atua.anddev.globaltv.form.UpdateOutdatedPlaylistForm;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 
-public class UpdateOutdatedPlaylistActivity implements Services {
+class UpdateOutdatedPlaylistActivity implements Services {
     private UpdateOutdatedPlaylistForm updateOutdatedPlaylistForm;
-    private DefaultTableModel model;
     private int updNum;
 
-    public UpdateOutdatedPlaylistActivity() {
+    UpdateOutdatedPlaylistActivity() {
         updateOutdatedPlaylistForm = new UpdateOutdatedPlaylistForm();
         updateAll();
     }
@@ -25,7 +24,7 @@ public class UpdateOutdatedPlaylistActivity implements Services {
         for (int i = 0; i < playlistService.sizeOfActivePlaylist(); i++) {
             downloadOutdatedPlaylist(i);
         }
-        model = new DefaultTableModel(data, colNames);
+        DefaultTableModel model = new DefaultTableModel(data, colNames);
         updateOutdatedPlaylistForm.table1.setModel(model);
         updateOutdatedPlaylistForm.pack();
     }

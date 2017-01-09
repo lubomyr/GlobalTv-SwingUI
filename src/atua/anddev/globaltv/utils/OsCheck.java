@@ -1,4 +1,4 @@
-package atua.anddev.globaltv;
+package atua.anddev.globaltv.utils;
 
 import java.util.Locale;
 

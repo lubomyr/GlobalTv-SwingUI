@@ -2,6 +2,7 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.form.SettingForm;
+import atua.anddev.globaltv.utils.OsCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -26,18 +27,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static atua.anddev.globaltv.OsCheck.OSType.Windows;
 import static atua.anddev.globaltv.Services.guideService;
 import static atua.anddev.globaltv.Services.tService;
 import static atua.anddev.globaltv.service.GuideService.channelGuideList;
 import static atua.anddev.globaltv.service.GuideService.guideProvList;
+import static atua.anddev.globaltv.utils.OsCheck.OSType.Windows;
 
-public class SettingsActivity {
+class SettingsActivity {
     private SettingForm settingForm;
     private List<String> themeList = Arrays.asList("Metal", "Nimbus", "CDE/Motif", "GTK+", "Windows", "Windows Classic");
     private List<String> fontSizeList = Arrays.asList("12", "16", "20", "24");
 
-    public SettingsActivity() {
+    SettingsActivity() {
         settingForm = new SettingForm();
         applyLocals();
         showSettings();
