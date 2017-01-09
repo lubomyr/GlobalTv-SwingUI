@@ -31,8 +31,6 @@ public class GuideServiceImpl implements GuideService {
             currentTime = Calendar.getInstance();
             parseGuide();
             result = checkGuideDates();
-            //Thread thread = new Thread(parseGuideRunnable);
-            //thread.start();
         }
         return result;
     }
@@ -45,17 +43,9 @@ public class GuideServiceImpl implements GuideService {
         return result;
     }
 
-    private Runnable parseGuideRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            parseGuide();
-            checkGuideDates();
-        }
-    };
-
     public void parseGuide() {
         System.out.println("parsing program guide...");
+        Global.guideLoaded = false;
         channelGuideList.clear();
         programmeList.clear();
         try {
@@ -151,6 +141,7 @@ public class GuideServiceImpl implements GuideService {
             }
             gzipIs.close();
             is.close();
+            Global.guideLoaded = true;
             System.out.println("parsing finished");
 
         } catch (Exception e) {

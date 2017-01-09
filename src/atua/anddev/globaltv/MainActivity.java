@@ -58,8 +58,10 @@ public class MainActivity implements Services {
         if (Global.lang == null)
             Global.lang = Locale.getDefault().getISO3Language();
 
-        if (guideService.checkForUpdate())
-            updateGuide();
+        if (!Global.guideLoaded) {
+            Thread checkGuideUpdateThread = new Thread(checkGuideForUpdate);
+            checkGuideUpdateThread.start();
+        }
 
         setUIFont(new FontUIResource(new Font("Dialog", 0, Integer.valueOf(Global.selectedFontSize))));
 
@@ -471,6 +473,14 @@ public class MainActivity implements Services {
         });
 
     }
+
+    private static Runnable checkGuideForUpdate = new Runnable() {
+
+        @Override
+        public void run() {
+            guideService.checkForUpdate();
+        }
+    };
 
     private static class DownloadPlaylist implements Runnable {
         private int num;
