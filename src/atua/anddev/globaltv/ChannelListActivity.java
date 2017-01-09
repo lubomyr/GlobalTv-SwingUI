@@ -79,7 +79,9 @@ class ChannelListActivity implements Services {
             @Override
             public void run() {
                 for (int row = 0; row < channellist.size(); row++) {
-                    channelListForm.table1.setValueAt(guideService.getProgramTitle(channellist.get(row).getName()), row, 2);
+                    if (Global.guideLoaded)
+                        channelListForm.table1.setValueAt(guideService.getProgramTitle(channellist.get(row).getName()),
+                                row, 2);
                 }
             }
         }).start();
@@ -97,8 +99,8 @@ class ChannelListActivity implements Services {
             }
         };
         channelListForm.table1.setModel(model);
-        channelListForm.table1.setRowHeight(50);
-        channelListForm.table1.getColumnModel().getColumn(0).setMinWidth(230);
+        channelListForm.table1.setRowHeight(30);
+        channelListForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
         channelListForm.table1.getColumnModel().getColumn(1).setMinWidth(200);
         channelListForm.table1.getColumnModel().getColumn(2).setMinWidth(250);
         channelListForm.setMinimumSize(new Dimension(680, channelListForm.getHeight()));
@@ -113,6 +115,9 @@ class ChannelListActivity implements Services {
                 URL url = new URL(urlPath);
                 BufferedImage image = ImageIO.read(url);
                 imageIcon = new ImageIcon(image);
+                //if (imageIcon.getIconHeight() > 25)
+                imageIcon = logoService.scaleImage(imageIcon, 100,
+                        25);
             }
         } catch (IOException ignored) {
         }
