@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LogoServiceImpl implements LogoService {
+    private boolean logoLoaded;
 
     @Override
     public void setupLogos() {
@@ -25,7 +26,7 @@ public class LogoServiceImpl implements LogoService {
 
     @Override
     public String getLogoByName(String str) {
-        if (logoList.size() != 0) {
+        if (logoLoaded && (logoList.size() != 0)) {
             for (Logo logo : logoList) {
                 if (str.equals(logo.getName())) {
                     return logo.getUrl() + logo.getIcon();
@@ -95,7 +96,7 @@ public class LogoServiceImpl implements LogoService {
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
 
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -123,6 +124,7 @@ public class LogoServiceImpl implements LogoService {
                     String url = el.getString("url");
                     addToLogoList(name, icon, url);
                 }
+                logoLoaded = true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
