@@ -295,7 +295,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
                     if (chName.startsWith(" ")) {
                         chName = chName.substring(1, chName.length());
                     }
-                    if (chName.charAt(chName.length() - 1) == '\15') {
+                    if ((chName.length() > 0) && (chName.charAt(chName.length() - 1) == '\15')) {
                         chName = chName.substring(0, chName.length() - 1);
                     }
                     chCategory = tService.translateCategory(chCategory);
@@ -339,7 +339,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
             }
             myInputFile.close();
         } catch (Exception e) {
-//            Log.i("GlobalTV", "Error: " + e.toString());
+            System.out.println(e);
         }
     }
 
