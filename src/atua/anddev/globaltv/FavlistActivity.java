@@ -1,9 +1,11 @@
 package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.form.FavoritesForm;
+import atua.anddev.globaltv.models.TableModelWithIcons;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -32,23 +34,39 @@ class FavlistActivity implements Services {
         List<String> playlist = favoriteService.getFavoriteListForSelProv();
         String[] colNames;
         Object[][] data;
-        int cols = 2;
-        colNames = new String[]{"name", "program"};
+        int cols = 3;
+        colNames = new String[]{"icon", "name", "program"};
         data = new Object[playlist.size()][cols];
         for (int row = 0; row < playlist.size(); row++) {
-            data[row][0] = playlist.get(row);
+            data[row][1] = playlist.get(row);
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < playlist.size(); row++) {
-                    favoritesForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row , 1);
+                    ImageIcon imageIcon = logoService.getIcon(playlist.get(row));
+                    if (imageIcon == null)
+                        imageIcon = new ImageIcon("");
+                    favoritesForm.table1.setValueAt(imageIcon, row, 0);
                 }
             }
         }).start();
-        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < playlist.size(); row++) {
+                    favoritesForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row)), row, 2);
+                }
+            }
+        }).start();
+        DefaultTableModel model = new TableModelWithIcons(data, colNames);
         favoritesForm.table1.setModel(model);
         favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.getString("pcs"));
+        favoritesForm.table1.setRowHeight(30);
+        favoritesForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
+        favoritesForm.table1.getColumnModel().getColumn(1).setMinWidth(200);
+        favoritesForm.table1.getColumnModel().getColumn(2).setMinWidth(250);
+        favoritesForm.setMinimumSize(new Dimension(680, favoritesForm.getHeight()));
         favoritesForm.pack();
     }
 

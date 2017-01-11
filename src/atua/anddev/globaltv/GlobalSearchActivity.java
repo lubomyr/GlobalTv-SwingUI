@@ -2,8 +2,11 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.GlobalSearchForm;
+import atua.anddev.globaltv.models.TableModelWithIcons;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -48,25 +51,42 @@ public class GlobalSearchActivity implements Services {
     private void showSearchResults() {
         String[] colNames;
         Object[][] data;
-        int cols = 3;
-        colNames = new String[]{"name", "playlist", "program"};
+        int cols = 4;
+        colNames = new String[]{"icon", "name", "playlist", "program"};
         data = new Object[searchService.sizeOfSearchList()][cols];
         for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-            data[row][0] = searchService.getSearchListById(row).getName();
-            data[row][1] = searchService.getSearchListById(row).getProv();
+            data[row][1] = searchService.getSearchListById(row).getName();
+            data[row][2] = searchService.getSearchListById(row).getProv();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchListById(row).getName()),
-                            row , 2);
+                    ImageIcon imageIcon = logoService.getIcon(searchService.getSearchListById(row).getName());
+                    if (imageIcon == null)
+                        imageIcon = new ImageIcon("");
+                    globalSearchForm.table1.setValueAt(imageIcon, row, 0);
                 }
             }
         }).start();
-        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
+                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchListById(row).getName()),
+                            row, 3);
+                }
+            }
+        }).start();
+        DefaultTableModel model = new TableModelWithIcons(data, colNames);
         globalSearchForm.table1.setModel(model);
         globalSearchForm.globalSearchLabel.setText(searchService.sizeOfSearchList() + " - " + tService.getString("pcs"));
+        globalSearchForm.table1.setRowHeight(30);
+        globalSearchForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
+        globalSearchForm.table1.getColumnModel().getColumn(1).setMinWidth(200);
+        globalSearchForm.table1.getColumnModel().getColumn(2).setMinWidth(220);
+        globalSearchForm.table1.getColumnModel().getColumn(3).setMinWidth(250);
+        globalSearchForm.setMinimumSize(new Dimension(770, globalSearchForm.getHeight()));
         globalSearchForm.pack();
     }
 

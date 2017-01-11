@@ -2,8 +2,11 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.SearchForm;
+import atua.anddev.globaltv.models.TableModelWithIcons;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -46,23 +49,39 @@ public class SearchListActivity implements Services {
 
         String[] colNames;
         Object[][] data;
-        int cols = 2;
-        colNames = new String[]{"name", "program"};
+        int cols = 3;
+        colNames = new String[]{"icon", "name", "program"};
         data = new Object[searchlist.size()][cols];
         for (int row = 0; row < searchlist.size(); row++) {
-            data[row][0] = searchlist.get(row).getName();
+            data[row][1] = searchlist.get(row).getName();
         }
-        DefaultTableModel model = new DefaultTableModel(data, colNames);
+        DefaultTableModel model = new TableModelWithIcons(data, colNames);
         searchForm.table1.setModel(model);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < searchlist.size(); row++) {
-                    searchForm.table1.setValueAt(guideService.getProgramTitle(searchlist.get(row).getName()), row, 1);
+                    ImageIcon imageIcon = logoService.getIcon(searchlist.get(row).getName());
+                    if (imageIcon == null)
+                        imageIcon = new ImageIcon("");
+                    searchForm.table1.setValueAt(imageIcon, row, 0);
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < searchlist.size(); row++) {
+                    searchForm.table1.setValueAt(guideService.getProgramTitle(searchlist.get(row).getName()), row, 2);
                 }
             }
         }).start();
         searchForm.searchLabel.setText(searchlist.size() + " - " + tService.getString("pcs"));
+        searchForm.table1.setRowHeight(30);
+        searchForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
+        searchForm.table1.getColumnModel().getColumn(1).setMinWidth(200);
+        searchForm.table1.getColumnModel().getColumn(2).setMinWidth(250);
+        searchForm.setMinimumSize(new Dimension(680, searchForm.getHeight()));
         searchForm.pack();
     }
 

@@ -3,8 +3,11 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.dialog.WarningDialog;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.GlobalFavoritesForm;
+import atua.anddev.globaltv.models.TableModelWithIcons;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -31,25 +34,42 @@ class GlobalFavoriteActivity implements Services {
     private void showFavorites() {
         String[] colNames;
         Object[][] data;
-        int cols = 3;
-        colNames = new String[]{"name", "playlist", "program"};
+        int cols = 4;
+        colNames = new String[]{"icon", "name", "playlist", "program"};
         data = new Object[favoriteService.sizeOfFavoriteList()][cols];
         for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
-            data[row][0] = favoriteService.getFavoriteById(row).getName();
-            data[row][1] = favoriteService.getFavoriteById(row).getProv();
+            data[row][1] = favoriteService.getFavoriteById(row).getName();
+            data[row][2] = favoriteService.getFavoriteById(row).getProv();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
-                    globalFavoritesForm.table1.setValueAt(guideService.getProgramTitle(favoriteService.getFavoriteById(row).getName()),
-                            row , 2);
+                    ImageIcon imageIcon = logoService.getIcon(favoriteService.getFavoriteById(row).getName());
+                    if (imageIcon == null)
+                        imageIcon = new ImageIcon("");
+                    globalFavoritesForm.table1.setValueAt(imageIcon, row, 0);
                 }
             }
         }).start();
-        model = new DefaultTableModel(data, colNames);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
+                    globalFavoritesForm.table1.setValueAt(guideService.getProgramTitle(favoriteService.getFavoriteById(row).getName()),
+                            row, 3);
+                }
+            }
+        }).start();
+        model = new TableModelWithIcons(data, colNames);
         globalFavoritesForm.table1.setModel(model);
         globalFavoritesForm.globalFavoritesLabel.setText(favoriteService.sizeOfFavoriteList() + " - " + tService.getString("pcs"));
+        globalFavoritesForm.table1.setRowHeight(30);
+        globalFavoritesForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
+        globalFavoritesForm.table1.getColumnModel().getColumn(1).setMinWidth(200);
+        globalFavoritesForm.table1.getColumnModel().getColumn(2).setMinWidth(220);
+        globalFavoritesForm.table1.getColumnModel().getColumn(3).setMinWidth(250);
+        globalFavoritesForm.setMinimumSize(new Dimension(770, globalFavoritesForm.getHeight()));
         globalFavoritesForm.pack();
     }
 

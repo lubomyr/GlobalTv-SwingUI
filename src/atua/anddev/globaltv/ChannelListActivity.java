@@ -4,6 +4,7 @@ import atua.anddev.globaltv.dialog.SearchDialog;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.ChannelListForm;
+import atua.anddev.globaltv.models.TableModelWithIcons;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -81,19 +82,7 @@ class ChannelListActivity implements Services {
                 }
             }
         }).start();
-        DefaultTableModel model = new DefaultTableModel(data, colNames) {
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (getRowCount() > 0) {
-                    Object value = getValueAt(0, column);
-                    if (value != null) {
-                        return getValueAt(0, column).getClass();
-                    }
-                }
-
-                return super.getColumnClass(column);
-            }
-        };
+        DefaultTableModel model = new TableModelWithIcons(data, colNames);
         channelListForm.table1.setModel(model);
         channelListForm.table1.setRowHeight(30);
         channelListForm.table1.getColumnModel().getColumn(0).setMinWidth(100);
