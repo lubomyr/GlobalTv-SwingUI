@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ChannelService {
-    List<Channel> channel = new ArrayList<>();
+    List<Channel> channels = new ArrayList<>();
 
     List<Channel> getAllChannels();
 
-    void addToChannelList(String name, String url, String category);
+    void addToChannelList(Channel chn);
 
     Channel getChannelById(int id);
 

@@ -4,12 +4,15 @@ public class Channel {
     private String name;
     private String url;
     private String category;
+    private String icon;
     private String provider;
 
-    public Channel(String name, String url, String category) {
+    public Channel(String name, String url, String category, String icon, String provider) {
         this.name = name;
         this.url = url;
         this.category = category;
+        this.icon = icon;
+        this.provider = provider;
     }
 
     public void setName(String name) {
@@ -42,5 +45,13 @@ public class Channel {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

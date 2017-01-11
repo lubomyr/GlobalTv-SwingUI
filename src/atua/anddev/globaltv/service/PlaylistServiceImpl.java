@@ -1,7 +1,7 @@
 package atua.anddev.globaltv.service;
 
-import atua.anddev.globaltv.Global;
 import atua.anddev.globaltv.Services;
+import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Playlist;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -272,9 +272,9 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
     public void readPlaylist(int num) {
         String fname = getActivePlaylistById(num).getFile();
+        String provName = getActivePlaylistById(num).getName();
         int type = getActivePlaylistById(num).getType();
-        Global.playlistWithGroup = false;
-        String lineStr, chName = "", chCategory = "", chLink = "";
+        String lineStr, chName = "", chCategory = "", chLink = "", chIcon = "";
         String groupName = "", groupName2 = "";
         channelService.clearAllChannel();
         try {
@@ -299,35 +299,31 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
                         chName = chName.substring(0, chName.length() - 1);
                     }
                     chCategory = tService.translateCategory(chCategory);
-                    channelService.addToChannelList(chName, chLink, chCategory);
-                    if (!chCategory.equals(""))
-                        Global.playlistWithGroup = true;
+                    Channel channel = new Channel(chName, chLink, chCategory, chIcon, provName);
+                    channelService.addToChannelList(channel);
                     chName = "";
                     chCategory = "";
                     chLink = "";
+                    chIcon = "";
                     groupName = "";
                     groupName2 = "";
                 }
                 if ((type == 1) && lineStr.startsWith("#EXTINF:-1,") && (lineStr.indexOf("(") == lineStr.lastIndexOf("("))) {
                     chName = lineStr.substring(11, lineStr.indexOf("(") - 1);
                     chCategory = lineStr.substring(lineStr.lastIndexOf("(") + 1, lineStr.lastIndexOf(")"));
-                    Global.playlistWithGroup = true;
                 }
                 if ((type == 1) && lineStr.startsWith("#EXTINF:-1,") && (lineStr.indexOf("(") != lineStr.lastIndexOf("("))) {
                     chName = lineStr.substring(11, lineStr.lastIndexOf("(") - 1);
                     chCategory = lineStr.substring(lineStr.lastIndexOf("(") + 1, lineStr.lastIndexOf(")"));
-                    Global.playlistWithGroup = true;
                 }
                 if (lineStr.startsWith("#EXTINF:") && (type != 1)) {
                     chName = lineStr.substring(lineStr.lastIndexOf(",") + 1, lineStr.length());
                 }
                 if (lineStr.contains("group-title=") && lineStr.contains(",") && (lineStr.substring(lineStr.indexOf("group-title="), lineStr.indexOf("group-title=") + 12).equals("group-title="))) {
                     groupName = lineStr.substring(lineStr.indexOf("group-title=") + 13, lineStr.indexOf('"', lineStr.indexOf("group-title=") + 13));
-                    Global.playlistWithGroup = true;
                 }
                 if (lineStr.contains("#EXTGRP:") && (lineStr.substring(lineStr.indexOf("#EXTGRP:"), lineStr.indexOf("#EXTGRP:") + 8).equals("#EXTGRP:"))) {
                     groupName2 = lineStr.substring(lineStr.indexOf("#EXTGRP:") + 8, lineStr.length());
-                    Global.playlistWithGroup = true;
                 }
                 if (!groupName.equals("")) {
                     chCategory = groupName;

@@ -437,7 +437,7 @@ public class MainActivity implements Services {
                     }
                 } finally {
                     playlistService.readPlaylist(selectedProvider);
-                    if (Global.playlistWithGroup) {
+                    if (channelService.getCategoriesList().size() > 0) {
                         new CatlistActivity();
                     } else {
                         Global.selectedCategory = tService.getString("all");

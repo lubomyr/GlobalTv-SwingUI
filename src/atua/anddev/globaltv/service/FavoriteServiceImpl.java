@@ -90,7 +90,7 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
                 Element favorites = doc.createElement("favorites");
                 rootElement.appendChild(favorites);
 
-                // channel elements
+                // channels elements
                 Element channel = doc.createElement("channel");
                 channel.appendChild(doc.createTextNode(getFavoriteById(j).getName()));
                 favorites.appendChild(channel);

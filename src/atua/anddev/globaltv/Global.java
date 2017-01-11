@@ -5,7 +5,6 @@ package atua.anddev.globaltv;
  */
 public class Global {
     public static String torrentKey = "";
-    public static boolean playlistWithGroup;
     public static int selectedGuideProv = 2;
     public static boolean guideLoaded;
     static String selectedCategory;
