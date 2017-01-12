@@ -8,6 +8,8 @@ import java.util.List;
 public interface SearchService {
     List<Channel> searchList = new ArrayList<>();
 
+    List<Channel> getSearchList();
+
     void addToSearchList(Channel channel);
 
     Channel getSearchChannelById(int id);

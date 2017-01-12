@@ -3,8 +3,9 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.SearchForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
+import atua.anddev.globaltv.runnables.GetIconRunnable;
+import atua.anddev.globaltv.runnables.GetProgramTitleRunnable;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -57,25 +58,16 @@ public class SearchListActivity implements Services {
         }
         DefaultTableModel model = new TableModelWithIcons(data, colNames);
         searchForm.table1.setModel(model);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < searchlist.size(); row++) {
-                    ImageIcon imageIcon = logoService.getIcon(searchlist.get(row).getName());
-                    if (imageIcon == null)
-                        imageIcon = new ImageIcon("");
-                    searchForm.table1.setValueAt(imageIcon, row, 0);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < searchlist.size(); row++) {
-                    searchForm.table1.setValueAt(guideService.getProgramTitle(searchlist.get(row).getName()), row, 2);
-                }
-            }
-        }).start();
+
+        GetIconRunnable getIconRunnable = new GetIconRunnable(searchForm.table1, searchlist);
+        Thread getIconThread = new Thread(getIconRunnable);
+        getIconThread.start();
+
+        GetProgramTitleRunnable getProgramTitleRunnable = new GetProgramTitleRunnable(searchForm.table1,
+                2, searchlist);
+        Thread getProgramTitleThread = new Thread(getProgramTitleRunnable);
+        getProgramTitleThread.start();
+
         searchForm.searchLabel.setText(searchlist.size() + " - " + tService.getString("pcs"));
         searchForm.table1.setRowHeight(30);
         searchForm.table1.getColumnModel().getColumn(0).setMinWidth(100);

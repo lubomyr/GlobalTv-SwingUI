@@ -37,6 +37,11 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
     }
 
     @Override
+    public List<Channel> getFavoriteList() {
+        return favorites;
+    }
+
+    @Override
     public List<Channel> getFavoriteListForSelProv() {
         List<Channel> arr = new ArrayList<>();
         for (int i = 0; i < sizeOfFavoriteList(); i++) {

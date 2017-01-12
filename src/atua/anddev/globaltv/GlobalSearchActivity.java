@@ -3,8 +3,9 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.GlobalSearchForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
+import atua.anddev.globaltv.runnables.GetIconRunnable;
+import atua.anddev.globaltv.runnables.GetProgramTitleRunnable;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -57,26 +58,16 @@ public class GlobalSearchActivity implements Services {
             data[row][1] = searchService.getSearchChannelById(row).getName();
             data[row][2] = searchService.getSearchChannelById(row).getProvider();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-                    ImageIcon imageIcon = logoService.getIcon(searchService.getSearchChannelById(row).getName());
-                    if (imageIcon == null)
-                        imageIcon = new ImageIcon("");
-                    globalSearchForm.table1.setValueAt(imageIcon, row, 0);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchChannelById(row).getName()),
-                            row, 3);
-                }
-            }
-        }).start();
+
+        GetIconRunnable getIconRunnable = new GetIconRunnable(globalSearchForm.table1, searchService.getSearchList());
+        Thread getIconThread = new Thread(getIconRunnable);
+        getIconThread.start();
+
+        GetProgramTitleRunnable getProgramTitleRunnable = new GetProgramTitleRunnable(globalSearchForm.table1,
+                3, searchService.getSearchList());
+        Thread getProgramTitleThread = new Thread(getProgramTitleRunnable);
+        getProgramTitleThread.start();
+
         DefaultTableModel model = new TableModelWithIcons(data, colNames);
         globalSearchForm.table1.setModel(model);
         globalSearchForm.globalSearchLabel.setText(searchService.sizeOfSearchList() + " - " + tService.getString("pcs"));

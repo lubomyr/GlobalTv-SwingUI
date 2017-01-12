@@ -4,8 +4,9 @@ import atua.anddev.globaltv.dialog.SearchDialog;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.ChannelListForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
+import atua.anddev.globaltv.runnables.GetIconRunnable;
+import atua.anddev.globaltv.runnables.GetProgramTitleRunnable;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -56,28 +57,15 @@ class ChannelListActivity implements Services {
             Channel channel = channellist.get(row);
             data[row][1] = channel.getName();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < channellist.size(); row++) {
-                    Channel channel = channellist.get(row);
-                    ImageIcon imageIcon = logoService.getIcon(channel.getName());
-                    if (imageIcon == null)
-                        imageIcon = new ImageIcon("");
-                    channelListForm.table1.setValueAt(imageIcon, row, 0);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < channellist.size(); row++) {
-                    if (Global.guideLoaded)
-                        channelListForm.table1.setValueAt(guideService.getProgramTitle(channellist.get(row).getName()),
-                                row, 2);
-                }
-            }
-        }).start();
+        GetIconRunnable getIconRunnable = new GetIconRunnable(channelListForm.table1, channellist);
+        Thread getIconThread = new Thread(getIconRunnable);
+        getIconThread.start();
+
+        GetProgramTitleRunnable getProgramTitleRunnable = new GetProgramTitleRunnable(channelListForm.table1,
+                2, channellist);
+        Thread getProgramTitleThread = new Thread(getProgramTitleRunnable);
+        getProgramTitleThread.start();
+
         DefaultTableModel model = new TableModelWithIcons(data, colNames);
         channelListForm.table1.setModel(model);
         channelListForm.table1.setRowHeight(30);

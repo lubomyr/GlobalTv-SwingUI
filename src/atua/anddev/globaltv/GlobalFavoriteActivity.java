@@ -4,8 +4,9 @@ import atua.anddev.globaltv.dialog.WarningDialog;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.GlobalFavoritesForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
+import atua.anddev.globaltv.runnables.GetIconRunnable;
+import atua.anddev.globaltv.runnables.GetProgramTitleRunnable;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,26 +42,16 @@ class GlobalFavoriteActivity implements Services {
             data[row][1] = favoriteService.getFavoriteById(row).getName();
             data[row][2] = favoriteService.getFavoriteById(row).getProvider();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
-                    ImageIcon imageIcon = logoService.getIcon(favoriteService.getFavoriteById(row).getName());
-                    if (imageIcon == null)
-                        imageIcon = new ImageIcon("");
-                    globalFavoritesForm.table1.setValueAt(imageIcon, row, 0);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
-                    globalFavoritesForm.table1.setValueAt(guideService.getProgramTitle(favoriteService.getFavoriteById(row).getName()),
-                            row, 3);
-                }
-            }
-        }).start();
+
+        GetIconRunnable getIconRunnable = new GetIconRunnable(globalFavoritesForm.table1, favoriteService.getFavoriteList());
+        Thread getIconThread = new Thread(getIconRunnable);
+        getIconThread.start();
+
+        GetProgramTitleRunnable getProgramTitleRunnable = new GetProgramTitleRunnable(globalFavoritesForm.table1,
+                3, favoriteService.getFavoriteList());
+        Thread getProgramTitleThread = new Thread(getProgramTitleRunnable);
+        getProgramTitleThread.start();
+
         model = new TableModelWithIcons(data, colNames);
         globalFavoritesForm.table1.setModel(model);
         globalFavoritesForm.globalFavoritesLabel.setText(favoriteService.sizeOfFavoriteList() + " - " + tService.getString("pcs"));

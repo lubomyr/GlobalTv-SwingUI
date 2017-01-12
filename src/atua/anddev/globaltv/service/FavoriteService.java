@@ -21,6 +21,8 @@ public interface FavoriteService {
 
     List<Channel> getFavoriteListForSelProv();
 
+    List<Channel> getFavoriteList();
+
     int indexOfFavoriteByChannel(Channel channel);
 
     void saveFavorites();

@@ -3,6 +3,8 @@ package atua.anddev.globaltv;
 import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.form.FavoritesForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
+import atua.anddev.globaltv.runnables.GetIconRunnable;
+import atua.anddev.globaltv.runnables.GetProgramTitleRunnable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -42,25 +44,16 @@ class FavlistActivity implements Services {
         for (int row = 0; row < playlist.size(); row++) {
             data[row][1] = playlist.get(row).getName();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < playlist.size(); row++) {
-                    ImageIcon imageIcon = logoService.getIcon(playlist.get(row).getName());
-                    if (imageIcon == null)
-                        imageIcon = new ImageIcon("");
-                    favoritesForm.table1.setValueAt(imageIcon, row, 0);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int row = 0; row < playlist.size(); row++) {
-                    favoritesForm.table1.setValueAt(guideService.getProgramTitle(playlist.get(row).getName()), row, 2);
-                }
-            }
-        }).start();
+
+        GetIconRunnable getIconRunnable = new GetIconRunnable(favoritesForm.table1, playlist);
+        Thread getIconThread = new Thread(getIconRunnable);
+        getIconThread.start();
+
+        GetProgramTitleRunnable getProgramTitleRunnable = new GetProgramTitleRunnable(favoritesForm.table1,
+                2, playlist);
+        Thread getProgramTitleThread = new Thread(getProgramTitleRunnable);
+        getProgramTitleThread.start();
+
         DefaultTableModel model = new TableModelWithIcons(data, colNames);
         favoritesForm.table1.setModel(model);
         favoritesForm.favoritesLabel.setText(favoriteService.getFavoriteListForSelProv().size() + " - " + tService.getString("pcs"));
