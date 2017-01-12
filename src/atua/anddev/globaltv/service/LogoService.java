@@ -1,5 +1,6 @@
 package atua.anddev.globaltv.service;
 
+import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Logo;
 
 import javax.swing.*;
@@ -13,5 +14,5 @@ public interface LogoService {
 
     String getLogoByName(String str);
 
-    ImageIcon getIcon(String name);
+    ImageIcon getIcon(Channel channel);
 }

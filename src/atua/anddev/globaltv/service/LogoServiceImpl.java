@@ -1,5 +1,6 @@
 package atua.anddev.globaltv.service;
 
+import atua.anddev.globaltv.entity.Channel;
 import atua.anddev.globaltv.entity.Logo;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,15 +38,22 @@ public class LogoServiceImpl implements LogoService {
     }
 
     @Override
-    public ImageIcon getIcon(String name) {
+    public ImageIcon getIcon(Channel channel) {
         ImageIcon imageIcon = null;
         try {
-            String urlPath = getLogoByName(name);
+            String urlPath;
+            if ((channel.getIcon() != null) && (!channel.getIcon().isEmpty()))
+                urlPath = channel.getIcon();
+            else
+                urlPath = getLogoByName(channel.getName());
             if (urlPath != null) {
                 URL url = new URL(urlPath);
                 BufferedImage image = ImageIO.read(url);
-                imageIcon = new ImageIcon(image);
-                imageIcon = scaleImage(imageIcon, 100, 25);
+                try {
+                    imageIcon = new ImageIcon(image);
+                    imageIcon = scaleImage(imageIcon, 100, 25);
+                } catch (Exception e) {
+                }
             }
         } catch (IOException ignored) {
         }

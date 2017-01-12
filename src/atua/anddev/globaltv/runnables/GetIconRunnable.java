@@ -20,7 +20,7 @@ public class GetIconRunnable implements Runnable {
     public void run() {
         for (int row = 0; row < list.size(); row++) {
             Channel channel = list.get(row);
-            ImageIcon imageIcon = logoService.getIcon(channel.getName());
+            ImageIcon imageIcon = logoService.getIcon(channel);
             if (imageIcon == null)
                 imageIcon = new ImageIcon("");
             table.setValueAt(imageIcon, row, 0);
