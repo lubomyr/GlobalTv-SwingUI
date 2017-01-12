@@ -41,8 +41,7 @@ public class GlobalSearchActivity implements Services {
             for (Channel chn : channelService.getAllChannels()) {
                 chName = chn.getName().toLowerCase();
                 if (chName.contains(searchString.toLowerCase())) {
-                    searchService.addToSearchList(chn.getName(),
-                            chn.getUrl(), playlistService.getActivePlaylistById(i).getName());
+                    searchService.addToSearchList(chn);
                 }
             }
         }
@@ -55,14 +54,14 @@ public class GlobalSearchActivity implements Services {
         colNames = new String[]{"icon", "name", "playlist", "program"};
         data = new Object[searchService.sizeOfSearchList()][cols];
         for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-            data[row][1] = searchService.getSearchListById(row).getName();
-            data[row][2] = searchService.getSearchListById(row).getProv();
+            data[row][1] = searchService.getSearchChannelById(row).getName();
+            data[row][2] = searchService.getSearchChannelById(row).getProvider();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-                    ImageIcon imageIcon = logoService.getIcon(searchService.getSearchListById(row).getName());
+                    ImageIcon imageIcon = logoService.getIcon(searchService.getSearchChannelById(row).getName());
                     if (imageIcon == null)
                         imageIcon = new ImageIcon("");
                     globalSearchForm.table1.setValueAt(imageIcon, row, 0);
@@ -73,7 +72,7 @@ public class GlobalSearchActivity implements Services {
             @Override
             public void run() {
                 for (int row = 0; row < searchService.sizeOfSearchList(); row++) {
-                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchListById(row).getName()),
+                    globalSearchForm.table1.setValueAt(guideService.getProgramTitle(searchService.getSearchChannelById(row).getName()),
                             row, 3);
                 }
             }
@@ -100,21 +99,18 @@ public class GlobalSearchActivity implements Services {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
-                String selectedName = searchService.getSearchListById(selected).getName();
-                String selectedProv = searchService.getSearchListById(selected).getProv();
+                Channel channel = searchService.getSearchChannelById(selected);
                 if (selected != -1) {
                     globalSearchForm.openChannelButton.setVisible(true);
                     globalSearchForm.guideButton.setVisible(true);
-                    if (favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv) == -1) {
+                    if (favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider()) == -1) {
                         globalSearchForm.addToFavoritesButton.setVisible(true);
                         globalSearchForm.removeFromFavoritesButton.setVisible(false);
                     } else {
                         globalSearchForm.addToFavoritesButton.setVisible(false);
                         globalSearchForm.removeFromFavoritesButton.setVisible(true);
                     }
-
-                    String selectedChannel = globalSearchForm.table1.getValueAt(selected,0).toString();
-                    String title = guideService.getProgramTitle(selectedChannel);
+                    String title = guideService.getProgramTitle(channel.getName());
                     if ((title != null) && !title.isEmpty()) {
                         globalSearchForm.guidePanel.setVisible(true);
                         globalSearchForm.guideTextArea.setText(title);
@@ -122,7 +118,7 @@ public class GlobalSearchActivity implements Services {
                         globalSearchForm.guidePanel.setVisible(false);
                     }
 
-                    String desc = guideService.getProgramDesc(selectedChannel);
+                    String desc = guideService.getProgramDesc(channel.getName());
                     if ((desc != null) && !desc.isEmpty()) {
                         globalSearchForm.guideTextArea.append("\n" + desc);
                         globalSearchForm.guideTextArea.setLineWrap(true);
@@ -162,15 +158,14 @@ public class GlobalSearchActivity implements Services {
         globalSearchForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
-                channelService.openURL(searchService.getSearchListById(selected).getUrl());
+                channelService.openURL(searchService.getSearchChannelById(selected).getUrl());
             }
         });
         globalSearchForm.addToFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
-                String selectedName = searchService.getSearchListById(selected).getName();
-                String selectedProv = searchService.getSearchListById(selected).getProv();
-                favoriteService.addToFavoriteList(selectedName, selectedProv);
+                Channel channel = searchService.getSearchChannelById(selected);
+                favoriteService.addToFavoriteList(channel.getName(), channel.getProvider());
                 favoriteService.saveFavorites();
                 globalSearchForm.removeFromFavoritesButton.setVisible(true);
                 globalSearchForm.addToFavoritesButton.setVisible(false);
@@ -179,9 +174,8 @@ public class GlobalSearchActivity implements Services {
         globalSearchForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
-                String selectedName = searchService.getSearchListById(selected).getName();
-                String selectedProv = searchService.getSearchListById(selected).getProv();
-                int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
+                Channel channel = searchService.getSearchChannelById(selected);
+                int index = favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider());
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
                 globalSearchForm.removeFromFavoritesButton.setVisible(false);
@@ -192,7 +186,7 @@ public class GlobalSearchActivity implements Services {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
-                String selectedName = searchService.getSearchListById(selected).getName();
+                String selectedName = searchService.getSearchChannelById(selected).getName();
                 new GuideActivity(selectedName);
             }
         });

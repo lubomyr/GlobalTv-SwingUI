@@ -1,16 +1,16 @@
 package atua.anddev.globaltv.service;
 
-import atua.anddev.globaltv.entity.Search;
+import atua.anddev.globaltv.entity.Channel;
 
 public class SearchServiceImpl implements SearchService {
 
     @Override
-    public void addToSearchList(String name, String url, String prov) {
-        searchList.add(new Search(name, url, prov));
+    public void addToSearchList(Channel channel) {
+        searchList.add(channel);
     }
 
     @Override
-    public Search getSearchListById(int id) {
+    public Channel getSearchChannelById(int id) {
         return searchList.get(id);
     }
 

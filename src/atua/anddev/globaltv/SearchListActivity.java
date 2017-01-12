@@ -96,9 +96,8 @@ public class SearchListActivity implements Services {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
-                String selectedName = searchlist.get(selected).getName();
-                String selectedProv = searchlist.get(selected).getProvider();
-                favoriteService.addToFavoriteList(selectedName, selectedProv);
+                Channel channel = searchlist.get(selected);
+                favoriteService.addToFavoriteList(channel.getName(), channel.getProvider());
                 favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(true);
                 searchForm.addToFavoritesButton.setVisible(false);
@@ -108,10 +107,8 @@ public class SearchListActivity implements Services {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
-                String selectedName = searchlist.get(selected).getName();
-                String selectedProv = searchlist.get(selected).getProvider();
-                ;
-                int index = favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv);
+                Channel channel = searchlist.get(selected);
+                int index = favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider());
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(false);
@@ -139,21 +136,18 @@ public class SearchListActivity implements Services {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int index = searchForm.table1.getSelectedRow();
-                String selectedName = searchlist.get(index).getName();
-                String selectedProv = searchlist.get(index).getProvider();
-                ;
+                Channel channel = searchlist.get(index);
                 if (index != -1) {
                     searchForm.openChannelButton.setVisible(true);
                     searchForm.guideButton.setVisible(true);
-                    if (favoriteService.indexOfFavoriteByNameAndProv(selectedName, selectedProv) == -1) {
+                    if (favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider()) == -1) {
                         searchForm.addToFavoritesButton.setVisible(true);
                         searchForm.removeFromFavoritesButton.setVisible(false);
                     } else {
                         searchForm.addToFavoritesButton.setVisible(false);
                         searchForm.removeFromFavoritesButton.setVisible(true);
                     }
-                    String selectedChannel = searchForm.table1.getValueAt(index,0).toString();
-                    String title = guideService.getProgramTitle(selectedChannel);
+                    String title = guideService.getProgramTitle(channel.getName());
                     if ((title != null) && !title.isEmpty()) {
                         searchForm.guidePanel.setVisible(true);
                         searchForm.guideTextArea.setText(title);
@@ -161,7 +155,7 @@ public class SearchListActivity implements Services {
                         searchForm.guidePanel.setVisible(false);
                     }
 
-                    String desc = guideService.getProgramDesc(selectedChannel);
+                    String desc = guideService.getProgramDesc(channel.getName());
                     if ((desc != null) && !desc.isEmpty()) {
                         searchForm.guideTextArea.append("\n" + desc);
                         searchForm.guideTextArea.setLineWrap(true);
