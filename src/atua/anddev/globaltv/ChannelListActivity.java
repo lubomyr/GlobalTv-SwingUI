@@ -2,7 +2,6 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.dialog.SearchDialog;
 import atua.anddev.globaltv.entity.Channel;
-import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.ChannelListForm;
 import atua.anddev.globaltv.models.TableModelWithIcons;
 
@@ -19,9 +18,6 @@ import java.util.List;
 class ChannelListActivity implements Services {
     private ChannelListForm channelListForm;
     private List<Channel> channellist;
-    private String selectedChannel;
-    private String selectedLink;
-    private Playlist selectedPlaylist;
 
     ChannelListActivity() {
         channelListForm = new ChannelListForm();
@@ -104,12 +100,10 @@ class ChannelListActivity implements Services {
             public void mouseClicked(MouseEvent e) {
                 int index = channelListForm.table1.getSelectedRow();
                 if (index != -1) {
-                    selectedChannel = channellist.get(index).getName();
-                    selectedLink = channellist.get(index).getUrl();
-                    selectedPlaylist = playlistService.getActivePlaylistById(MainActivity.selectedProvider);
+                    Channel channel = channellist.get(index);
                     channelListForm.openChannelButton.setVisible(true);
                     channelListForm.guideButton.setVisible(true);
-                    if (favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName()) == -1) {
+                    if (favoriteService.indexOfFavoriteByChannel(channel) == -1) {
                         channelListForm.addToFavoritesButton.setVisible(true);
                         channelListForm.removeFromFavoritesButton.setVisible(false);
                     } else {
@@ -117,7 +111,7 @@ class ChannelListActivity implements Services {
                         channelListForm.addToFavoritesButton.setVisible(false);
                     }
 
-                    String title = guideService.getProgramTitle(selectedChannel);
+                    String title = guideService.getProgramTitle(channel.getName());
                     if ((title != null) && !title.isEmpty()) {
                         channelListForm.guidePanel.setVisible(true);
                         channelListForm.guideTextArea.setText(title);
@@ -125,7 +119,7 @@ class ChannelListActivity implements Services {
                         channelListForm.guidePanel.setVisible(false);
                     }
 
-                    String desc = guideService.getProgramDesc(selectedChannel);
+                    String desc = guideService.getProgramDesc(channel.getName());
                     if ((desc != null) && !desc.isEmpty()) {
                         channelListForm.guideTextArea.append("\n" + desc);
                         channelListForm.guideTextArea.setLineWrap(true);
@@ -162,7 +156,9 @@ class ChannelListActivity implements Services {
     private void buttonActionListener() {
         channelListForm.openChannelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                channelService.openURL(selectedLink);
+                int index = channelListForm.table1.getSelectedRow();
+                Channel channel = channellist.get(index);
+                channelService.openURL(channel.getUrl());
             }
         });
         channelListForm.favoritesButton.addActionListener(new ActionListener() {
@@ -177,7 +173,9 @@ class ChannelListActivity implements Services {
         });
         channelListForm.addToFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                favoriteService.addToFavoriteList(selectedChannel, selectedPlaylist.getName());
+                int index = channelListForm.table1.getSelectedRow();
+                Channel channel = channellist.get(index);
+                favoriteService.addToFavoriteList(channel);
                 favoriteService.saveFavorites();
                 channelListForm.removeFromFavoritesButton.setVisible(true);
                 channelListForm.addToFavoritesButton.setVisible(false);
@@ -185,8 +183,10 @@ class ChannelListActivity implements Services {
         });
         channelListForm.removeFromFavoritesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                int index = favoriteService.indexOfFavoriteByNameAndProv(selectedChannel, selectedPlaylist.getName());
-                favoriteService.deleteFromFavoritesById(index);
+                int index = channelListForm.table1.getSelectedRow();
+                Channel channel = channellist.get(index);
+                int favIndex = favoriteService.indexOfFavoriteByChannel(channel);
+                favoriteService.deleteFromFavoritesById(favIndex);
                 favoriteService.saveFavorites();
                 channelListForm.removeFromFavoritesButton.setVisible(false);
                 channelListForm.addToFavoritesButton.setVisible(true);
@@ -195,7 +195,9 @@ class ChannelListActivity implements Services {
         channelListForm.guideButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GuideActivity(selectedChannel);
+                int index = channelListForm.table1.getSelectedRow();
+                Channel channel = channellist.get(index);
+                new GuideActivity(channel.getName());
             }
         });
     }

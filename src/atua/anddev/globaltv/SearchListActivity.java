@@ -97,7 +97,7 @@ public class SearchListActivity implements Services {
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
                 Channel channel = searchlist.get(selected);
-                favoriteService.addToFavoriteList(channel.getName(), channel.getProvider());
+                favoriteService.addToFavoriteList(channel);
                 favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(true);
                 searchForm.addToFavoritesButton.setVisible(false);
@@ -108,7 +108,7 @@ public class SearchListActivity implements Services {
             public void actionPerformed(ActionEvent e) {
                 int selected = searchForm.table1.getSelectedRow();
                 Channel channel = searchlist.get(selected);
-                int index = favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider());
+                int index = favoriteService.indexOfFavoriteByChannel(channel);
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
                 searchForm.removeFromFavoritesButton.setVisible(false);
@@ -140,7 +140,7 @@ public class SearchListActivity implements Services {
                 if (index != -1) {
                     searchForm.openChannelButton.setVisible(true);
                     searchForm.guideButton.setVisible(true);
-                    if (favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider()) == -1) {
+                    if (favoriteService.indexOfFavoriteByChannel(channel) == -1) {
                         searchForm.addToFavoritesButton.setVisible(true);
                         searchForm.removeFromFavoritesButton.setVisible(false);
                     } else {

@@ -248,7 +248,7 @@ public class MainActivity implements Services {
         }
     }
 
-    static void saveUrl(final String filename, final String urlString)
+    public static void saveUrl(final String filename, final String urlString)
             throws MalformedURLException, IOException {
         BufferedInputStream in = null;
         FileOutputStream fout = null;

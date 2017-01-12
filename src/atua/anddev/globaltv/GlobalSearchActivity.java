@@ -103,7 +103,7 @@ public class GlobalSearchActivity implements Services {
                 if (selected != -1) {
                     globalSearchForm.openChannelButton.setVisible(true);
                     globalSearchForm.guideButton.setVisible(true);
-                    if (favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider()) == -1) {
+                    if (favoriteService.indexOfFavoriteByChannel(channel) == -1) {
                         globalSearchForm.addToFavoritesButton.setVisible(true);
                         globalSearchForm.removeFromFavoritesButton.setVisible(false);
                     } else {
@@ -165,7 +165,7 @@ public class GlobalSearchActivity implements Services {
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
                 Channel channel = searchService.getSearchChannelById(selected);
-                favoriteService.addToFavoriteList(channel.getName(), channel.getProvider());
+                favoriteService.addToFavoriteList(channel);
                 favoriteService.saveFavorites();
                 globalSearchForm.removeFromFavoritesButton.setVisible(true);
                 globalSearchForm.addToFavoritesButton.setVisible(false);
@@ -175,7 +175,7 @@ public class GlobalSearchActivity implements Services {
             public void actionPerformed(ActionEvent e) {
                 int selected = globalSearchForm.table1.getSelectedRow();
                 Channel channel = searchService.getSearchChannelById(selected);
-                int index = favoriteService.indexOfFavoriteByNameAndProv(channel.getName(), channel.getProvider());
+                int index = favoriteService.indexOfFavoriteByChannel(channel);
                 favoriteService.deleteFromFavoritesById(index);
                 favoriteService.saveFavorites();
                 globalSearchForm.removeFromFavoritesButton.setVisible(false);

@@ -20,7 +20,9 @@ public interface ChannelService {
 
     List<String> getCategoriesList();
 
-    void openChannel(String chName);
+    void openChannel(Channel channel);
 
     void openURL(final String chURL);
+
+    String getUpdatedUrl(String chName, int provId);
 }

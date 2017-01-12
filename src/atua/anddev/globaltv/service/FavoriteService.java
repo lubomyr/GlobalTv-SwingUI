@@ -1,17 +1,17 @@
 package atua.anddev.globaltv.service;
 
-import atua.anddev.globaltv.entity.Favorites;
+import atua.anddev.globaltv.entity.Channel;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface FavoriteService {
-    List<Favorites> favorites = new ArrayList<>();
+    List<Channel> favorites = new ArrayList<>();
 
-    void addToFavoriteList(String name, String prov);
+    void addToFavoriteList(Channel channel);
 
-    Favorites getFavoriteById(int id);
+    Channel getFavoriteById(int id);
 
     void clearAllFavorites();
 
@@ -19,9 +19,9 @@ public interface FavoriteService {
 
     void deleteFromFavoritesById(int id);
 
-    List<String> getFavoriteListForSelProv();
+    List<Channel> getFavoriteListForSelProv();
 
-    int indexOfFavoriteByNameAndProv(String name, String prov);
+    int indexOfFavoriteByChannel(Channel channel);
 
     void saveFavorites();
 

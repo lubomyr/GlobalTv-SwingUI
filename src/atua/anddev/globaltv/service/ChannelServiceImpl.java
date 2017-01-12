@@ -1,10 +1,15 @@
 package atua.anddev.globaltv.service;
 
+import atua.anddev.globaltv.MainActivity;
 import atua.anddev.globaltv.Player;
 import atua.anddev.globaltv.entity.Channel;
+import atua.anddev.globaltv.entity.Playlist;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static atua.anddev.globaltv.Services.playlistService;
 
 public class ChannelServiceImpl implements ChannelService {
 
@@ -48,9 +53,10 @@ public class ChannelServiceImpl implements ChannelService {
         return channels.size();
     }
 
-    public void openChannel(String chName) {
+    @Override
+    public void openChannel(Channel channel) {
         for (Channel chn : channels) {
-            if (chName.equals(chn.getName())) {
+            if (channel.getName().equals(chn.getName())) {
                 openURL(chn.getUrl());
                 return;
             }
@@ -64,5 +70,25 @@ public class ChannelServiceImpl implements ChannelService {
                 new Player(chURL);
             }
         }).start();
+    }
+
+    public String getUpdatedUrl(String chName, int provId) {
+        Playlist plst = playlistService.getActivePlaylistById(provId);
+        try {
+            MainActivity.saveUrl(plst.getFile(), plst.getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        playlistService.readPlaylist(provId);
+        return getChannelsUrl(chName);
+    }
+
+    private String getChannelsUrl(String chName) {
+        for (Channel chn : channels) {
+            if (chName.equals(chn.getName())) {
+                return chn.getUrl();
+            }
+        }
+        return null;
     }
 }

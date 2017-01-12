@@ -2,7 +2,7 @@ package atua.anddev.globaltv.service;
 
 import atua.anddev.globaltv.MainActivity;
 import atua.anddev.globaltv.Services;
-import atua.anddev.globaltv.entity.Favorites;
+import atua.anddev.globaltv.entity.Channel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,10 +25,11 @@ import java.util.List;
 public class FavoriteServiceImpl implements FavoriteService, Services {
 
     @Override
-    public int indexOfFavoriteByNameAndProv(String name, String prov) {
+    public int indexOfFavoriteByChannel(Channel channel) {
         int result = -1;
         for (int i = 0; i < sizeOfFavoriteList(); i++) {
-            if (name.equals(favorites.get(i).getName()) && prov.equals(favorites.get(i).getProv())) {
+            if (channel.getName().equals(favorites.get(i).getName()) &&
+                    channel.getProvider().equals(favorites.get(i).getProvider())) {
                 result = i;
             }
         }
@@ -36,13 +37,13 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
     }
 
     @Override
-    public List<String> getFavoriteListForSelProv() {
-        List<String> arr = new ArrayList<String>();
+    public List<Channel> getFavoriteListForSelProv() {
+        List<Channel> arr = new ArrayList<>();
         for (int i = 0; i < sizeOfFavoriteList(); i++) {
             for (int j = 0; j < channelService.sizeOfChannelList(); j++) {
                 if (getFavoriteById(i).getName().equals(channelService.getChannelById(j).getName()) && !arr.contains(getFavoriteById(i).getName())
-                        && getFavoriteById(i).getProv().equals(playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName())) {
-                    arr.add(getFavoriteById(i).getName());
+                        && getFavoriteById(i).getProvider().equals(playlistService.getActivePlaylistById(MainActivity.selectedProvider).getName())) {
+                    arr.add(getFavoriteById(i));
                 }
             }
         }
@@ -55,12 +56,12 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
     }
 
     @Override
-    public void addToFavoriteList(String name, String prov) {
-        favorites.add(new Favorites(name, prov));
+    public void addToFavoriteList(Channel channel) {
+        favorites.add(channel);
     }
 
     @Override
-    public Favorites getFavoriteById(int id) {
+    public Channel getFavoriteById(int id) {
         return favorites.get(id);
     }
 
@@ -97,7 +98,7 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
 
                 // playlist elements
                 Element playlist = doc.createElement("playlist");
-                playlist.appendChild(doc.createTextNode(getFavoriteById(j).getProv()));
+                playlist.appendChild(doc.createTextNode(getFavoriteById(j).getProvider()));
                 favorites.appendChild(playlist);
             }
             // write the content into xml file
@@ -149,7 +150,7 @@ public class FavoriteServiceImpl implements FavoriteService, Services {
                     channel = eElement.getElementsByTagName("channel").item(0).getTextContent();
                     playlist = eElement.getElementsByTagName("playlist").item(0).getTextContent();
 
-                    addToFavoriteList(channel, playlist);
+                    addToFavoriteList(new Channel(channel, null, null, null, playlist));
                 }
             }
         } catch (Exception ignored) {

@@ -39,7 +39,7 @@ class GlobalFavoriteActivity implements Services {
         data = new Object[favoriteService.sizeOfFavoriteList()][cols];
         for (int row = 0; row < favoriteService.sizeOfFavoriteList(); row++) {
             data[row][1] = favoriteService.getFavoriteById(row).getName();
-            data[row][2] = favoriteService.getFavoriteById(row).getProv();
+            data[row][2] = favoriteService.getFavoriteById(row).getProvider();
         }
         new Thread(new Runnable() {
             @Override
@@ -83,21 +83,20 @@ class GlobalFavoriteActivity implements Services {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selected = globalFavoritesForm.table1.getSelectedRow();
+                Channel channel = favoriteService.getFavoriteById(selected);
                 if (selected != -1) {
                     globalFavoritesForm.openChannelButton.setVisible(true);
                     globalFavoritesForm.removeFromFavoritesButton.setVisible(true);
                     globalFavoritesForm.guideButton.setVisible(true);
 
-                    String selectedChannel = globalFavoritesForm.table1.getValueAt(selected,0).toString();
-                    String title = guideService.getProgramTitle(selectedChannel);
+                    String title = guideService.getProgramTitle(channel.getName());
                     if ((title != null) && !title.isEmpty()) {
                         globalFavoritesForm.guidePanel.setVisible(true);
                         globalFavoritesForm.guideTextArea.setText(title);
                     } else {
                         globalFavoritesForm.guidePanel.setVisible(false);
                     }
-
-                    String desc = guideService.getProgramDesc(selectedChannel);
+                    String desc = guideService.getProgramDesc(channel.getName());
                     if ((desc != null) && !desc.isEmpty()) {
                         globalFavoritesForm.guideTextArea.append("\n" + desc);
                         globalFavoritesForm.guideTextArea.setLineWrap(true);
@@ -158,7 +157,7 @@ class GlobalFavoriteActivity implements Services {
     }
 
     private void openFavorite(int itemNum) {
-        String getProvName = favoriteService.getFavoriteById(itemNum).getProv();
+        String getProvName = favoriteService.getFavoriteById(itemNum).getProvider();
         int numA = playlistService.indexNameForActivePlaylist(getProvName);
         if (numA == -1) {
             new WarningDialog(tService.getString("playlistnotexist"));
