@@ -73,6 +73,12 @@
     <string name="update">Оновити</string>
     <string name="fileSize">розмір</string>
     <string name="period">період</string>
+    <string name="search_program">Пошук програм</string>
+    <string name="search_channel">Пошук каналів</string>
+    <string name="all_period">Весь період</string>
+    <string name="today">Сьогодні</string>
+    <string name="after_moment">Після поточного моменту</string>
+    <string name="now">Зараз</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

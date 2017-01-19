@@ -30,4 +30,14 @@ public interface GuideService {
     String getTotalTimePeriod();
 
     Calendar decodeDateTime(String str);
+
+    List<Programme> searchAllPeriod(String str);
+
+    List<Programme> searchAfterMoment(String str);
+
+    List<Programme> searchCurrentMoment(String str);
+
+    List<Programme> searchToday(String str);
+
+    String getChannelNameById(String id);
 }

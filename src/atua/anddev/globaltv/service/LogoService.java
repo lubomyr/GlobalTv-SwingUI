@@ -12,7 +12,9 @@ public interface LogoService {
 
     void setupLogos();
 
-    String getLogoByName(String str);
+    String getLogoUrlByName(String str);
 
     ImageIcon getIcon(Channel channel);
+
+    ImageIcon getIconByName(String name);
 }

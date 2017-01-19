@@ -26,7 +26,7 @@ public class LogoServiceImpl implements LogoService {
     }
 
     @Override
-    public String getLogoByName(String str) {
+    public String getLogoUrlByName(String str) {
         if (logoLoaded && (logoList.size() != 0)) {
             for (Logo logo : logoList) {
                 if (str.equals(logo.getName())) {
@@ -45,7 +45,26 @@ public class LogoServiceImpl implements LogoService {
             if ((channel.getIcon() != null) && (!channel.getIcon().isEmpty()))
                 urlPath = channel.getIcon();
             else
-                urlPath = getLogoByName(channel.getName());
+                urlPath = getLogoUrlByName(channel.getName());
+            if (urlPath != null) {
+                URL url = new URL(urlPath);
+                BufferedImage image = ImageIO.read(url);
+                try {
+                    imageIcon = new ImageIcon(image);
+                    imageIcon = scaleImage(imageIcon, 100, 25);
+                } catch (Exception e) {
+                }
+            }
+        } catch (IOException ignored) {
+        }
+        return imageIcon;
+    }
+
+    @Override
+    public ImageIcon getIconByName(String name) {
+        ImageIcon imageIcon = null;
+        try {
+            String urlPath = getLogoUrlByName(name);
             if (urlPath != null) {
                 URL url = new URL(urlPath);
                 BufferedImage image = ImageIO.read(url);

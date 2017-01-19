@@ -73,6 +73,12 @@
     <string name="update">Обновить</string>
     <string name="fileSize">размер</string>
     <string name="period">период</string>
+    <string name="search_program">Поиск програм</string>
+    <string name="search_channel">Поиск каналов</string>
+    <string name="all_period">Весь период</string>
+    <string name="today">Сегодня</string>
+    <string name="after_moment">Будет</string>
+    <string name="now">Счас</string>
 
     <string-array name="categories_list_orig">
         <item>Europe</item>

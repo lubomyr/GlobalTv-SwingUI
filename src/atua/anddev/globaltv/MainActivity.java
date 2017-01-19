@@ -2,6 +2,7 @@ package atua.anddev.globaltv;
 
 import atua.anddev.globaltv.dialog.AddPlaylistDialog;
 import atua.anddev.globaltv.dialog.SearchDialog;
+import atua.anddev.globaltv.dialog.SearchProgramDialog;
 import atua.anddev.globaltv.entity.GuideProv;
 import atua.anddev.globaltv.entity.Playlist;
 import atua.anddev.globaltv.form.MainForm;
@@ -104,7 +105,8 @@ public class MainActivity implements Services {
         mainForm.updatePlaylistButton.setText(tService.getString("updatePlaylistButton"));
         mainForm.updateOutdatedPlaylistButton.setText(tService.getString("updateOutdatedPlaylists"));
         mainForm.openPlaylistButton.setText(tService.getString("openPlaylistButton"));
-        mainForm.searchButton.setText(tService.getString("search"));
+        mainForm.searchButton.setText(tService.getString("search_channel"));
+        mainForm.searchProgramButton.setText(tService.getString("search_program"));
         mainForm.favoritesButton.setText(tService.getString("favorites"));
         mainForm.settingsButton.setText(tService.getString("settings"));
         mainForm.playlistManagerButton.setText(tService.getString("playlistsManagerButton"));
@@ -112,7 +114,7 @@ public class MainActivity implements Services {
     }
 
     private static void setUIFont(FontUIResource f) {
-        Enumeration keys = UIManager.getDefaults().keys();
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
@@ -472,13 +474,21 @@ public class MainActivity implements Services {
             }
         });
 
+        mainForm.searchProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SearchProgramDialog();
+            }
+        });
+
     }
 
     private static Runnable checkGuideForUpdate = new Runnable() {
 
         @Override
         public void run() {
-            guideService.checkForUpdate();
+            if (guideService.checkForUpdate())
+                updateGuide();
         }
     };
 

@@ -33,7 +33,6 @@ class GuideActivity implements Services {
     private void showChannelGuide(String chName) {
         List<Programme> guideList = guideService.getChannelGuide(chName);
         Calendar currentTime = Calendar.getInstance();
-        final DateFormat sdfInput = new SimpleDateFormat("yyyyMMddHHmmss Z");
         final DateFormat sdfStartOutput = new SimpleDateFormat("dd.MM HH:mm");
         final DateFormat sdfEndOutput = new SimpleDateFormat("HH:mm");
         String[] colNames;

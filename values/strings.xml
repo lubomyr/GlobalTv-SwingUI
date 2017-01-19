@@ -74,6 +74,12 @@
     <string name="update">Update</string>
     <string name="fileSize">file size</string>
     <string name="period">period</string>
+    <string name="search_program">Search Programs</string>
+    <string name="search_channel">Search Channels</string>
+    <string name="all_period">All Period</string>
+    <string name="today">Today</string>
+    <string name="after_moment">After current moment</string>
+    <string name="now">Now</string>
 
     <string-array name="categories_list_orig">
         <item>Музыка</item>

@@ -19,6 +19,7 @@ public class MainForm extends JFrame{
     public JLabel mainPlaylistInfoLabel;
     public JLabel mainWarningLabel;
     public JLabel playlistLabel;
+    public JButton searchProgramButton;
 
     public MainForm() {
         super("Global Tv");

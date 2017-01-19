@@ -21,8 +21,8 @@ class SortedListOfPlaylists implements Services {
 
     private void showSortedDateOfPlaylist() {
         List<Playlist> sortedList = playlistService.getSortedByDatePlaylists();
-        List<String> name = new ArrayList<String>();
-        List<String> date = new ArrayList<String>();
+        List<String> name = new ArrayList<>();
+        List<String> date = new ArrayList<>();
         String[] colNames;
         Object[][] data;
         int cols = 2;

@@ -21,6 +21,7 @@ import static atua.anddev.globaltv.Services.myPath;
 
 public class GuideServiceImpl implements GuideService {
     private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss Z");
+    private final String ukrEpg = " (на укр.)";
     private Calendar currentTime;
 
     public boolean checkForUpdate() {
@@ -152,7 +153,9 @@ public class GuideServiceImpl implements GuideService {
     @Override
     public String getProgramTitle(String chName) {
         currentTime = Calendar.getInstance();
-        String id = getIdByChannelName(chName);
+        String id = getIdByChannelName(chName + ukrEpg);
+        if (id == null)
+            id = getIdByChannelName(chName);
         return getProgramTitlebyId(id);
     }
 
@@ -232,7 +235,9 @@ public class GuideServiceImpl implements GuideService {
 
     public List<Programme> getChannelGuide(String chName) {
         List<Programme> result = new ArrayList<>();
-        String id = getIdByChannelName(chName);
+        String id = getIdByChannelName(chName + ukrEpg);
+        if (id == null)
+            id = getIdByChannelName(chName);
         for (Programme programme : programmeList) {
             if (programme.getChannel().equals(id)) {
                 result.add(programme);
@@ -278,6 +283,62 @@ public class GuideServiceImpl implements GuideService {
             result = totalSdf.format(startDate.getTime()) + " - " + totalSdf.format(endDate.getTime());
         }
         return result;
+    }
+
+    public String getChannelNameById(String id) {
+        for (ChannelGuide cg : channelGuideList) {
+            if (id.equals(cg.getId()))
+                return cg.getDisplayName();
+        }
+        return null;
+    }
+
+    public List<Programme> searchAllPeriod(String str) {
+        List<Programme> list = new ArrayList<>();
+        for (Programme p : programmeList) {
+            if (p.getTitle().toLowerCase().contains(str.toLowerCase()))
+                list.add(p);
+        }
+        return list;
+    }
+
+    public List<Programme> searchAfterMoment(String str) {
+        List<Programme> list = new ArrayList<>();
+        for (Programme p : programmeList) {
+            if (p.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                Calendar stopTime = decodeDateTime(p.getStop());
+                if (currentTime.before(stopTime))
+                    list.add(p);
+            }
+        }
+        return list;
+    }
+
+    public List<Programme> searchToday(String str) {
+        List<Programme> list = new ArrayList<>();
+        for (Programme p : programmeList) {
+            if (p.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                Calendar startTime = decodeDateTime(p.getStart());
+                Calendar stopTime = decodeDateTime(p.getStop());
+                if ((currentTime.get(Calendar.MONTH) == startTime.get(Calendar.MONTH)) &&
+                        (currentTime.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH)))
+                    list.add(p);
+            }
+        }
+        return list;
+    }
+
+    public List<Programme> searchCurrentMoment(String str) {
+        List<Programme> list = new ArrayList<>();
+        for (Programme p : programmeList) {
+            if (p.getTitle().toLowerCase().contains(str.toLowerCase())) {
+                Calendar startTime = decodeDateTime(p.getStart());
+                Calendar stopTime = decodeDateTime(p.getStop());
+                if (currentTime.after(startTime) && currentTime.before(stopTime))
+                    list.add(p);
+            }
+        }
+        return list;
     }
 
 }
