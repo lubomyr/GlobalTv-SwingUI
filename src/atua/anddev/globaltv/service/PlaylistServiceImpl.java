@@ -274,6 +274,10 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
         String fname = getActivePlaylistById(num).getFile();
         String provName = getActivePlaylistById(num).getName();
         int type = getActivePlaylistById(num).getType();
+        if (type == 2) {
+            parseW3u(num);
+            return;
+        }
         String lineStr, chName = "", chCategory = "", chLink = "", chIcon = "";
         String groupName = "", groupName2 = "";
         channelService.clearAllChannel();
@@ -339,6 +343,42 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
             myInputFile.close();
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    private void parseW3u(int num) {
+        String fname = getActivePlaylistById(num).getFile();
+        String provName = getActivePlaylistById(num).getName();
+        String resultJson = "";
+        channelService.clearAllChannel();
+        try {
+            InputStream myfile = new FileInputStream(myPath + fname);
+            Scanner myInputFile = new Scanner(myfile, "UTF8").useDelimiter("[\n]");
+            StringBuffer buffer = new StringBuffer();
+            while (myInputFile.hasNext()) {
+                buffer.append(myInputFile.next());
+            }
+            resultJson = buffer.toString();
+            myInputFile.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        JSONObject dataJsonObj = null;
+        try {
+            dataJsonObj = new JSONObject(resultJson);
+            JSONArray stations = dataJsonObj.getJSONArray("stations");
+
+            for (int i = 0; i < stations.length(); i++) {
+                JSONObject station = stations.getJSONObject(i);
+                String name = station.getString("name");
+                String image = station.getString("image");
+                String url = station.getString("url");
+                Channel channel = new Channel(name, url, "", image, provName);
+                channelService.addToChannelList(channel);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
