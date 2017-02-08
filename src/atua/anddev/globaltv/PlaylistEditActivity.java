@@ -42,10 +42,17 @@ class PlaylistEditActivity implements Services {
         if (editAction.equals("modify")) {
             playlistEditForm.textField1.setText(playlistService.getActivePlaylistById(num).getName());
             playlistEditForm.textField2.setText(playlistService.getActivePlaylistById(num).getUrl());
-            if (playlistService.getActivePlaylistById(num).getType() == 0)
-                playlistEditForm.standartRadioButton.setSelected(true);
-            else
-                playlistEditForm.torrentTvRadioButton.setSelected(true);
+            switch (playlistService.getActivePlaylistById(num).getType()) {
+                case 0:
+                    playlistEditForm.standartRadioButton.setSelected(true);
+                    break;
+                case 1:
+                    playlistEditForm.torrentTvRadioButton.setSelected(true);
+                    break;
+                case 2:
+                    playlistEditForm.w3uRadioButton.setSelected(true);
+                    break;
+            }
         }
         playlistEditForm.pack();
     }
@@ -54,6 +61,7 @@ class PlaylistEditActivity implements Services {
         ButtonGroup group = new ButtonGroup();
         group.add(playlistEditForm.standartRadioButton);
         group.add(playlistEditForm.torrentTvRadioButton);
+        group.add(playlistEditForm.w3uRadioButton);
 
         playlistEditForm.editButton.addActionListener(new ActionListener() {
             @Override
@@ -65,8 +73,10 @@ class PlaylistEditActivity implements Services {
                 url = playlistEditForm.textField2.getText();
                 if (playlistEditForm.standartRadioButton.isSelected())
                     type = 0;
-                else
+                else if (playlistEditForm.torrentTvRadioButton.isSelected())
                     type = 1;
+                else
+                    type = 2;
                 if (name.length() == 0 || url.length() == 0) {
                     new WarningDialog(tService.getString("pleasefillallfields"));
                 } else {

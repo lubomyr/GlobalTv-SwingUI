@@ -9,6 +9,7 @@ public class PlaylistEditForm extends JFrame {
     public JRadioButton torrentTvRadioButton;
     public JButton editButton;
     private JPanel playlistEditPanel;
+    public JRadioButton w3uRadioButton;
 
     public PlaylistEditForm() {
         super("Playlist Add/Edit");
