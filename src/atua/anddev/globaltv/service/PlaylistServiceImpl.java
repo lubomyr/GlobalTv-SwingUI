@@ -395,7 +395,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
 
         String doInBackground() {
             try {
-                URL url = new URL("https://dl.dropboxusercontent.com/u/47797448/playlist/playlists.json");
+                URL url = new URL("http://anddev.at.ua/globaltv/playlists.json");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
