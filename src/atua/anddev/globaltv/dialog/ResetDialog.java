@@ -10,10 +10,14 @@ public class ResetDialog extends JDialog implements Services {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JLabel resetLabel;
+    private ResetListener resetListener;
 
-    public ResetDialog() {
+    public ResetDialog(ResetListener resetListener) {
+        this.resetListener = resetListener;
+
         setContentPane(contentPane);
         setModal(true);
+
         getRootPane().setDefaultButton(buttonOK);
         resetLabel.setText(tService.getString("resetwarn"));
         buttonOK.setText(tService.getString("reset"));
@@ -48,10 +52,7 @@ public class ResetDialog extends JDialog implements Services {
     }
 
     private void onOK() {
-        favoriteService.clearAllFavorites();
-        favoriteService.saveFavorites();
-        playlistService.clearActivePlaylist();
-        playlistService.saveData();
+        resetListener.resetAll();
         dispose();
     }
 
@@ -60,9 +61,7 @@ public class ResetDialog extends JDialog implements Services {
         dispose();
     }
 
-    public static void main(String[] args) {
-        ResetDialog dialog = new ResetDialog();
-        dialog.pack();
-        dialog.setVisible(true);
+    public interface ResetListener {
+        void resetAll();
     }
 }

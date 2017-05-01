@@ -10,11 +10,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PlaylistManagerActivity implements Services {
-    static DefaultListModel<String> model_a;
+public class PlaylistManagerActivity implements Services, PlaylistEditActivity.AddEditListener, ResetDialog.ResetListener {
+    private DefaultListModel<String> model_a;
     private DefaultListModel<String> model_d;
     private PlaylistManagerForm playlistManagerForm;
-
 
     public PlaylistManagerActivity() {
         playlistManagerForm = new PlaylistManagerForm();
@@ -99,7 +98,7 @@ public class PlaylistManagerActivity implements Services {
         playlistManagerForm.editButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = playlistManagerForm.list1.getSelectedIndex();
-                new PlaylistEditActivity("modify", index);
+                editPlaylist(index);
             }
         });
         playlistManagerForm.removeButton.addActionListener(new ActionListener() {
@@ -123,12 +122,12 @@ public class PlaylistManagerActivity implements Services {
         });
         playlistManagerForm.resetButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ResetDialog.main(null);
+                resetDialog();
             }
         });
         playlistManagerForm.addNewPlaylistButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new PlaylistEditActivity("addNew");
+                addNewPlaylist();
             }
         });
         playlistManagerForm.sortedListByUpdateButton.addActionListener(new ActionListener() {
@@ -137,5 +136,43 @@ public class PlaylistManagerActivity implements Services {
             }
         });
     }
+
+    private void addNewPlaylist() {
+        new PlaylistEditActivity(this, "addNew");
+    }
+
+    private void editPlaylist(int num) {
+        new PlaylistEditActivity(this, "modify", num);
+    }
+
+    private void resetDialog() {
+        ResetDialog dialog = new ResetDialog(this);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+    @Override
+    public void change(String name, int num) {
+        model_a.setElementAt(name, num);
+        MainActivity.mainForm.comboBox1.removeItemAt(num);
+        MainActivity.mainForm.comboBox1.insertItemAt(name, num);
+    }
+
+    @Override
+    public void addnew(String name) {
+        model_a.addElement(name);
+        MainActivity.mainForm.comboBox1.addItem(name);
+    }
+
+    @Override
+    public void resetAll() {
+        favoriteService.clearAllFavorites();
+        favoriteService.saveFavorites();
+        playlistService.clearActivePlaylist();
+        playlistService.saveData();
+        model_a.clear();
+        MainActivity.mainForm.comboBox1.removeAll();
+    }
+
 
 }

@@ -22,6 +22,7 @@ import static atua.anddev.globaltv.Services.myPath;
 public class GuideServiceImpl implements GuideService {
     private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss Z");
     private final String ukrEpg = " (на укр.)";
+    //private final String ukrEpg = "";
     private Calendar currentTime;
 
     public boolean checkForUpdate() {

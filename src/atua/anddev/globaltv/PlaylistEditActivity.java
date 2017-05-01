@@ -8,11 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class PlaylistEditActivity implements Services {
-    private static int num = 0;
+    private int num = 0;
     private String editAction;
     private PlaylistEditForm playlistEditForm;
+    private AddEditListener addEditListener;
 
-    PlaylistEditActivity(String mode) {
+    PlaylistEditActivity(AddEditListener addEditListener, String mode) {
+        this.addEditListener = addEditListener;
         editAction = mode;
         playlistEditForm = new PlaylistEditForm();
         applyLocals();
@@ -20,9 +22,10 @@ class PlaylistEditActivity implements Services {
         buttonActionListener();
     }
 
-    PlaylistEditActivity(String mode, int num) {
+    PlaylistEditActivity(AddEditListener addEditListener, String mode, int num) {
+        this.addEditListener = addEditListener;
         editAction = mode;
-        PlaylistEditActivity.num = num;
+        this.num = num;
         playlistEditForm = new PlaylistEditForm();
         applyLocals();
         showEdit();
@@ -82,11 +85,11 @@ class PlaylistEditActivity implements Services {
                 } else {
                     if (editAction.equals("modify")) {
                         playlistService.setActivePlaylistById(num, name, url, type);
-                        PlaylistManagerActivity.model_a.setElementAt(name, num);
+                        addEditListener.change(name, num);
                         success = true;
                     } else if (editAction.equals("addNew") && playlistService.indexNameForActivePlaylist(name.toString()) == -1) {
                         playlistService.addToActivePlaylist(name, url, type, "", "");
-                        PlaylistManagerActivity.model_a.addElement(name);
+                        addEditListener.addnew(name);
                         success = true;
                     } else {
                         new WarningDialog(tService.getString("playlistexist"));
@@ -99,6 +102,12 @@ class PlaylistEditActivity implements Services {
             }
         });
 
+    }
+
+    public interface AddEditListener {
+        void change(String name, int num);
+
+        void addnew(String name);
     }
 
 }

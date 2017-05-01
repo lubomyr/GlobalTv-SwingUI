@@ -157,11 +157,7 @@ public class PlaylistServiceImpl implements PlaylistService, Services {
     }
 
     public void addAllOfferedPlaylist() {
-        for (Playlist plst : offeredPlaylist) {
-            if (indexNameForActivePlaylist(plst.getName()) != -1) {
-                activePlaylist.add(plst);
-            }
-        }
+        activePlaylist.addAll(offeredPlaylist);
         saveData();
     }
 

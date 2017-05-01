@@ -25,7 +25,7 @@ public class MainForm extends JFrame{
         super("Global Tv");
         setContentPane(mainPanel);
         pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
