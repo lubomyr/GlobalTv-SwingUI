@@ -143,12 +143,12 @@ public class GuideServiceImpl implements GuideService {
             }
             gzipIs.close();
             is.close();
-            Global.guideLoaded = true;
-            System.out.println("parsing finished");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Global.guideLoaded = true;
+        System.out.println("parsing finished");
     }
 
     @Override
